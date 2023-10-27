@@ -1,71 +1,81 @@
-<x-laravel-ui-adminlte::adminlte-layout>
+@extends('layouts.app')
 
-    <body class="hold-transition login-page">
-        <div class="login-box">
-            <div class="login-logo">
-                <a href="{{ url('/home') }}"><b>{{ config('app.name') }}</b></a>
-            </div>
-            <!-- /.login-logo -->
+@section('content')
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="{{ asset('img/logo_tib.png') }}" style="width: 50%; height: auto;">
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
 
-            <!-- /.login-box-body -->
-            <div class="card">
-                <div class="card-body login-card-body">
-                    <p class="login-box-msg">Sign in to start your session</p>
-
-                    <form method="post" action="{{ url('/login') }}">
-                        @csrf
-
+                <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
+                    @csrf
+                    <div class="form-group row">
                         <div class="input-group mb-3">
-                            <input type="email" name="email" value="{{ old('email') }}" placeholder="Email"
-                                class="form-control @error('email') is-invalid @enderror">
-                            <div class="input-group-append">
-                                <div class="input-group-text"><span class="fas fa-envelope"></span></div>
-                            </div>
-                            @error('email')
-                                <span class="error invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <input type="password" name="password" placeholder="Password"
-                                class="form-control @error('password') is-invalid @enderror">
+                            <input id="username" type="text"
+                                class="form-control {{ $errors->has('email') || $errors->has('username') ? ' is-invalid' : '' }}"
+                                name="email" value="{{ old('username') }}" required autofocus placeholder="Username">
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
+                                    <span class="fas fa-user"></span>
                                 </div>
                             </div>
-                            @error('password')
-                                <span class="error invalid-feedback">{{ $message }}</span>
-                            @enderror
-
                         </div>
-
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="icheck-primary">
-                                    <input type="checkbox" id="remember">
-                                    <label for="remember">Remember Me</label>
+                        @error('username')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-group mb-3">
+                            <input id="password" type="password"
+                                class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" name="password"
+                                required placeholder="Password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span id="togglePassword" class="fas fa-eye"></span>
                                 </div>
                             </div>
-
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-                            </div>
-
                         </div>
-                    </form>
-
-                    <p class="mb-1">
-                        <a href="{{ route('password.request') }}">I forgot my password</a>
-                    </p>
-                    <p class="mb-0">
-                        <a href="{{ route('register') }}" class="text-center">Register a new membership</a>
-                    </p>
-                </div>
-                <!-- /.login-card-body -->
+                    </div>
+                    <div class="row">
+                        <!-- /.col -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block text-uppercase">Login</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
             </div>
-
+            <!-- /.login-card-body -->
         </div>
-        <!-- /.login-box -->
-    </body>
-</x-laravel-ui-adminlte::adminlte-layout>
+    </div>
+@endsection
+
+@push('levelPluginsJs')
+    <script>
+        $(document).ready(function() {
+            $("#togglePassword").click(function() {
+                var passwordField = $("#password");
+                var passwordFieldType = passwordField.attr("type");
+
+                if (passwordFieldType === "password") {
+                    passwordField.attr("type", "text");
+                    $("#togglePassword").removeClass("fa-eye");
+                    $("#togglePassword").addClass("fa-eye-slash");
+                } else {
+                    passwordField.attr("type", "password");
+                    $("#togglePassword").removeClass("fa-eye-slash");
+                    $("#togglePassword").addClass("fa-eye");
+                }
+            });
+        });
+    </script>
+@endpush
