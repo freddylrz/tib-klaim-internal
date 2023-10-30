@@ -11,6 +11,12 @@
 |
 */
 
-Auth::routes();
+Auth::routes([
+    'login' => true, // Registration Routes...
+    'register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
+]);
 
-Route::get('/', 'HomeController@index')->name('home');
+
+Route::get('/home', 'HomeController@index')->name('home');
