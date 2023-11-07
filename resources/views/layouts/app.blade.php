@@ -118,7 +118,7 @@
                                         </p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item {{{ Request::is('claim/list','claim/input') ? 'active' : '' }}}">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fas fa-book"></i>
                                         <p>
@@ -127,14 +127,14 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="../../index.html" class="nav-link">
+                                        <li class="nav-item {{{ Request::is('claim/list') ? 'active' : '' }}}">
+                                            <a href="/claim/list" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>List Data</p>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a href="../../index2.html" class="nav-link">
+                                        <li class="nav-item {{{ Request::is('claim/input') ? 'active' : '' }}}">
+                                            <a href="/claim/input" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Input Data</p>
                                             </a>
@@ -169,7 +169,7 @@
                                                 <p>input</p>
                                             </a>
                                         </li>
-                                        
+
                                     </ul>
                                         </li>
                                         <li class="nav-item">
@@ -216,8 +216,6 @@
                     @yield('content')
                 </div>
                 <!-- /.content-wrapper -->
-                </div>
-                <!-- /.content-wrapper -->
 
                 <footer class="main-footer">
                     <strong>Copyright &copy; <span id="year"></span> Tugu Insurance Broker
@@ -239,12 +237,13 @@
         <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
         <!-- Bootstrap 4 -->
         <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <!-- BEGIN PAGE LEVEL SCRIPTS -->
+        @stack('levelPluginsJs')
+        <!-- END PAGE LEVEL SCRIPTS -->
         <!-- Bootstrap switch -->
         <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
         <!-- AdminLTE App -->
         <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
-        <!-- AdminLTE for demo purposes -->
-        <script src="{{ asset('dist/js/demo.js') }}"></script>
         <script>
             $(function() {
                 // Initialize the switch based on the stored dark mode state
@@ -270,9 +269,6 @@
                 });
             });
         </script>
-        <!-- BEGIN PAGE LEVEL SCRIPTS -->
-        @stack('levelPluginsJs')
-        <!-- END PAGE LEVEL SCRIPTS -->
     </body>
 
 </html>
