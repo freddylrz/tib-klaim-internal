@@ -20,3 +20,23 @@ Auth::routes([
 
 
 Route::get('/', 'HomeController@index')->name('home');
+
+#CLAIM
+Route::group(['prefix' => 'claim', 'as' => 'claim::', 'middleware' => 'auth:web'], function () {
+    Route::get('/list', function () {
+        return view('claim.list');
+    });
+    Route::get('/input', function () {
+        return view('claim.input');
+    });
+});
+Route::group(['prefix' => 'utility', 'as' => 'utility::', 'middleware' => 'auth:web'], function () {
+    Route::group(['prefix' => 'col', 'as' => 'col::', 'middleware' => 'auth:web'], function () {
+    Route::get('/input', function () {
+        return view('utility.CauseOfLoss.input');
+    });
+     Route::get('/list', function () {
+        return view('utility.CauseOfLoss.list');
+    });
+});
+});
