@@ -35,9 +35,7 @@
 
         <!-- Site wrapper -->
         @guest
-            <div>
-                @yield('content')
-            </div>
+            @yield('content')
         @else
             <!-- Site wrapper -->
             <div class="wrapper">
@@ -53,18 +51,21 @@
 
                     <!-- Right navbar links -->
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"
-                                role="button">
-                                <i class="fas fa-th-large"></i>
-                            </a>
-                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link" data-toggle="dropdown" href="#">
                                 <i class="far fa-user mr-1"></i>
                                 {{ Auth::user()->name }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="fas fa-moon mr-2"></i> Dark Mode
+                                    <span class="float-right text-muted text-sm">
+                                        <input type="checkbox" class="nav-link" id="modeToggle" name="my-checkbox"
+                                            onclick="toggleFunction()" value="1" data-bootstrap-switch
+                                            data-off-color="light" data-on-color="gray-dark"
+                                            data-on="<i class='fa fa-moon'></i>" data-off="<i class='fa fa-sun'">
+                                    </span>
+                                </a>
                                 <div class="dropdown-divider"></div>
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();""
@@ -95,7 +96,8 @@
                         <!-- Sidebar user (optional) -->
                         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                             <div class="image">
-                                <img src="{{ asset('img/user.png') }}" class="img-circle elevation-2" alt="User Image">
+                                <img src="{{ asset('img/user.png') }}" class="img-circle elevation-2 bg-white"
+                                    alt="User Image">
                             </div>
                             <div class="info">
                                 <a href="/" class="d-block">
@@ -108,11 +110,9 @@
                         <nav class="mt-2">
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                                 data-accordion="false">
-                                <!-- Add icons to the links using the .nav-icon class
-                                                                                                                                                                                                     with font-awesome or any other icon font library -->
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <i class="nav-icon fas fa-home"></i>
                                         <p>
                                             Dashboard
                                             <i class="right fas fa-angle-left"></i>
@@ -138,6 +138,38 @@
                                             </a>
                                         </li>
                                     </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-book"></i>
+                                        <p>
+                                            Klaim Data
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-database"></i>
+                                        <p>
+                                            Utility
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-archive"></i>
+                                        <p>
+                                            Data Rekap Klaim
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-building"></i>
+                                        <p>
+                                            Klaim BNI
+                                        </p>
+                                    </a>
                                 </li>
                             </ul>
                         </nav>
@@ -226,6 +258,31 @@
         <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="{{ asset('dist/js/demo.js') }}"></script>
+        <script>
+            $(function() {
+                // Initialize the switch based on the stored dark mode state
+                var darkModeState = localStorage.getItem('darkModeState');
+                if (darkModeState === 'true') {
+                    $('#modeToggle').bootstrapSwitch('state', true);
+                    $('body').addClass('dark-mode');
+                } else {
+                    $('#modeToggle').bootstrapSwitch('state', false);
+                    $('body').removeClass('dark-mode');
+                }
+
+                // Handle the switch change event
+                $('#modeToggle').on('switchChange.bootstrapSwitch', function(event, state) {
+                    if (state) {
+                        $('body').addClass('dark-mode');
+                    } else {
+                        $('body').removeClass('dark-mode');
+                    }
+
+                    // Store the dark mode state in localStorage
+                    localStorage.setItem('darkModeState', state);
+                });
+            });
+        </script>
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
         @stack('levelPluginsJs')
         <!-- END PAGE LEVEL SCRIPTS -->
