@@ -20,3 +20,13 @@ Auth::routes([
 
 
 Route::get('/', 'HomeController@index')->name('home');
+
+#CLAIM
+Route::group(['prefix' => 'claim', 'as' => 'claim::', 'middleware' => 'auth:web'], function () {
+    Route::get('/list', function () {
+        return view('claim.list');
+    });
+    Route::get('/input', function () {
+        return view('claim.input');
+    });
+});
