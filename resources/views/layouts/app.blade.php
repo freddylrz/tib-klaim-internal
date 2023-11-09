@@ -21,8 +21,18 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    @stack('levelPluginsJsh')
+    <link
+      rel="stylesheet"
+      href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}"
+    />
     <!-- END PAGE LEVEL SCRIPTS -->
+    <style>
+        .nav-item a:active,
+.nav-item a:hover {
+    background-color: white;
+    color: #000; /* Ubah warna teks jika perlu */
+}
+    </style>
 </head>
 
 @guest
@@ -128,7 +138,7 @@
                                     </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="../../index.html" class="nav-link">
+                                            <a href="/list" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>List Data</p>
                                             </a>
@@ -166,7 +176,7 @@
                                         <li class="nav-item">
                                             <a href="/utility/col/input" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
-                                                <p>input</p>
+                                                <p>Input</p>
                                             </a>
                                         </li>
                                         
@@ -178,6 +188,21 @@
                                                 <p>Loss Adjuster</p>
                                                 <i class="right fas fa-angle-left"></i>
                                             </a>
+                                             <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="/utility/lar/list" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>list</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/utility/lar/input" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Input</p>
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
                                         </li>
                                         <li class="nav-item">
                                             <a href="../../index2.html" class="nav-link">
@@ -185,7 +210,23 @@
                                                 <p>Workshop</p>
                                                 <i class="right fas fa-angle-left"></i>
                                             </a>
+                                        
+                                        <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="/utility/ws/list" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>list</p>
+                                            </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a href="/utility/ws/input" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Input</p>
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
+                                    </li>
                                     </ul>
                                 </li>
                                 <li class="nav-item">
@@ -216,7 +257,6 @@
                     @yield('content')
                 </div>
                 <!-- /.content-wrapper -->
-                </div>
                 <!-- /.content-wrapper -->
 
                 <footer class="main-footer">
@@ -245,6 +285,9 @@
         <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="{{ asset('dist/js/demo.js') }}"></script>
+        @stack('levelPluginsJs')
+         <script src="{{ asset('plugins/datatables/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
         <script>
             $(function() {
                 // Initialize the switch based on the stored dark mode state
@@ -270,8 +313,13 @@
                 });
             });
         </script>
+         <script>
+      $(function () {
+        $("#example1").DataTable();
+        });
+    </script>
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
-        @stack('levelPluginsJs')
+       
         <!-- END PAGE LEVEL SCRIPTS -->
     </body>
 
