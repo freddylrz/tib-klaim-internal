@@ -1,15 +1,15 @@
 @extends('layouts.app')
 @section('content')
-        <div class="content-header">
+<div class="content-header">
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
-                <h1 class="m-0"><b>Caused of Loss Management</b> List</h1>
+                <h1 class="m-0"><b>Loss Adjuster Management</b> List</h1>
               </div><!-- /.col -->
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="/">Home</a></li>
-                  <li class="breadcrumb-item active">Caused of Loss Management List</li>
+                  <li class="breadcrumb-item active">Loss Adjuster Management List</li>
                 </ol>
               </div><!-- /.col -->
             </div><!-- /.row -->
@@ -99,10 +99,4 @@
           <!-- /.row -->
         </section>
      
-
-    <!-- jQuery -->
-    @push('levelPluginsJs')
-     <script src="{{ asset('plugins/datatables/jquery.dataTables.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
-    @endpush
 @endsection
