@@ -20,6 +20,18 @@ Auth::routes([
 
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('list', function () {
+     return view('CauseOfLoss.list');
+     });
+     Route::get('input', function () {
+     return view('CauseOfLoss.input');
+     });
+Route::get('list', function () {
+     return view('LossAdjuster.list');
+     });
+     Route::get('input', function () {
+     return view('LossAdjuster.input');
+     });
 
 #CLAIM
 Route::group(['prefix' => 'claim', 'as' => 'claim::', 'middleware' => 'auth:web'], function () {
@@ -37,6 +49,28 @@ Route::group(['prefix' => 'utility', 'as' => 'utility::', 'middleware' => 'auth:
     });
      Route::get('/list', function () {
         return view('utility.CauseOfLoss.list');
+    });
+});
+});
+
+Route::group(['prefix' => 'utility', 'as' => 'utility::', 'middleware' => 'auth:web'], function () {
+    Route::group(['prefix' => 'lar', 'as' => 'lar::', 'middleware' => 'auth:web'], function () {
+    Route::get('/input', function () {
+        return view('utility.LossAdjuster.input');
+    });
+     Route::get('/list', function () {
+        return view('utility.LossAdjuster.list');
+    });
+});
+});
+
+Route::group(['prefix' => 'utility', 'as' => 'utility::', 'middleware' => 'auth:web'], function () {
+    Route::group(['prefix' => 'ws', 'as' => 'ws::', 'middleware' => 'auth:web'], function () {
+    Route::get('/input', function () {
+        return view('utility.Workshop.input');
+    });
+     Route::get('/list', function () {
+        return view('utility.Workshop.list');
     });
 });
 });
