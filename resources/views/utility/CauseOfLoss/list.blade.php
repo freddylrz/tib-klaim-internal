@@ -100,9 +100,9 @@
         </section>
      
 
+@endsection
     <!-- jQuery -->
     @push('levelPluginsJs')
      <script src="{{ asset('plugins/datatables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
     @endpush
-@endsection

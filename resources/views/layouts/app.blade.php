@@ -21,18 +21,8 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    <link
-      rel="stylesheet"
-      href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}"
-    />
+       @stack('levelPluginsJsh')
     <!-- END PAGE LEVEL SCRIPTS -->
-    <style>
-        .nav-item a:active,
-.nav-item a:hover {
-    background-color: white;
-    color: #000; /* Ubah warna teks jika perlu */
-}
-    </style>
 </head>
 
 @guest
@@ -279,17 +269,13 @@
         <!-- Bootstrap 4 -->
         <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
-        @stack('levelPluginsJs')
         <!-- END PAGE LEVEL SCRIPTS -->
         <!-- Bootstrap switch -->
         <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
         <!-- AdminLTE App -->
         <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
-        <!-- AdminLTE for demo purposes -->
-        <script src="{{ asset('dist/js/demo.js') }}"></script>
         @stack('levelPluginsJs')
-         <script src="{{ asset('plugins/datatables/jquery.dataTables.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
+    
 
         <script>
             $(function() {
@@ -316,11 +302,6 @@
                 });
             });
         </script>
-         <script>
-      $(function () {
-        $("#example1").DataTable();
-        });
-    </script>
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
        
         <!-- END PAGE LEVEL SCRIPTS -->
