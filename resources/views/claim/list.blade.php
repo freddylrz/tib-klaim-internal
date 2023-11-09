@@ -176,7 +176,6 @@
         $(function() {
             $('#example2').DataTable({
                 "paging": true,
-                "lengthChange": false,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,

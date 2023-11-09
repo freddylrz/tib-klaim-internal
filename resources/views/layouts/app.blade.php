@@ -151,7 +151,7 @@
                                     </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="../../index.html" class="nav-link">
+                                            <a href="#" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Cause Of Loss</p>
                                                 <i class="right fas fa-angle-left"></i>
@@ -173,7 +173,7 @@
                                     </ul>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="../../index2.html" class="nav-link">
+                                            <a href="#" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Loss Adjuster</p>
                                                 <i class="right fas fa-angle-left"></i>
@@ -191,16 +191,16 @@
                                                 <p>Input</p>
                                             </a>
                                         </li>
-                                        
+
                                     </ul>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="../../index2.html" class="nav-link">
+                                            <a href="#" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Workshop</p>
                                                 <i class="right fas fa-angle-left"></i>
                                             </a>
-                                        
+
                                         <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="/utility/ws/list" class="nav-link">
@@ -214,7 +214,7 @@
                                                 <p>Input</p>
                                             </a>
                                         </li>
-                                        
+
                                     </ul>
                                     </li>
                                     </ul>
@@ -268,15 +268,13 @@
         <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
         <!-- Bootstrap 4 -->
         <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <!-- BEGIN PAGE LEVEL SCRIPTS -->
-        <!-- END PAGE LEVEL SCRIPTS -->
         <!-- Bootstrap switch -->
         <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
         <!-- AdminLTE App -->
         <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+        <!-- BEGIN PAGE LEVEL SCRIPTS -->
         @stack('levelPluginsJs')
-    
-
+        <!-- END PAGE LEVEL SCRIPTS -->
         <script>
             $(function() {
                 // Initialize the switch based on the stored dark mode state
@@ -302,9 +300,6 @@
                 });
             });
         </script>
-        <!-- BEGIN PAGE LEVEL SCRIPTS -->
-       
-        <!-- END PAGE LEVEL SCRIPTS -->
     </body>
 
 </html>
