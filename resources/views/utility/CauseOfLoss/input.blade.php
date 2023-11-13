@@ -28,17 +28,23 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="exampleDropdown">Select an option <span style="color: red;">*</span></label>
-                    <select class="form-control" id="exampleDropdown">
+                    <select class="form-control" id="exampleDropdown"required>
+                       <option value="">pilih opsi </option>
                       <option value="option1">Option 1</option>
                       <option value="option2">Option 2</option>
                       <option value="option3">Option 3</option>
                     </select>
                     <!-- <small class="text-muted">Please select an option from the dropdown.</small> -->
+                    <br>
+                   <br>
+                    <br>
+                    <hr>
+                    <em>note: tanda<strong> (bintang merah wajib di isi) </strong>wajib diisi</em>
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="form-group" style="padding-right: 5px;">
-                    <label for="exampleTextarea">Textarea <span style="color: red; ">*</span></label>
+                  <div class="form-group">
+                    <label for="exampleTextarea">Textarea</label>
                     <textarea class="form-control" id="exampleTextarea" rows="5" placeholder="Enter text"></textarea>
                     
                   </div>

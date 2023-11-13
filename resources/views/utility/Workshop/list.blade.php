@@ -28,10 +28,10 @@
                   >
                     <thead>
                       <tr>
-                        <th>Rendering engine</th>
-                        <th>Browser</th>
-                        <th>Platform(s)</th>
-                        <th>Engine version</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>PIC Name</th>
+                        <th>PIC Phone</th>
                         <th>CSS grade</th>
                       </tr>
                     </thead>
@@ -79,15 +79,6 @@
                         <td>A</td>
                       </tr>
                     </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>Rendering engine</th>
-                        <th>Browser</th>
-                        <th>Platform(s)</th>
-                        <th>Engine version</th>
-                        <th>CSS grade</th>
-                      </tr>
-                    </tfoot>
                   </table>
                 </div>
                 <!-- /.card-body -->
@@ -117,13 +108,7 @@
     <script>
         $(function() {
             $('#example1').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "scrollX": true
+                
             });
         });
     </script>
