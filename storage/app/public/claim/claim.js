@@ -1,3 +1,5 @@
+var base_url = window.location.origin;
+
 $(function() {
     $('#tbsppa').DataTable({
         "paging": true,
@@ -7,7 +9,6 @@ $(function() {
         "responsive": true,
         "scrollX": true
     });
-
 
     // List data dari webapps
     $('#tbsppa').on('click', 'tbody tr', function() {
@@ -60,10 +61,47 @@ $(function() {
     });
 });
 
+function getDataAsset() {
+    $.ajax({
+        "url": base_url.concat('/api/claim/input/asset'),
+        "method": "GET",
+        "timeout": 0,
+        "headers": {
+            "Authorization": "Bearer " + $('#token').val()
+        },
+    }).done(function (response) {
+        $.each(response.filter, function (i, item) {
+            $('#parameterId').append($('<option>', {
+                value: item.filterId,
+                text: item.filterDesc
+            }));
+        });
+        $.each(response.cause, function (i, item) {
+            $('#causeId').append($('<option>', {
+                value: item.causeId,
+                text: item.description
+            }));
+        });
+        $.each(response.lossAdj, function (i, item) {
+            $('#lossAdjId').append($('<option>', {
+                value: item.lossAdjId,
+                text: item.adj_name
+            }));
+        });
+        $.each(response.workshop, function (i, item) {
+            $('#workshopId').append($('<option>', {
+                value: item.workshopId,
+                text: item.ws_name
+            }));
+        });
+    });
+}
+
+
 // fungsi button "search"
 function search()
 {
-    document.getElementById('dataClient').style.display = "block";
+    $('#dataClient').slideDown()
 }
 
 // Fungsi button "Load"
@@ -77,34 +115,4 @@ function dataKlaim()
 {
     document.getElementById('dataKlaim').style.display = "block";
     document.getElementById('dataAmount').style.display = "block";
-
-    var cobId = document.getElementById('c_cob').value
-    // alert('ye'+cob_id+'hore');
-    $.ajax({
-        url: "/request/get_caused?cobId="+cobId,
-        type: "GET",
-        dataType: "json",
-        success: function (response) {
-            console.log(response['data']);
-            $("#ddCaused").empty();
-            $("#ddCaused").append('<option value="0">-</option>');
-
-            var len = 0;
-            if (response['data'] != null) {
-              len = response['data'].length;
-            }
-
-            if (len > 0) {
-              for (var i = 0; i < len; i++) {
-                var id = response['data'][i].id;
-                var desc = response['data'][i].description;
-
-                var opt = "<option value="+id+">"+desc+"</option>";
-
-                $("#ddCaused").append(opt);
-                }
-            }
-
-      }
-    });
 }

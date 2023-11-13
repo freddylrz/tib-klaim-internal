@@ -28,11 +28,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="insured_name">Parameter</label>
-                                        <select class="form-control select2bs4" style="width: 100%;" id="param_id"
-                                            name="param_id">
-                                            <option value="1">DEBIT NOTE</option>
-                                            <option value="3">CLIENT</option>
-                                            <option value="2">POLIS</option>
+                                        <select class="form-control select2bs4" style="width: 100%;" id="parameterId"
+                                            name="parameter_id">
                                         </select>
                                     </div>
                                     <!-- /.form-group -->
@@ -538,7 +535,7 @@
 
                                     <div class="form-group">
                                         <label for="insured_name">Cause of Loss</label>
-                                        <select class="form-control select2bs4" id="ddCaused" name="ddCaused"
+                                        <select class="form-control select2bs4" id="causeId" name="causeId"
                                             style="width: 100%;">
 
                                         </select>
@@ -546,89 +543,15 @@
 
                                     <div class="form-group">
                                         <label for="insured_name">Loss Adjuster</label>
-                                        <select class="form-control select2bs4" id="ddLadj" name="ddLadj"
+                                        <select class="form-control select2bs4" id="lossAdjId" name="lossAdjId"
                                             style="width: 100%;">
-                                            <option value="0">-</option>
-                                            <option value="1">PT. RADITA HUTAMA INTERNUSA</option>
-                                            <option value="2">MATTHEWS DANIEL INTERNATIONAL, PTE.LTD</option>
-                                            <option value="3">PT. MCLARENS INDONESIA</option>
-                                            <option value="4">PT. SATRIA DHARMA PUSAKA CRAWFORD THG</option>
-                                            <option value="5">PT. UTAMA NILAI SENTOSA</option>
-                                            <option value="6">PT. AXIS INTERNATIONAL</option>
-                                            <option value="7">PT. CUNNINGHAM LINDSAY</option>
-                                            <option value="8">PT. PANDU HALIM PERKASA</option>
-                                            <option value="9">PT. NIPPON KAIJI KYOKAI INDONESIA (NK3I)</option>
-                                            <option value="10">PERSADA ADJUSTERS (PT. BAHTERA ARUNG PERSADA)</option>
-                                            <option value="11">PT. ASUKA BAHARI NUSANTARA</option>
-                                            <option value="12">PRIMA ADJUSTER</option>
-                                            <option value="13">PT. GENERAL ADJUSTER INDONESIA</option>
-                                            <option value="14">PT. GLOBAL INTERNUSA ADJUSTING</option>
-                                            <option value="15">PT. RISWAN BRAHMANA MANDIRI SURVEI</option>
-                                            <option value="16">UNIVERSAL NILAITAMA</option>
-                                            <option value="17">PT ROYAL CONOCEAN INTERNATIONAL</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="insured_name">Workshop</label>
-                                        <select class="form-control select2bs4" id="ddWs" name="ddWs"
+                                        <select class="form-control select2bs4" id="workshopId" name="workshopId"
                                             style="width: 100%;">
-                                            <option value="0">-</option>
-                                            <option value="1">SUBUR OTO</option>
-                                            <option value="2">NEW BERINGIN MOTOR</option>
-                                            <option value="3">CITRA SIMA</option>
-                                            <option value="4">METRO 55</option>
-                                            <option value="5">CV. KARYA MURNI INDAH</option>
-                                            <option value="6">CAR PRO</option>
-                                            <option value="7">MUSTIKA MOBILINDO</option>
-                                            <option value="8">KARINDA MOTOR</option>
-                                            <option value="9">PIRASA KENCANA MOTOR</option>
-                                            <option value="10">HONDA IKJ PONDOK PINANG</option>
-                                            <option value="11">TARA MOTOR</option>
-                                            <option value="12">MULIA MOTOR (LESTARI MULIA ABADI)</option>
-                                            <option value="13">SUN MOTOR</option>
-                                            <option value="14">GUNADAYA MOTOR</option>
-                                            <option value="15">MULTIGUNA CEMERLANG</option>
-                                            <option value="16">CAHAYA UTAMA MOTOR</option>
-                                            <option value="17">ANTONA MOTOR</option>
-                                            <option value="18">BAVARIA MERCINDO MOTOR</option>
-                                            <option value="19">PANCA BUANA MOTOR</option>
-                                            <option value="20">PRIMA MOBIL</option>
-                                            <option value="21">CITRA CEMERLANG</option>
-                                            <option value="22">PITSTOP</option>
-                                            <option value="23">NEW AUTO BLITZ</option>
-                                            <option value="24">TRIPANCAR JAYA</option>
-                                            <option value="25">SMARINA</option>
-                                            <option value="26">AUTO PRIMA</option>
-                                            <option value="27">LIEF&#039;S ENGINEERING</option>
-                                            <option value="28">AUTOCARE SPECIALIST</option>
-                                            <option value="29">CITRA CEMERLANG SURABAYA</option>
-                                            <option value="30">BINTANG JAYA</option>
-                                            <option value="31">HANDAL MITRA PRAKARSA</option>
-                                            <option value="32">CITRA AUTO MAKMUR SENTOSA</option>
-                                            <option value="33">FONTANA INDAH MOTOR</option>
-                                            <option value="34">MUTIARA JAYA MAKMUR</option>
-                                            <option value="35">NV MASS</option>
-                                            <option value="36">MANDIRI BUANA SENTOSA (MBS)</option>
-                                            <option value="37">HONDA IKJ WR. BUNCIT</option>
-                                            <option value="38">DHARMA MOTOR</option>
-                                            <option value="39">ARMADA INTERNATIONAL MOTOR (DAIHATSU)</option>
-                                            <option value="40">MERCINDO AUTORAMA</option>
-                                            <option value="41">AUTO BLITZ (PEKANBARU)</option>
-                                            <option value="42">METRO AUTO CARE</option>
-                                            <option value="43">B2M MOTOR</option>
-                                            <option value="44">BINTANG UTAMA</option>
-                                            <option value="45">MAHKOTA BUANA</option>
-                                            <option value="46">FASHION MOTOR</option>
-                                            <option value="47">PARAMA SUTERA AUTOTREN (HONDA ALAM SUTERA)</option>
-                                            <option value="48">BUMEN REJA ABADI (MITSUBISHI MOTOR)</option>
-                                            <option value="49">GARUDA MOTOR BENGKEL</option>
-                                            <option value="50">NICO BODY REPAIR</option>
-                                            <option value="51">FRIEND&#039;S (BODY REPAIR &amp; PAINT SPECIALIST)
-                                            </option>
-                                            <option value="52">BENGKEL HONDA ARTA CIKUPA</option>
-                                            <option value="53">NAGA MAS MOTOR</option>
-                                            <option value="54">DUA SEKAWAN MOTOR</option>
                                         </select>
                                     </div>
 
@@ -763,4 +686,9 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     {{-- custom js --}}
     <script src="{{ asset('storage/claim/claim.js') }}"></script>
+    <script>
+        $(function() {
+            getDataAsset()
+        })
+    </script>
 @endpush
