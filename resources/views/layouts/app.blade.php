@@ -127,14 +127,14 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        <li class="nav-item {{{ Request::is('claim/list') ? 'active' : '' }}}">
-                                            <a href="/claim/list" class="nav-link">
+                                        <li class="nav-item">
+                                            <a href="/claim/list" class="nav-link {{{ Request::is('claim/list') ? 'active' : '' }}}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>List Data</p>
                                             </a>
                                         </li>
-                                        <li class="nav-item {{{ Request::is('claim/input') ? 'active' : '' }}}">
-                                            <a href="/claim/input" class="nav-link">
+                                        <li class="nav-item">
+                                            <a href="/claim/input" class="nav-link  {{{ Request::is('claim/input') ? 'active' : '' }}}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Input Data</p>
                                             </a>
@@ -220,7 +220,7 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="/recap/claim" class="nav-link {{{ Request::is('recap/claim') ? 'active' : '' }}}">
                                         <i class="nav-icon fas fa-archive"></i>
                                         <p>
                                             Data Rekap Klaim
