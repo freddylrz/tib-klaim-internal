@@ -19,7 +19,7 @@
           <div class="row">
             <div class="col-12">
 
-              <div class="card">
+                <div class="card card-primary card-outline">
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table
