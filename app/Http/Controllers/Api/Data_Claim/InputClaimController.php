@@ -21,14 +21,10 @@ class InputClaimController extends Controller
                 ),
                 array(
                     "filterId" => 2,
-                    "filterDesc" => 'Prod No'
-                ),
-                array(
-                    "filterId" => 3,
                     "filterDesc" => 'Policy No'
                 ),
                 array(
-                    "filterId" => 4,
+                    "filterId" => 3,
                     "filterDesc" => 'Name'
                 ),
             );
@@ -75,6 +71,24 @@ class InputClaimController extends Controller
         }
     }
     public function getDataTable(Request $r){
+        try{
+            if ($r->get('type') == 1){
+                $data = DB::select("CALL klaimapps_db.getPolis(?,?)",[$r->get("type"),$r->get("search")]);
+            }
+            return response()->json([
+                'status' => 200,
+                'data' => $data,
+            ], 200);
+        }catch (Throwable $exception){
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+    public function getDataClient(Request $r){
         try{
             if ($r->get('type') == 1){
                 $data = DB::select("CALL klaimapps_db.getClientInfo(?)",[$r->get("prod_no")]);
