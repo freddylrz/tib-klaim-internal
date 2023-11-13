@@ -27,7 +27,7 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
             Route::get('/asset', ['uses' => 'Api\Utility\CauseOfLossController@asset']);
             Route::post('/insert', ['uses' => 'Api\Utility\CauseOfLossController@insert']);
             Route::get('/detail', ['uses' => 'Api\Utility\CauseOfLossController@detail']);
-            Route::post('/update', ['uses' => 'Api\Utility\CauseOfLossController@detail']);
+            Route::post('/update', ['uses' => 'Api\Utility\CauseOfLossController@update']);
         });
 
 
@@ -36,7 +36,7 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
             Route::get('/', ['uses' => 'Api\Utility\LossAdjusterController@index']);
             Route::post('/insert', ['uses' => 'Api\Utility\LossAdjusterController@insert']);
             Route::get('/detail', ['uses' => 'Api\Utility\LossAdjusterController@detail']);
-            Route::post('/update', ['uses' => 'Api\Utility\LossAdjusterController@detail']);
+            Route::post('/update', ['uses' => 'Api\Utility\LossAdjusterController@update']);
         });
 
 
@@ -45,7 +45,7 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
             Route::get('/', ['uses' => 'Api\Utility\WorkshopController@index']);
             Route::post('/insert', ['uses' => 'Api\Utility\WorkshopController@insert']);
             Route::get('/detail', ['uses' => 'Api\Utility\WorkshopController@detail']);
-            Route::post('/update', ['uses' => 'Api\Utility\WorkshopController@detail']);
+            Route::post('/update', ['uses' => 'Api\Utility\WorkshopController@update']);
         });
     });
 });
