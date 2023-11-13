@@ -41,7 +41,15 @@ Route::group(['prefix' => 'claim', 'as' => 'claim::', 'middleware' => 'auth:web'
     Route::get('/input', function () {
         return view('claim.input');
     });
+    Route::get('/detail/{claimId}', function () {
+        return view('claim.detail');
+    });
+    Route::get('/update/{claimId}', function () {
+        return view('claim.edit');
+    });
 });
+
+#UTILITY
 Route::group(['prefix' => 'utility', 'as' => 'utility::', 'middleware' => 'auth:web'], function () {
     Route::group(['prefix' => 'col', 'as' => 'col::', 'middleware' => 'auth:web'], function () {
     Route::get('/input', function () {
@@ -73,4 +81,11 @@ Route::group(['prefix' => 'utility', 'as' => 'utility::', 'middleware' => 'auth:
         return view('utility.Workshop.list');
     });
 });
+});
+
+#REKAP DATA KLAIM
+Route::group(['prefix' => 'recap', 'as' => 'recap::', 'middleware' => 'auth:web'], function () {
+    Route::get('/claim', function () {
+        return view('recap.claim');
+    });
 });
