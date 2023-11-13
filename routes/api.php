@@ -23,6 +23,7 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
         Route::prefix('/input')->group(function () {
             Route::get('/asset', ['uses' => 'Api\Data_Claim\InputClaimController@inputAsset']);
             Route::get('/dataTable', ['uses' => 'Api\Data_Claim\InputClaimController@getDataTable']);
+            Route::get('/data-client', ['uses' => 'Api\Data_Claim\InputClaimController@getDataClient']);
         });
     });
     Route::prefix('/utiliy')->group( function ()
