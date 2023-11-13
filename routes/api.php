@@ -48,4 +48,4 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
             Route::post('/update', ['uses' => 'Api\Utility\WorkshopController@detail']);
         });
     });
-}
+});
