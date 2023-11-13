@@ -206,85 +206,87 @@
                 <div class="card-header">
                     <h3 class="card-title"><b>Claim </b>Data</h3>
                 </div>
-                <div class="row">
-                    <div class="col-md-6" style="border-right: 1px solid #ddd;">
-                        <div class="form-group">
-                            <label for="insured_name">Claim No.</label>
-                            <p>CB0097/TIB/1123/CGL</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="insured_name"><u>Date of Loss</u></label>
-                            <p>2023-10-25</p>
-                            <input class="form-control" id="inputContact1" type="text" placeholder=""
-                                value="2023-10-25" hidden="true">
-                        </div>
-                        <div class="form-group">
-                            <label for="insured_name"><u>Location of Loss</u></label>
-                            <p>Tol Jagorawi Km 6</p>
-                            <input class="form-control" id="inputContact1" type="text" placeholder=""
-                                value="Tol Jagorawi Km 6" hidden="true">
-                        </div>
-                        <div class="form-group">
-                            <label for="insured_name"><u>Cause of Loss</u></label>
-                            <p>-</p>
-                            <input class="form-control" id="inputContact1" type="text" placeholder="" value="-"
-                                hidden="true">
-                        </div>
-                        <div class="form-group">
-                            <label for="insured_name"><u>Loss Adjuster</u></label>
-                            <p>-</p>
-                            <input class="form-control" id="inputContact1" type="text" placeholder="" value="-"
-                                hidden="true">
-                        </div>
-                        <div class="form-group">
-                            <label for="insured_name"><u>Workshop</u></label>
-                            <p>-</p>
-                            <input class="form-control" id="inputContact1" type="text" placeholder="" value="-"
-                                hidden="true">
-                        </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6" style="border-right: 1px solid #ddd;">
+                            <div class="form-group">
+                                <label for="insured_name">Claim No.</label>
+                                <p>CB0097/TIB/1123/CGL</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="insured_name"><u>Date of Loss</u></label>
+                                <p>2023-10-25</p>
+                                <input class="form-control" id="inputContact1" type="text" placeholder=""
+                                    value="2023-10-25" hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="insured_name"><u>Location of Loss</u></label>
+                                <p>Tol Jagorawi Km 6</p>
+                                <input class="form-control" id="inputContact1" type="text" placeholder=""
+                                    value="Tol Jagorawi Km 6" hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="insured_name"><u>Cause of Loss</u></label>
+                                <p>-</p>
+                                <input class="form-control" id="inputContact1" type="text" placeholder=""
+                                    value="-" hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="insured_name"><u>Loss Adjuster</u></label>
+                                <p>-</p>
+                                <input class="form-control" id="inputContact1" type="text" placeholder=""
+                                    value="-" hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="insured_name"><u>Workshop</u></label>
+                                <p>-</p>
+                                <input class="form-control" id="inputContact1" type="text" placeholder=""
+                                    value="-" hidden="true">
+                            </div>
 
 
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="insured_name"><u>Estimation Amount</u></label>
-                            <p>IDR 310,000,000</p>
-                            <input class="form-control" id="est_amt" type="text" placeholder=""
-                                value="310,000,000" hidden="true">
                         </div>
-                        <div class="form-group">
-                            <label for="insured_name"><u>Claim Amount</u></label>
-                            <p>IDR 310,000,000</p>
-                            <input class="form-control" id="claim_amt" type="text" placeholder=""
-                                value="310,000,000" hidden="true">
-                        </div>
-                        <div class="form-group">
-                            <label for="insured_name"><u>Deduction Amount</u></label>
-                            <p>IDR 0</p>
-                            <input class="form-control" id="deduct_amt" type="text" placeholder="" value="0"
-                                hidden="true">
-                        </div>
-                        <div class="form-group">
-                            <label for="insured_name"><u>Recovery Amount</u></label>
-                            <p>IDR 0</p>
-                            <input class="form-control" id="inputContact1" type="text" placeholder="" value="0"
-                                hidden="true">
-                        </div>
-                        <div class="form-group">
-                            <label for="insured_name"><u>Net Claim Amount</u></label>
-                            <p>IDR 310,000,000</p>
-                            <input class="form-control" id="net_amt" type="text" placeholder=""
-                                value="310,000,000" hidden="true">
-                        </div>
-                        <div class="form-group">
-                            <label for="txtRequestNotes"><u>Uploaded Attachment</u></label><br>
-                            <p><a href="https://klaimapp.tib.co.id/upload/CGL/8423/Data stargazer.pdf" target="_blank">1.
-                                    Data stargazer.pdf</a></p>
-                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="insured_name"><u>Estimation Amount</u></label>
+                                <p>IDR 310,000,000</p>
+                                <input class="form-control" id="est_amt" type="text" placeholder=""
+                                    value="310,000,000" hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="insured_name"><u>Claim Amount</u></label>
+                                <p>IDR 310,000,000</p>
+                                <input class="form-control" id="claim_amt" type="text" placeholder=""
+                                    value="310,000,000" hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="insured_name"><u>Deduction Amount</u></label>
+                                <p>IDR 0</p>
+                                <input class="form-control" id="deduct_amt" type="text" placeholder=""
+                                    value="0" hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="insured_name"><u>Recovery Amount</u></label>
+                                <p>IDR 0</p>
+                                <input class="form-control" id="inputContact1" type="text" placeholder=""
+                                    value="0" hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="insured_name"><u>Net Claim Amount</u></label>
+                                <p>IDR 310,000,000</p>
+                                <input class="form-control" id="net_amt" type="text" placeholder=""
+                                    value="310,000,000" hidden="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtRequestNotes"><u>Uploaded Attachment</u></label><br>
+                                <p><a href="https://klaimapp.tib.co.id/upload/CGL/8423/Data stargazer.pdf"
+                                        target="_blank">1. Data stargazer.pdf</a></p>
+                            </div>
 
-                    </div>
-                    <div class="col-md-6">
-                        <div id="uploadform">
+                        </div>
+                        <div class="col-md-6">
+                            <div id="uploadform">
+                            </div>
                         </div>
                     </div>
                 </div>
