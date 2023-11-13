@@ -90,9 +90,7 @@ class InputClaimController extends Controller
     }
     public function getDataClient(Request $r){
         try{
-            if ($r->get('type') == 1){
-                $data = DB::select("CALL klaimapps_db.getClientInfo(?)",[$r->get("prod_no")]);
-            }
+            $data = DB::select("CALL klaimapps_db.getClientInfo(?)",[$r->get("prod_no")]);
             return response()->json([
                 'status' => 200,
                 'data' => $data,
