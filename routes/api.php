@@ -16,23 +16,24 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::prefix('/utiliy')->group( function () 
-{       
-    Route::prefix('/cause-of-loss')->group( function () 
-    {       
+Route::prefix('/claim')->group(function () {
+    Route::prefix('/input')->group(function () {
+        Route::get('/asset', ['uses' => 'Api\Data_Claim\InputClaimController@inputAsset']);
+        Route::get('/dataTable', ['uses' => 'Api\Data_Claim\InputClaimController@getDataTable']);
+    });
+});
+Route::prefix('/utiliy')->group(function () {
+    Route::prefix('/cause-of-loss')->group(function () {
         Route::get('/', ['uses' => 'Api\Utility\CauseOfLossController@index']);
     });
 
 
-    Route::prefix('/loss-adjuster')->group( function () 
-    {       
+    Route::prefix('/loss-adjuster')->group(function () {
         Route::get('/', ['uses' => 'Api\Utility\LossAdjusterController@index']);
     });
 
 
-    Route::prefix('/workshop')->group( function () 
-    {       
+    Route::prefix('/workshop')->group(function () {
         Route::get('/', ['uses' => 'Api\Utility\WorkshopController@index']);
     });
 });
