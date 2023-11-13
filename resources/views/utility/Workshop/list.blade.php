@@ -1,15 +1,15 @@
 @extends('layouts.app')
 @section('content')
-        <div class="content-header">
+<div class="content-header">
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
-                <h1 class="m-0"><b>Caused of Loss Management</b> List</h1>
+                <h1 class="m-0"><b>Workshop Management</b> List</h1>
               </div><!-- /.col -->
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="/">Home</a></li>
-                  <li class="breadcrumb-item active">Caused of Loss Management List</li>
+                  <li class="breadcrumb-item active">Workshop Management List</li>
                 </ol>
               </div><!-- /.col -->
             </div><!-- /.row -->
@@ -24,14 +24,15 @@
                 <div class="card-body">
                   <table
                     id="example1"
-                    class="table table-bordered table-striped">
+                    class="table table-bordered table-striped"
+                  >
                     <thead>
                       <tr>
-                        <th>No.</th>
-                        <th>COB</th>
-                        <th>COB Name</th>
-                        <th>Description</th>
-                        <th>test</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>PIC Name</th>
+                        <th>PIC Phone</th>
+                        <th>CSS grade</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -40,37 +41,43 @@
                         <td>Internet Explorer 4.0</td>
                         <td>Win 95+</td>
                         <td>4</td>
-                        <td></td>
+                        <td>X</td>
                       </tr>
                       <tr>
                         <td>Trident</td>
-                        <td>Internet Explorer 4.0</td>
+                        <td>Internet Explorer 5.0</td>
                         <td>Win 95+</td>
-                        <td>4</td>
-                        <td></td>
+                        <td>5</td>
+                        <td>C</td>
                       </tr>
                       <tr>
                         <td>Trident</td>
-                        <td>Internet Explorer 4.0</td>
+                        <td>Internet Explorer 5.5</td>
                         <td>Win 95+</td>
-                        <td>4</td>
-                        <td></td>
+                        <td>5.5</td>
+                        <td>A</td>
                       </tr>
                       <tr>
                         <td>Trident</td>
-                        <td>Internet Explorer 4.0</td>
-                        <td>Win 95+</td>
-                        <td>4</td>
-                        <td></td>
+                        <td>Internet Explorer 6</td>
+                        <td>Win 98+</td>
+                        <td>6</td>
+                        <td>A</td>
                       </tr>
                       <tr>
                         <td>Trident</td>
-                        <td>Internet Explorer 4.0</td>
-                        <td>Win 95+</td>
-                        <td>4</td>
-                        <td></td>
+                        <td>Internet Explorer 7</td>
+                        <td>Win XP SP2+</td>
+                        <td>7</td>
+                        <td>A</td>
                       </tr>
-                      
+                      <tr>
+                        <td>Trident</td>
+                        <td>AOL browser (AOL desktop)</td>
+                        <td>Win XP</td>
+                        <td>6</td>
+                        <td>A</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -83,10 +90,9 @@
           <!-- /.row -->
         </section>
      
-
 @endsection
-    <!-- jQuery -->
-  @push('levelPluginsJsh')
+
+@push('levelPluginsJsh')
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
@@ -102,6 +108,7 @@
     <script>
         $(function() {
             $('#example1').DataTable({
+                
             });
         });
     </script>
