@@ -22,6 +22,42 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="insured_name">Parameter</label>
+                                        <select class="form-control select2bs4" style="width: 100%;" id="param_id"
+                                            name="param_id">
+                                            <option value="1">DEBIT NOTE</option>
+                                            <option value="3">CLIENT</option>
+                                            <option value="2">POLIS</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="insured_name">Value Parameter</label>
+                                        <input type="text" class="form-control" id="value" name="value"
+                                            placeholder="Value">
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer col-md-12" style="text-align: right;">
+                            <button class="btn btn-primary" onclick="search();">
+                                <i class="fas fa-search mr-1"></i>Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12" id="dataClient" style="display: none;">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Data Client</h3>
                         </div>
@@ -353,8 +389,8 @@
 
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="card card-primary card-tabs" id="c_info" style="display: none;">
+                <div class="col-12" id="c_info" style="display: none;">
+                    <div class="card card-primary card-tabs">
                         <div class="card-header p-0 pt-1">
                             <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                 <li class="nav-item">
@@ -479,8 +515,8 @@
                         <!-- /.card -->
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="card card-primary card-outline" id="dataKlaim" style="display: none;">
+                <div class="col-12" id="dataKlaim" style="display: none;">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Claim Data</h3>
                         </div>
@@ -651,8 +687,8 @@
 
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="card card-primary card-outline" id="dataAmount" style="display: none;">
+                <div class="col-12" id="dataAmount" style="display: none;">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Claim Amount</h3>
                         </div>
