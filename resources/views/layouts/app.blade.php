@@ -255,11 +255,7 @@
                     document.getElementById("year").innerHTML = new Date().getFullYear();
                 </script>
 
-                <!-- Control Sidebar -->
-                <aside class="control-sidebar control-sidebar-dark">
-                    <!-- Control sidebar content goes here -->
-                </aside>
-                <!-- /.control-sidebar -->
+                <input type="hidden" id="token" value="{{Auth::user()->api_token}}">
             </div>
             <!-- ./wrapper -->
         @endguest
