@@ -129,13 +129,13 @@
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="/claim/list" class="nav-link {{{ Request::is('claim/list') ? 'active' : '' }}}">
-                                                <i class="far fa-circle nav-icon"></i>
+                                                <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>List Data</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/claim/input" class="nav-link {{{ Request::is('claim/input') ? 'active' : '' }}}">
-                                                <i class="far fa-circle nav-icon"></i>
+                                            <a href="/claim/input" class="nav-link  {{{ Request::is('claim/input') ? 'active' : '' }}}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Input Data</p>
                                             </a>
                                         </li>
@@ -154,18 +154,18 @@
                                             <a href="#" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Cause Of Loss</p>
-                                                <i class="right fas fa-angle-left"></i>
+                                                <i class="right fas fa-angle-left "></i>
                                             </a>
                                             <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="/utility/col/list" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
+                                                <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>list</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="/utility/col/input" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
+                                                <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Input</p>
                                             </a>
                                         </li>
@@ -181,13 +181,13 @@
                                              <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="/utility/lar/list" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
+                                                <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>list</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="/utility/lar/input" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
+                                                <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Input</p>
                                             </a>
                                         </li>
@@ -204,13 +204,13 @@
                                         <ul class="nav nav-treeview">
                                         <li class="nav-item">
                                             <a href="/utility/ws/list" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
+                                                <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>list</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="/utility/ws/input" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
+                                                <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Input</p>
                                             </a>
                                         </li>
@@ -220,7 +220,7 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="/recap/claim" class="nav-link {{{ Request::is('recap/claim') ? 'active' : '' }}}">
                                         <i class="nav-icon fas fa-archive"></i>
                                         <p>
                                             Data Rekap Klaim
