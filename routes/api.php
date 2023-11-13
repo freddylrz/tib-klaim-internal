@@ -19,10 +19,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['cors','auth:api']], function ($router)
 {
-    Route::prefix('/utiliy')->group( function () 
-    {       
-        Route::prefix('/cause-of-loss')->group( function () 
-        {       
+    Route::prefix('/claim')->group(function () {
+        Route::prefix('/input')->group(function () {
+            Route::get('/asset', ['uses' => 'Api\Data_Claim\InputClaimController@inputAsset']);
+            Route::get('/dataTable', ['uses' => 'Api\Data_Claim\InputClaimController@getDataTable']);
+        });
+    });
+    Route::prefix('/utiliy')->group( function ()
+    {
+        Route::prefix('/cause-of-loss')->group( function ()
+        {
             Route::get('/', ['uses' => 'Api\Utility\CauseOfLossController@index']);
             Route::get('/asset', ['uses' => 'Api\Utility\CauseOfLossController@asset']);
             Route::post('/insert', ['uses' => 'Api\Utility\CauseOfLossController@insert']);
@@ -31,8 +37,8 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
         });
 
 
-        Route::prefix('/loss-adjuster')->group( function () 
-        {       
+        Route::prefix('/loss-adjuster')->group( function ()
+        {
             Route::get('/', ['uses' => 'Api\Utility\LossAdjusterController@index']);
             Route::post('/insert', ['uses' => 'Api\Utility\LossAdjusterController@insert']);
             Route::get('/detail', ['uses' => 'Api\Utility\LossAdjusterController@detail']);
@@ -40,8 +46,8 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
         });
 
 
-        Route::prefix('/workshop')->group( function () 
-        {       
+        Route::prefix('/workshop')->group( function ()
+        {
             Route::get('/', ['uses' => 'Api\Utility\WorkshopController@index']);
             Route::post('/insert', ['uses' => 'Api\Utility\WorkshopController@insert']);
             Route::get('/detail', ['uses' => 'Api\Utility\WorkshopController@detail']);

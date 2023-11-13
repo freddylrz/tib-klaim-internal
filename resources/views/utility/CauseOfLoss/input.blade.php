@@ -38,8 +38,6 @@
                     <br>
                    <br>
                     <br>
-                    <hr>
-                    <em>note: tanda<strong> (bintang merah wajib di isi) </strong>wajib diisi</em>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -51,8 +49,9 @@
                 </div>
               </div>
             </div>
-            <div class="card-footer" style="text-align: right;">
-              <button class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+            <div class="card-footer">
+            <em style="text-align: left;">note: tanda<strong> (<span style="color: red;">*</span>) </strong> wajib diisi</em>
+              <button class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
             </div>
           </form>
         </div>

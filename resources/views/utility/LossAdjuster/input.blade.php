@@ -72,16 +72,15 @@
                   <input type="text" class="form-control" id="pic_email" name="pic_email" placeholder="PIC Email" required="true">
                 </div>
                  <hr>
-                  <em>note: tanda<strong> (bintang merah wajib di isi) </strong>wajib diisi</em>
               </div>
-               <hr>
               
             </div>
           </div>
           <input type="submit" id="saveBtn" style="display: none;">
         </form>
-        <div class="card-footer" style="text-align: right;">
-          <button class="btn btn-primary" onclick="$('#saveBtn').click();"><i class="fas fa-save"></i> Save</button>
+        <div class="card-footer">
+         <em>note: tanda <strong>(<span style="color: red;">*</span>)</strong> wajib di isi</em>
+          <button class="btn btn-primary float-right" onclick="$('#saveBtn').click();"><i class="fas fa-save"></i> Save</button>
         </div>
       </div> 
      </div>
