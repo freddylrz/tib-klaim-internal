@@ -1,150 +1,186 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="content-header">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>List Klaim</h1>
-                </div>
+                    <h1 class="m-0"><b>Klaim</b> List</h1>
+                </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Klaim Data</a></li>
-                        <li class="breadcrumb-item active">List</li>
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">Klaim List</li>
                     </ol>
-                </div>
-            </div>
-        </div>
-    </section>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
-    <section class="content">
+    <!-- Main content -->
+    <div class="content">
         <div class="container-fluid">
+
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">DataTable with minimal features & hover style</h3>
-                        </div>
-
+                    <div class="card card-primary card-outline">
+                        <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="insured_name">COB</label>
+                                        <select class="form-control select2bs4" style="width: 100%;" id="cob_id"
+                                            name="cob_id">
+                                            <option value="0" selected="selected">Semua COB</option>
+                                            <option value="1">PAR</option>
+                                            <option value="3">MV</option>
+                                            <option value="2">MCI</option>
+                                            <option value="4">MH</option>
+                                            <option value="7">ENG</option>
+                                            <option value="5">VA</option>
+                                            <option value="6">LB</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="insured_name">Status</label>
+                                        <select class="form-control select2bs4" style="width: 100%;" id="status"
+                                            name="status">
+                                            <option value="0" selected="selected">Semua Status</option>
+                                            <option value="1">Laporan awal klaim</option>
+                                            <option value="2">On Process</option>
+                                            <option value="5">Settled</option>
+                                            <option value="6">Proses Klaim Dibayar</option>
+                                            <option value="7">Proses Final</option>
+                                            <option value="8">Final</option>
+                                            <option value="9">Ditolak</option>
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer col-md-12" style="text-align: right;">
+                            <!-- <a class="btn btn-primary" id="b_load" onclick="load();"> Load</a> -->
+                            <button class="btn btn-primary" onclick="load();"><i class="fas fa-save"></i> Load</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style type="text/css">
+                table.table-bordered {
+                    border: 1px solid #ddd;
+                    margin-top: 20px;
+                }
+
+                table.table-bordered>thead>tr>th {
+                    border: 1px solid #ddd;
+                }
+
+                table.table-bordered>tbody>tr>td {
+                    border: 1px solid #ddd;
+                }
+            </style>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body">
+                            <table class="table table-bordered table-striped table-hover dataTable" id="table_1">
                                 <thead>
-                                    <tr>
-                                        <th>Rendering engine</th>
-                                        <th>Browser</th>
-                                        <th>Platform(s)</th>
-                                        <th>Engine version</th>
-                                        <th>CSS grade</th>
+                                    <tr class="table-primary">
+                                        <th>Claim No</th>
+                                        <th>Input Date</th>
+                                        <th>Insured Name</th>
+                                        <th>D O L</th>
+                                        <th>COB</th>
+                                        <th>User</th>
+                                        <th>&nbsp;</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Trident</td>
-                                        <td>Internet
-                                            Explorer 4.0
-                                        </td>
-                                        <td>Win 95+</td>
-                                        <td> 4</td>
-                                        <td>X</td>
+                                    <tr role="row" class="odd">
+                                        <td>CB0097/TIB/1123/CGL</td>
+                                        <td>2023-11-01 14:59</td>
+                                        <td>HYUNDAI MOTOR INDONESIA, PT</td>
+                                        <td>2023-10-25</td>
+                                        <td>CGL</td>
+                                        <td>DOFAN -</td>
+                                        <td> <a class="btn btn-primary btn-block" href="/claim/detail/8423">Proses
+                                                kelengkapan dokumen(12 Hari)
+                                            </a> &nbsp;</td>
                                     </tr>
-                                    <tr>
-                                        <td>Trident</td>
-                                        <td>Internet
-                                            Explorer 5.0
-                                        </td>
-                                        <td>Win 95+</td>
-                                        <td>5</td>
-                                        <td>C</td>
+                                    <tr role="row" class="even">
+                                        <td>CB0096/TIB/1123/CGL</td>
+                                        <td>2023-11-01 14:50</td>
+                                        <td>HYUNDAI MOTOR INDONESIA, PT</td>
+                                        <td>2023-11-01</td>
+                                        <td>CGL</td>
+                                        <td>DOFAN -</td>
+                                        <td> <a class="btn btn-primary btn-block" href="/claim/detail/8422">Proses
+                                                kelengkapan dokumen(12 Hari)
+                                            </a> &nbsp;</td>
                                     </tr>
-                                    <tr>
-                                        <td>Trident</td>
-                                        <td>Internet
-                                            Explorer 5.5
-                                        </td>
-                                        <td>Win 95+</td>
-                                        <td>5.5</td>
-                                        <td>A</td>
+                                    <tr role="row" class="even">
+                                        <td>CA0035/TIB/1122/CIB</td>
+                                        <td>2022-11-28 12:00</td>
+                                        <td>PROSEGUR CASH INDONESIA, PT</td>
+                                        <td>2022-10-14</td>
+                                        <td>CIB</td>
+                                        <td>DOFAN -</td>
+                                        <td> <a class="btn btn-primary btn-block" href="/claim/detail/8313">Proses Klaim
+                                                diasuransi(350 Hari)
+                                            </a> &nbsp;</td>
                                     </tr>
-                                    <tr>
-                                        <td>Tasman</td>
-                                        <td>Internet Explorer 5.1</td>
-                                        <td>Mac OS 7.6-9</td>
-                                        <td>1</td>
-                                        <td>C</td>
+                                    <tr role="row" class="odd">
+                                        <td>CA0034/TIB/1122/CIB</td>
+                                        <td>2022-11-28 11:57</td>
+                                        <td>PROSEGUR CASH INDONESIA, PT</td>
+                                        <td>2022-10-10</td>
+                                        <td>CIB</td>
+                                        <td>DOFAN -</td>
+                                        <td> <a class="btn btn-primary btn-block" href="/claim/detail/8312">Final </a>
+                                            &nbsp;</td>
                                     </tr>
-                                    <tr>
-                                        <td>Tasman</td>
-                                        <td>Internet Explorer 5.2</td>
-                                        <td>Mac OS 8-X</td>
-                                        <td>1</td>
-                                        <td>C</td>
+                                    <tr role="row" class="even">
+                                        <td>CA0033/TIB/1122/CIB</td>
+                                        <td>2022-11-28 11:48</td>
+                                        <td>PROSEGUR CASH INDONESIA, PT</td>
+                                        <td>2022-10-10</td>
+                                        <td>CIB</td>
+                                        <td>DOFAN -</td>
+                                        <td> <a class="btn btn-primary btn-block" href="/claim/detail/8311">Final </a>
+                                            &nbsp;</td>
                                     </tr>
-                                    <tr>
-                                        <td>Misc</td>
-                                        <td>NetFront 3.1</td>
-                                        <td>Embedded devices</td>
-                                        <td>-</td>
-                                        <td>C</td>
+                                    <tr role="row" class="odd">
+                                        <td>CA0030/TIB/1122/CIB</td>
+                                        <td>2022-11-28 11:34</td>
+                                        <td>PROSEGUR CASH INDONESIA, PT</td>
+                                        <td>2022-10-07</td>
+                                        <td>CIB</td>
+                                        <td>DOFAN -</td>
+                                        <td> <a class="btn btn-primary btn-block" href="/claim/detail/8308">Final </a>
+                                            &nbsp;</td>
                                     </tr>
-                                    <tr>
-                                        <td>Misc</td>
-                                        <td>NetFront 3.4</td>
-                                        <td>Embedded devices</td>
-                                        <td>-</td>
-                                        <td>A</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Misc</td>
-                                        <td>Dillo 0.8</td>
-                                        <td>Embedded devices</td>
-                                        <td>-</td>
-                                        <td>X</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Misc</td>
-                                        <td>Links</td>
-                                        <td>Text only</td>
-                                        <td>-</td>
-                                        <td>X</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Misc</td>
-                                        <td>Lynx</td>
-                                        <td>Text only</td>
-                                        <td>-</td>
-                                        <td>X</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Misc</td>
-                                        <td>IE Mobile</td>
-                                        <td>Windows Mobile 6</td>
-                                        <td>-</td>
-                                        <td>C</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Misc</td>
-                                        <td>PSP browser</td>
-                                        <td>PSP</td>
-                                        <td>-</td>
-                                        <td>C</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Other browsers</td>
-                                        <td>All others</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>U</td>
+                                    <tr role="row" class="even">
+                                        <td>CA0029/TIB/1122/CIB</td>
+                                        <td>2022-11-28 11:29</td>
+                                        <td>PROSEGUR CASH INDONESIA, PT</td>
+                                        <td>2022-10-05</td>
+                                        <td>CIB</td>
+                                        <td>DOFAN -</td>
+                                        <td> <a class="btn btn-primary btn-block" href="/claim/detail/8307">Final </a>
+                                            &nbsp;</td>
                                     </tr>
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Rendering engine</th>
-                                        <th>Browser</th>
-                                        <th>Platform(s)</th>
-                                        <th>Engine version</th>
-                                        <th>CSS grade</th>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
 
@@ -154,8 +190,7 @@
             </div>
 
         </div>
-
-    </section>
+    </div>
 @endsection
 
 
@@ -174,9 +209,8 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script>
         $(function() {
-            $('#example2').DataTable({
+            $('#table_1').DataTable({
                 "paging": true,
-                "lengthChange": false,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
