@@ -23,55 +23,17 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table
-                    id="example1"
+                    id="tablecol"
                     class="table table-bordered table-striped">
                     <thead>
-                      <tr>
+                      <tr class="table-primary">
                         <th>No.</th>
                         <th>COB</th>
-                        <th>COB Name</th>
                         <th>Description</th>
-                        <th>test</th>
+                        <th>&nbsp;</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td>Trident</td>
-                        <td>Internet Explorer 4.0</td>
-                        <td>Win 95+</td>
-                        <td>4</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td>Trident</td>
-                        <td>Internet Explorer 4.0</td>
-                        <td>Win 95+</td>
-                        <td>4</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td>Trident</td>
-                        <td>Internet Explorer 4.0</td>
-                        <td>Win 95+</td>
-                        <td>4</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td>Trident</td>
-                        <td>Internet Explorer 4.0</td>
-                        <td>Win 95+</td>
-                        <td>4</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td>Trident</td>
-                        <td>Internet Explorer 4.0</td>
-                        <td>Win 95+</td>
-                        <td>4</td>
-                        <td></td>
-                      </tr>
-                      
-                    </tbody>
+                    
                   </table>
                 </div>
                 <!-- /.card-body -->
@@ -89,6 +51,7 @@
   @push('levelPluginsJsh')
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endpush
 
@@ -99,10 +62,11 @@
     <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src ="{{ asset('storage/utility/causedOfloss.js') }}"> </script>
     <script>
         $(function() {
-            $('#example1').DataTable({
-            });
+          getDataTable()
         });
     </script>
 @endpush
