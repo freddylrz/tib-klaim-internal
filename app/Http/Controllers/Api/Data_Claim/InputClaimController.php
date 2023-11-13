@@ -58,7 +58,6 @@ class InputClaimController extends Controller
                 klaimapps_db.tb_workshop.id <> 0');
 
 //            DB::select("CALL my_stored_procedure()");
-
             return response()->json([
                 'status' => 200,
                 'filter' => $filter,
