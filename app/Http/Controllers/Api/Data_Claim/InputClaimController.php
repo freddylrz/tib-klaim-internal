@@ -72,9 +72,8 @@ class InputClaimController extends Controller
     }
     public function getDataTable(Request $r){
         try{
-            if ($r->get('type') == 1){
-                $data = DB::select("CALL klaimapps_db.getPolis(?,?)",[$r->get("type"),$r->get("search")]);
-            }
+            $data = DB::select("CALL klaimapps_db.getPolis(?,?)",[$r->get("type"),$r->get("search")]);
+
             return response()->json([
                 'status' => 200,
                 'data' => $data,
