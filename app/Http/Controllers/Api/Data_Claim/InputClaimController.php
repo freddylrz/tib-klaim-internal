@@ -17,15 +17,15 @@ class InputClaimController extends Controller
             $filter = array(
                 array(
                     "filterId" => 1,
-                    "filterDesc" => 'DN'
+                    "filterDesc" => 'Client'
                 ),
                 array(
                     "filterId" => 2,
-                    "filterDesc" => 'Policy No'
+                    "filterDesc" => 'Policy'
                 ),
                 array(
                     "filterId" => 3,
-                    "filterDesc" => 'Name'
+                    "filterDesc" => 'DN'
                 ),
             );
 
@@ -93,6 +93,78 @@ class InputClaimController extends Controller
             return response()->json([
                 'status' => 200,
                 'data' => $data,
+            ], 200);
+        }catch (Throwable $exception){
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+    public function getDataPremium(Request $r){
+        try{
+            $prem = DB::select("CALL klaimapps_db.getPremiumInfo(?)",[$r->get("prod_no")]);
+            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['1',$r->get("draft_no"),'','']);
+
+            if($listIns)
+                $premIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['2',$r->get("draft_no"),$r->get("prod_no"),$listIns[0]->insr_id]);
+
+            foreach ($listIns as $l){
+                $l->premium = $premIns;
+            }
+            $data = array(
+                "client" => $prem,
+                "ins" => $listIns,
+            );
+            return response()->json([
+                'status' => 200,
+                'data' => $data,
+            ], 200);
+        }catch (Throwable $exception){
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+    public function getDataIns(Request $r){
+        try{
+            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['3',$r->get("draft_no"),'','']);
+
+            return response()->json([
+                'status' => 200,
+                'data' => $listIns,
+            ], 200);
+        }catch (Throwable $exception){
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+    public function getClaimAmount(Request $r){
+        try{
+            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['3',$r->get("draft_no"),'','']);
+
+            if($listIns){
+                foreach ($listIns as $l){
+                    $amt[] = array(
+                        "insr_id" => $l->insr_id,
+                        "amt" => $r->get('claimAmt')*($l->share_pct/100),
+                        "amtDesc" => number_format($r->get('claimAmt')*($l->share_pct/100),0)
+                    );
+                }
+            }
+
+            return response()->json([
+                'status' => 200,
+                'data' => $amt,
             ], 200);
         }catch (Throwable $exception){
             Log::error($exception);

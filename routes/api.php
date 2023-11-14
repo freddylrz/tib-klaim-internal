@@ -24,6 +24,9 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
             Route::get('/asset', ['uses' => 'Api\Data_Claim\InputClaimController@inputAsset']);
             Route::get('/dataTable', ['uses' => 'Api\Data_Claim\InputClaimController@getDataTable']);
             Route::get('/data-client', ['uses' => 'Api\Data_Claim\InputClaimController@getDataClient']);
+            Route::get('/premium-info', ['uses' => 'Api\Data_Claim\InputClaimController@getDataPremium']);
+            Route::get('/share-insurance', ['uses' => 'Api\Data_Claim\InputClaimController@getDataIns']);
+            Route::get('/claim-amount', ['uses' => 'Api\Data_Claim\InputClaimController@getClaimAmount']);
         });
     });
     Route::prefix('/utiliy')->group( function ()
