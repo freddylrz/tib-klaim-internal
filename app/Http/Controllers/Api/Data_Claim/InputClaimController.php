@@ -135,6 +135,13 @@ class InputClaimController extends Controller
         try{
             $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['3',$r->get("draft_no"),'','']);
 
+            foreach ($listIns as $l){
+                $l->claimAmt = 0;
+                $l->deducAmt = 0;
+                $l->recovAmt = 0;
+                $l->netAmt = 0;
+            }
+
             return response()->json([
                 'status' => 200,
                 'data' => $listIns,
@@ -151,20 +158,52 @@ class InputClaimController extends Controller
     public function getClaimAmount(Request $r){
         try{
             $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['3',$r->get("draft_no"),'','']);
+            if($listIns) {
+                $cAmnt = str_replace(",", "",$r->get('claimAmt'));
+                $dAmnt = str_replace(",", "",$r->get('deducAmt'));
+                $rAmnt = str_replace(",", "",$r->get('recoveryAmt'));
+                $sum = $cAmnt-$dAmnt-$rAmnt;
+                $sisaNet = 0;$sisaClaim = 0;$sisaDeduc = 0;$sisaRec = 0;
+                for($i = 0; $i < count($listIns); $i++){
+                    if($i != count($listIns)-1){
+                        //net
+                        $netShare = $sum*($listIns[$i]->share_pct/100);
+                        $sisaNet = $sum - $netShare;
 
-            if($listIns){
-                foreach ($listIns as $l){
-                    $amt[] = array(
-                        "insr_id" => $l->insr_id,
-                        "amt" => $r->get('claimAmt')*($l->share_pct/100),
-                        "amtDesc" => number_format($r->get('claimAmt')*($l->share_pct/100),0)
-                    );
+                        //claim
+                        $claimShare = $cAmnt*($listIns[$i]->share_pct/100);
+                        $sisaClaim = $cAmnt - $claimShare;
+
+                        //deduc
+                        $deducShare = $dAmnt*($listIns[$i]->share_pct/100);
+                        $sisaDeduc = $dAmnt - $deducShare;
+
+                        //recov
+                        $recShare = $rAmnt*($listIns[$i]->share_pct/100);
+                        $sisaRec = $rAmnt - $recShare;
+                        $amt[] = array(
+                            "insr_id" => $listIns[$i]->insr_id,
+                            "claimDesc" => number_format($claimShare,0),
+                            "deducDesc" => number_format($deducShare,0),
+                            "recoveryDesc" => number_format($recShare,0),
+                            "netDesc" => number_format($netShare,0)
+                        );
+                    }else{
+                        $amt[] = array(
+                            "insr_id" => $listIns[$i]->insr_id,
+                            "claimDesc" => number_format($sisaClaim,0),
+                            "deducDesc" => number_format($sisaDeduc,0),
+                            "recoveryDesc" => number_format($sisaRec,0),
+                            "netDesc" => number_format($sisaNet,0)
+                        );
+                    }
                 }
             }
 
             return response()->json([
                 'status' => 200,
                 'data' => $amt,
+                'netClaimAmt' => number_format($sum,0)
             ], 200);
         }catch (Throwable $exception){
             Log::error($exception);
