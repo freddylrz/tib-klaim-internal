@@ -148,4 +148,31 @@ class InputClaimController extends Controller
             ], 500);
         }
     }
+    public function getClaimAmount(Request $r){
+        try{
+            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['3',$r->get("draft_no"),'','']);
+
+            if($listIns){
+                foreach ($listIns as $l){
+                    $amt[] = array(
+                        "insr_id" => $l->insr_id,
+                        "amt" => $r->get('claimAmt')*($l->share_pct/100),
+                        "amtDesc" => number_format($r->get('claimAmt')*($l->share_pct/100),0)
+                    );
+                }
+            }
+
+            return response()->json([
+                'status' => 200,
+                'data' => $amt,
+            ], 200);
+        }catch (Throwable $exception){
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
 }
