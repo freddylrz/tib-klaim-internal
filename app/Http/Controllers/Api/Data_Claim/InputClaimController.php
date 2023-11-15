@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Data_Claim;
 
+use App\Http\Helper\HelperController;
 use App\Models\tb_klaim;
 use App\Models\tb_klaim_log;
 use App\Models\tb_klaim_ins;
@@ -98,6 +99,11 @@ class InputClaimController extends Controller
     {
         try {
             $data = DB::select("CALL klaimapps_db.getClientInfo(?)", [$r->get("prod_no")]);
+            if($data){
+                $data[0]->periode =  HelperController::changeDate($data[0]->start_dd).' s/d '.HelperController::changeDate($data[0]->end_dd);
+                $data[0]->start_dd = date("d-m-Y", strtotime($data[0]->start_dd));
+                $data[0]->end_dd = date("d-m-Y", strtotime($data[0]->end_dd));
+            }
             return response()->json([
                 'status' => 200,
                 'data' => $data,
