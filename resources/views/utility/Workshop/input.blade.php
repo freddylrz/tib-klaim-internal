@@ -18,7 +18,7 @@
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
 </div>
-      <div class="card">
+      <div class="card card-primary card-outline">
         <form role="post" method="post" id="form" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="bE6ymmcfhZbvzxhHm8lk6or5L9Vx81ocaT8voczb">
           <div class="card-body">
