@@ -70,15 +70,17 @@ class InputClaimController extends Controller
             ], 500);
         }
     }
-    public function getDataTable(Request $r){
-        try{
-            $data = DB::select("CALL klaimapps_db.getPolis(?,?)",[$r->get("type"),$r->get("search")]);
+
+    public function getDataTable(Request $r)
+    {
+        try {
+            $data = DB::select("CALL klaimapps_db.getPolis(?,?)", [$r->get("type"), $r->get("search")]);
 
             return response()->json([
                 'status' => 200,
                 'data' => $data,
             ], 200);
-        }catch (Throwable $exception){
+        } catch (Throwable $exception) {
             Log::error($exception);
 
             return response()->json([
@@ -87,14 +89,16 @@ class InputClaimController extends Controller
             ], 500);
         }
     }
-    public function getDataClient(Request $r){
-        try{
-            $data = DB::select("CALL klaimapps_db.getClientInfo(?)",[$r->get("prod_no")]);
+
+    public function getDataClient(Request $r)
+    {
+        try {
+            $data = DB::select("CALL klaimapps_db.getClientInfo(?)", [$r->get("prod_no")]);
             return response()->json([
                 'status' => 200,
                 'data' => $data,
             ], 200);
-        }catch (Throwable $exception){
+        } catch (Throwable $exception) {
             Log::error($exception);
 
             return response()->json([
@@ -103,15 +107,17 @@ class InputClaimController extends Controller
             ], 500);
         }
     }
-    public function getDataPremium(Request $r){
-        try{
-            $prem = DB::select("CALL klaimapps_db.getPremiumInfo(?)",[$r->get("prod_no")]);
-            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['1',$r->get("draft_no"),'','']);
 
-            if($listIns)
-                $premIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['2',$r->get("draft_no"),$r->get("prod_no"),$listIns[0]->insr_id]);
+    public function getDataPremium(Request $r)
+    {
+        try {
+            $prem = DB::select("CALL klaimapps_db.getPremiumInfo(?)", [$r->get("prod_no")]);
+            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)", ['1', $r->get("draft_no"), '', '']);
 
-            foreach ($listIns as $l){
+            if ($listIns)
+                $premIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)", ['2', $r->get("draft_no"), $r->get("prod_no"), $listIns[0]->insr_id]);
+
+            foreach ($listIns as $l) {
                 $l->premium = $premIns;
             }
             $data = array(
@@ -122,7 +128,7 @@ class InputClaimController extends Controller
                 'status' => 200,
                 'data' => $data,
             ], 200);
-        }catch (Throwable $exception){
+        } catch (Throwable $exception) {
             Log::error($exception);
 
             return response()->json([
@@ -131,15 +137,24 @@ class InputClaimController extends Controller
             ], 500);
         }
     }
-    public function getDataIns(Request $r){
-        try{
-            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['3',$r->get("draft_no"),'','']);
+
+    public function getDataIns(Request $r)
+    {
+        try {
+            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)", ['3', $r->get("draft_no"), '', '']);
+
+            foreach ($listIns as $l) {
+                $l->claimAmt = 0;
+                $l->deducAmt = 0;
+                $l->recovAmt = 0;
+                $l->netAmt = 0;
+            }
 
             return response()->json([
                 'status' => 200,
                 'data' => $listIns,
             ], 200);
-        }catch (Throwable $exception){
+        } catch (Throwable $exception) {
             Log::error($exception);
 
             return response()->json([
@@ -148,25 +163,58 @@ class InputClaimController extends Controller
             ], 500);
         }
     }
-    public function getClaimAmount(Request $r){
-        try{
-            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)",['3',$r->get("draft_no"),'','']);
 
-            if($listIns){
-                foreach ($listIns as $l){
-                    $amt[] = array(
-                        "insr_id" => $l->insr_id,
-                        "amt" => $r->get('claimAmt')*($l->share_pct/100),
-                        "amtDesc" => number_format($r->get('claimAmt')*($l->share_pct/100),0)
-                    );
+    public function getClaimAmount(Request $r)
+    {
+        try {
+            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)", ['3', $r->get("draft_no"), '', '']);
+            if ($listIns) {
+                $cAmnt = str_replace(",", "", $r->get('claimAmt'));
+                $dAmnt = str_replace(",", "", $r->get('deducAmt'));
+                $rAmnt = str_replace(",", "", $r->get('recoveryAmt'));
+                $sum = $cAmnt - $dAmnt - $rAmnt;
+                $sisaNet = 0;
+                $sisaClaim = 0;
+                $sisaDeduc = 0;
+                $sisaRec = 0;
+                for ($i = 0; $i < count($listIns); $i++) {
+                    if ($i != count($listIns) - 1) {
+                        //net
+                        $netShare = $sum * ($listIns[$i]->share_pct / 100);
+                        $sisaNet = $sum - $netShare;
+
+                        //claim
+                        $claimShare = $cAmnt * ($listIns[$i]->share_pct / 100);
+                        $sisaClaim = $cAmnt - $claimShare;
+
+                        //deduc
+                        $deducShare = $dAmnt * ($listIns[$i]->share_pct / 100);
+                        $sisaDeduc = $dAmnt - $deducShare;
+
+                        //recov
+                        $recShare = $rAmnt * ($listIns[$i]->share_pct / 100);
+                        $sisaRec = $rAmnt - $recShare;
+
+                        $listIns[$i]->claimAmt = number_format($claimShare, 0);
+                        $listIns[$i]->deducAmt = number_format($deducShare, 0);
+                        $listIns[$i]->recovAmt = number_format($recShare, 0);
+                        $listIns[$i]->netAmt = number_format($netShare, 0);
+
+                    } else {
+                        $listIns[$i]->claimAmt = number_format($sisaClaim, 0);
+                        $listIns[$i]->deducAmt = number_format($sisaDeduc, 0);
+                        $listIns[$i]->recovAmt = number_format($sisaRec, 0);
+                        $listIns[$i]->netAmt = number_format($sisaNet, 0);
+                    }
                 }
             }
 
             return response()->json([
                 'status' => 200,
-                'data' => $amt,
+                'data' => $listIns,
+                'netClaimAmt' => number_format($sum, 0)
             ], 200);
-        }catch (Throwable $exception){
+        } catch (Throwable $exception) {
             Log::error($exception);
 
             return response()->json([

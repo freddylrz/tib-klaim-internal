@@ -51,7 +51,7 @@ Route::group(['prefix' => 'claim', 'as' => 'claim::', 'middleware' => 'auth:web'
 
 #UTILITY
 Route::group(['prefix' => 'utility', 'as' => 'utility::', 'middleware' => 'auth:web'], function () {
-    Route::group(['prefix' => 'col', 'as' => 'col::', 'middleware' => 'auth:web'], function () {
+    Route::group(['prefix' => 'cfl', 'as' => 'cfl::', 'middleware' => 'auth:web'], function () {
     Route::get('/input', function () {
         return view('utility.CauseOfLoss.input');
     });
