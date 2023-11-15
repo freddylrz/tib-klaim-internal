@@ -184,42 +184,8 @@ class InputClaimController extends Controller
                 $sisaDeduc = 0;
                 $sisaRec = 0;
                 for ($i = 0; $i < count($listIns); $i++) {
-                    if(count($listIns) > 1){
-                        if ($i != count($listIns) - 1) {
-                            //net
-                            $netShare = $sum * ($listIns[$i]->share_pct / 100);
-                            $sisaNet = $sum - $netShare;
-
-                            //est
-                            $estShare = $eAmnt * ($listIns[$i]->share_pct / 100);
-                            $sisaEst = $eAmnt - $estShare;
-
-                            //claim
-                            $claimShare = $cAmnt * ($listIns[$i]->share_pct / 100);
-                            $sisaClaim = $cAmnt - $claimShare;
-
-                            //deduc
-                            $deducShare = $dAmnt * ($listIns[$i]->share_pct / 100);
-                            $sisaDeduc = $dAmnt - $deducShare;
-
-                            //recov
-                            $recShare = $rAmnt * ($listIns[$i]->share_pct / 100);
-                            $sisaRec = $rAmnt - $recShare;
-
-                            $listIns[$i]->estAmt = number_format($estShare, 0);
-                            $listIns[$i]->claimAmt = number_format($claimShare, 0);
-                            $listIns[$i]->deducAmt = number_format($deducShare, 0);
-                            $listIns[$i]->recovAmt = number_format($recShare, 0);
-                            $listIns[$i]->netAmt = number_format($netShare, 0);
-
-                        } else {
-                            $listIns[$i]->estAmt = number_format($sisaEst, 0);
-                            $listIns[$i]->claimAmt = number_format($sisaClaim, 0);
-                            $listIns[$i]->deducAmt = number_format($sisaDeduc, 0);
-                            $listIns[$i]->recovAmt = number_format($sisaRec, 0);
-                            $listIns[$i]->netAmt = number_format($sisaNet, 0);
-                        }
-                    }else{
+                    if ($i != count($listIns) - 1 || $i == 0) {
+                        //net
                         $netShare = $sum * ($listIns[$i]->share_pct / 100);
                         $sisaNet = $sum - $netShare;
 
@@ -244,6 +210,13 @@ class InputClaimController extends Controller
                         $listIns[$i]->deducAmt = number_format($deducShare, 0);
                         $listIns[$i]->recovAmt = number_format($recShare, 0);
                         $listIns[$i]->netAmt = number_format($netShare, 0);
+
+                    } else {
+                        $listIns[$i]->estAmt = number_format($sisaEst, 0);
+                        $listIns[$i]->claimAmt = number_format($sisaClaim, 0);
+                        $listIns[$i]->deducAmt = number_format($sisaDeduc, 0);
+                        $listIns[$i]->recovAmt = number_format($sisaRec, 0);
+                        $listIns[$i]->netAmt = number_format($sisaNet, 0);
                     }
                 }
             }
@@ -362,7 +335,7 @@ class InputClaimController extends Controller
                 $ins->klaim_id = $klaim->id;
                 $ins->insr_id = $r->insr_id[$i];
                 $ins->share = $r->share[$i];
-                $ins->est_amt = str_replace(",", "",$r->estimationInsAmt[$i]);
+                $ins->est_amt = str_replace(",", "", $r->estimationInsAmt[$i]);
                 $ins->claim_amt = str_replace(",", "", $r->claimInsAmt[$i]);
                 $ins->deduct_amt = str_replace(",", "", $r->deducInsAmt[$i]);
                 $ins->recv_amt = str_replace(",", "", $r->recoveryInsAmt[$i]);
