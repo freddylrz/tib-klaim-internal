@@ -120,48 +120,54 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="insured_name">Policy</label>
+                                                    <p id="txtpolisNo"></p>
                                                     <input type="text" class="form-control" id="polisNo"
-                                                        name="polisNo" placeholder="Policy" readonly>
+                                                        name="polisNo" placeholder="Policy" hidden>
                                                     <input type="text" class="form-control" id="draftNo"
                                                         name="draftNo" placeholder="Draft Number" required="true" hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Type of Cover</label>
+                                                    <p id="txttypeOFCover"></p>
                                                     <input type="text" class="form-control" id="typeOFCover"
                                                         name="typeOFCover" placeholder="Type of Cover" required="true"
-                                                        readonly>
+                                                        hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Insured Name</label>
+                                                    <p id="txtnameWrt"></p>
                                                     <input type="text" class="form-control" id="nameWrt"
-                                                        name="nameWrt" readonly>
+                                                        name="nameWrt" hidden>
                                                     <input type="text" class="form-control" id="insdId"
                                                         name="insdId" placeholder="insdId" hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Total Sum Insured</label>
+                                                    <p id="txttsi"></p>
                                                     <input type="text" class="form-control" id="tsi"
-                                                        name="tsi" placeholder="tsi" readonly>
+                                                        name="tsi" placeholder="tsi" hidden>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="insured_name">Period</label>
+                                                    <p id="txtperiod"></p>
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6 col-sm-6 mb-1">
                                                             <input type="text" class="form-control" id="startDd"
-                                                                name="startDd" placeholder="Start Period" readonly>
+                                                                name="startDd" placeholder="Start Period" hidden>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6 col-sm-6 mb-1">
                                                             <input type="text" class="form-control" id="endDd"
-                                                                name="endDd" placeholder="End Period" readonly>
+                                                                name="endDd" placeholder="End Period" hidden>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Interest/Object Claim</label>
+                                                    <p id="txtinterestInsured"></p>
                                                     <textarea class="form-control" rows="10" style="width: 100%;" id="interestInsured" name="interestInsured"
-                                                        readonly></textarea>
+                                                        hidden></textarea>
                                                 </div>
 
                                             </div>
@@ -210,7 +216,7 @@
                             </div>
                         </div>
                         <div class="card-footer col-md-12" style="text-align: right;">
-                            <button class="btn btn-primary" onclick="addDataClaim();"><i class="fas fa-save mr-1"></i>
+                            <button class="btn btn-primary" onclick="addDataClaim();"><i class="fas fa-plus mr-1"></i>
                                 Add Data Claim
                             </button>
                         </div>
@@ -224,18 +230,18 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6" style="border-right: 1px solid #ddd;">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="insured_name">Date of Loss</label>
-                                        <input type="text" class="form-control datepicker" id="date"
-                                            name="date" placeholder="Date of Loss" required="true">
-                                        <input type="text" class="form-control" id="dateInput" name="dateInput"
-                                            value="10-11-2023" hidden>
+                                        <input type="text" class="form-control datetimepicker-input" id="dateOfLoss"
+                                            data-toggle="datetimepicker" data-target="#dateOfLoss" name="dateOfLoss"
+                                            placeholder="Date of Loss" required="true">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="insured_name">Location of Loss</label>
-                                        <textarea class="form-control" rows="3" style="width: 100%;" id="location" name="location" required></textarea>
+                                        <textarea class="form-control" rows="3" style="width: 100%;" id="location" name="location"
+                                            placeholder="Location of Loss" required></textarea>
                                     </div>
 
                                     <div class="form-group">
@@ -265,49 +271,50 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="insured_name">Estimation Amount</label>
-                                        <input type="tel" class="form-control uang" id="c_amount" name="c_amount"
-                                            placeholder="Estimation Amount" required="true" onkeyup="amount();">
+                                        <input type="text" class="form-control money count-amount" id="estAmt"
+                                            name="estAmt" placeholder="Estimation Amount" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="insured_name">Claim Amount</label>
-                                        <input type="tel" class="form-control uang" id="c_claim" name="c_claim"
-                                            placeholder="Claim Amount" required="true" onkeyup="amount();">
+                                        <input type="text" class="form-control money count-amount" id="claimAmt"
+                                            name="claimAmt" placeholder="Claim Amount" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="insured_name">Deduction Amount</label>
-                                        <input type="tel" class="form-control uang" id="c_deduct" name="c_deduct"
-                                            placeholder="Deduction Amount" required="true" onkeyup="amount();">
+                                        <input type="text" class="form-control money count-amount" id="deducAmt"
+                                            name="deducAmt" placeholder="Deduction Amount" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="insured_name">Recovery Amount</label>
-                                        <input type="tel" class="form-control uang" id="c_recv" name="c_recv"
-                                            placeholder="Recovery Amount" required="true" onkeyup="amount();">
+                                        <input type="text" class="form-control money count-amount" id="recoveryAmt"
+                                            name="recoveryAmt" placeholder="Recovery Amount" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="insured_name">Net Claim Amount</label>
-                                        <input type="tel" class="form-control uang" id="c_net" name="c_net"
-                                            placeholder="Net Amount" onkeyup="amount();" readonly>
+                                        <div class="input-group">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text border-0">
+                                                    <i class="fas fa-sync-alt fa-spin font-weight-bold text-black loadingIndicator"
+                                                        style="display: none;font-size:18px"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control money count-amount border-left-0"
+                                                id="netClaimAmt" name="netClaimAmt" placeholder="Net Amount" readonly>
+                                        </div>
                                     </div>
 
                                     <div id="uploadform">
-                                        <form role="form" method="post" id="formupd"
-                                            enctype="multipart/form-data">
-                                            <input type="hidden" name="_token"
-                                                value="eusOl4d3Wubzy8GJzPmiFrMNvSi0xib1WvB60icy">
-                                            <div class="form-group">
-                                                <label for="client">Upload File</label><br>
-                                                <input type="file" id="fileInputupd" class="form-control"
-                                                    name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
-                                                <input type="hidden" id="dataid" name="dataid">
-                                                <input type="hidden" id="cob" name="cob">
-                                                <div id="opt"></div>
-                                                <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
-                                                        class="fa fa-upload"></i> Pilih
-                                                    File</a>
-                                                <small>Tekan CTRL untuk memilih beberapa file</small>
-                                                <ul id="listfilesupd"></ul>
-                                            </div>
-                                            <input type="submit" id="uploadupdbtn" style="display: none;">
+                                        <div class="form-group">
+                                            <label for="client">Upload File</label><br>
+                                            <input type="file" id="fileInputupd" class="form-control"
+                                                name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
+                                            <div id="opt"></div>
+                                            <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
+                                                    class="fa fa-upload"></i> Pilih
+                                                File</a>
+                                            <small>Tekan CTRL untuk memilih beberapa file</small>
+                                            <ul id="listfilesupd"></ul>
+                                        </div>
                                         </form>
                                     </div>
                                 </div>
@@ -327,7 +334,7 @@
                                     <table id="tbclaimAmount" class="table table-bordered table-hover text-nowrap"
                                         style="width: 100%">
                                         <thead>
-                                            <tr>
+                                            <tr class="bg-primary">
                                                 <th>Insurance Name</th>
                                                 <th>Share (%)</th>
                                                 <th>Claim Amount</th>
@@ -344,7 +351,7 @@
                             <div class="text-bold pt-2">Loading...</div>
                         </div>
                         <div class="card-footer" style="text-align: right;">
-                            <button class="btn btn-primary" onclick="submit();"><i class="fas fa-save"></i>
+                            <button class="btn btn-primary" onclick="submit();"><i class="fas fa-save mr-1"></i>
                                 Save All Data
                             </button>
                         </div>
@@ -362,6 +369,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endpush
@@ -370,6 +378,9 @@
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/inputmask/jquery.inputmask.min.js') }}"></script>
+    <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
