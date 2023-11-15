@@ -23,16 +23,17 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table
-                    id="example1"
+                    id="tableLar"
                     class="table table-bordered table-striped"
                   >
                     <thead>
-                      <tr>
+                      <tr class="table-primary">
+                        <th>No.</th>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>PIC Name</th>
                         <th>PIC Phone</th>
-                        <th></th>
+                        <th>&nbsp;</th>
                       </tr>
                     </thead>
                     
@@ -54,7 +55,7 @@
 @push('levelPluginsJsh')
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <!-- <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}"> -->
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endpush
 
@@ -65,11 +66,11 @@
     <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-     <!-- <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script> -->
-    <!-- <script src ="{{ asset('storage/utility/causedOfloss.js') }}"> </script> -->
+     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+     <script src ="{{ asset('storage/utility/lossAdjuster.js') }}"> </script>
     <script>
        $(function() {
-          getDataTable()
+          datatabelLar()
         });
     </script>
 @endpush
