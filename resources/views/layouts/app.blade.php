@@ -158,13 +158,13 @@
                                             </a>
                                             <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="/utility/col/list" class="nav-link">
+                                            <a href="/utility/cfl/list" class="nav-link">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>list</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/utility/col/input" class="nav-link">
+                                            <a href="/utility/cfl/input" class="nav-link">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Input</p>
                                             </a>
