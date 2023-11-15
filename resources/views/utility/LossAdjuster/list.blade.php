@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="content-header">
+<div class="content-header" >
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
@@ -19,20 +19,21 @@
           <div class="row">
             <div class="col-12">
 
-              <div class="card">
+                <div class="card card-primary card-outline">
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table
-                    id="example1"
+                    id="tableLar"
                     class="table table-bordered table-striped"
                   >
                     <thead>
-                      <tr>
+                      <tr class="table-primary">
+                        <th>No.</th>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>PIC Name</th>
                         <th>PIC Phone</th>
-                        <th></th>
+                        <th>&nbsp;</th>
                       </tr>
                     </thead>
                     
@@ -66,10 +67,10 @@
     <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
      <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src ="{{ asset('storage/utility/causedOfloss.js') }}"> </script>
+     <script src ="{{ asset('storage/utility/lossAdjuster.js') }}"> </script>
     <script>
        $(function() {
-          getDataTable()
+          datatabelLar()
         });
     </script>
 @endpush
