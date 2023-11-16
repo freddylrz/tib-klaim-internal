@@ -32,6 +32,10 @@ class InputClaimController extends Controller
                     "filterId" => 3,
                     "filterDesc" => 'DN'
                 ),
+                array(
+                    "filterId" => 4,
+                    "filterDesc" => 'Currency'
+                ),
             );
 
             $cause = DB::select('SELECT
@@ -362,5 +366,9 @@ class InputClaimController extends Controller
                 'message' => 'Gagal memuat data! Silahkan coba lagi.',
             ], 500);
         }
+    }
+
+    public function detailClaim(){
+
     }
 }
