@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Data_Claim;
 
+use App\Http\Helper\HelperController;
 use App\Models\tb_klaim;
 use App\Models\tb_klaim_log;
 use App\Models\tb_klaim_ins;
@@ -33,6 +34,12 @@ class InputClaimController extends Controller
                 ),
             );
 
+            $curr = DB::select(
+                'SELECT
+                webapps_db.tb_curr.*
+                FROM
+                webapps_db.tb_curr');
+
             $cause = DB::select('SELECT
                 klaimapps_db.tb_caused.id as causeId,
                 klaimapps_db.tb_caused.description
@@ -61,6 +68,7 @@ class InputClaimController extends Controller
             return response()->json([
                 'status' => 200,
                 'filter' => $filter,
+                'curr' => $curr,
                 'cause' => $cause,
                 'lossAdj' => $lossAdj,
                 'workshop' => $workshop,
@@ -98,6 +106,11 @@ class InputClaimController extends Controller
     {
         try {
             $data = DB::select("CALL klaimapps_db.getClientInfo(?)", [$r->get("prod_no")]);
+            if($data){
+                $data[0]->periode =  HelperController::changeDate($data[0]->start_dd).' s/d '.HelperController::changeDate($data[0]->end_dd);
+                $data[0]->start_dd = date("d-m-Y", strtotime($data[0]->start_dd));
+                $data[0]->end_dd = date("d-m-Y", strtotime($data[0]->end_dd));
+            }
             return response()->json([
                 'status' => 200,
                 'data' => $data,
@@ -184,42 +197,8 @@ class InputClaimController extends Controller
                 $sisaDeduc = 0;
                 $sisaRec = 0;
                 for ($i = 0; $i < count($listIns); $i++) {
-                    if(count($listIns) > 1){
-                        if ($i != count($listIns) - 1) {
-                            //net
-                            $netShare = $sum * ($listIns[$i]->share_pct / 100);
-                            $sisaNet = $sum - $netShare;
-
-                            //est
-                            $estShare = $eAmnt * ($listIns[$i]->share_pct / 100);
-                            $sisaEst = $eAmnt - $estShare;
-
-                            //claim
-                            $claimShare = $cAmnt * ($listIns[$i]->share_pct / 100);
-                            $sisaClaim = $cAmnt - $claimShare;
-
-                            //deduc
-                            $deducShare = $dAmnt * ($listIns[$i]->share_pct / 100);
-                            $sisaDeduc = $dAmnt - $deducShare;
-
-                            //recov
-                            $recShare = $rAmnt * ($listIns[$i]->share_pct / 100);
-                            $sisaRec = $rAmnt - $recShare;
-
-                            $listIns[$i]->estAmt = number_format($estShare, 0);
-                            $listIns[$i]->claimAmt = number_format($claimShare, 0);
-                            $listIns[$i]->deducAmt = number_format($deducShare, 0);
-                            $listIns[$i]->recovAmt = number_format($recShare, 0);
-                            $listIns[$i]->netAmt = number_format($netShare, 0);
-
-                        } else {
-                            $listIns[$i]->estAmt = number_format($sisaEst, 0);
-                            $listIns[$i]->claimAmt = number_format($sisaClaim, 0);
-                            $listIns[$i]->deducAmt = number_format($sisaDeduc, 0);
-                            $listIns[$i]->recovAmt = number_format($sisaRec, 0);
-                            $listIns[$i]->netAmt = number_format($sisaNet, 0);
-                        }
-                    }else{
+                    if ($i != count($listIns) - 1 || $i == 0) {
+                        //net
                         $netShare = $sum * ($listIns[$i]->share_pct / 100);
                         $sisaNet = $sum - $netShare;
 
@@ -244,6 +223,13 @@ class InputClaimController extends Controller
                         $listIns[$i]->deducAmt = number_format($deducShare, 0);
                         $listIns[$i]->recovAmt = number_format($recShare, 0);
                         $listIns[$i]->netAmt = number_format($netShare, 0);
+
+                    } else {
+                        $listIns[$i]->estAmt = number_format($sisaEst, 0);
+                        $listIns[$i]->claimAmt = number_format($sisaClaim, 0);
+                        $listIns[$i]->deducAmt = number_format($sisaDeduc, 0);
+                        $listIns[$i]->recovAmt = number_format($sisaRec, 0);
+                        $listIns[$i]->netAmt = number_format($sisaNet, 0);
                     }
                 }
             }
@@ -362,7 +348,7 @@ class InputClaimController extends Controller
                 $ins->klaim_id = $klaim->id;
                 $ins->insr_id = $r->insr_id[$i];
                 $ins->share = $r->share[$i];
-                $ins->est_amt = str_replace(",", "",$r->estimationInsAmt[$i]);
+                $ins->est_amt = str_replace(",", "", $r->estimationInsAmt[$i]);
                 $ins->claim_amt = str_replace(",", "", $r->claimInsAmt[$i]);
                 $ins->deduct_amt = str_replace(",", "", $r->deducInsAmt[$i]);
                 $ins->recv_amt = str_replace(",", "", $r->recoveryInsAmt[$i]);
@@ -383,5 +369,9 @@ class InputClaimController extends Controller
                 'message' => 'Gagal memuat data! Silahkan coba lagi.',
             ], 500);
         }
+    }
+
+    public function detailClaim(){
+
     }
 }
