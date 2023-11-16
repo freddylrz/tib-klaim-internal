@@ -23,7 +23,7 @@ $(function() {
     });
 
     //Date picker
-    $('#dateOfLoss').datetimepicker({
+    $('.datetimepicker-input').datetimepicker({
         format: "DD-MM-YYYY",
     });
 
@@ -83,6 +83,12 @@ $(function() {
 			$('#listfilesupd').append(`<li>${name}</li>`);
 		}
 	});
+
+    $('#formSaveAll').on('submit', async function(e) {
+        e.preventDefault()
+
+        saveAllData()
+	});
 });
 
 // Function to remove active class from current tab and switch to the first tab
@@ -135,6 +141,12 @@ function getDataAsset() {
             $('#workshopId').append($('<option>', {
                 value: item.workshopId,
                 text: item.ws_name
+            }));
+        });
+        $.each(response.curr, function (i, item) {
+            $('#currId').append($('<option>', {
+                value: item.id,
+                text: `${item.curr_code} | ${item.curr_name}`
             }));
         });
 
@@ -250,7 +262,7 @@ function getClientinfo() {
             $('#txttypeOFCover').html(item.type_of_cover)
             $('#txtpolisNo').html(item.pol_no)
             $('#txtinterestInsured').html(item.interest_insured)
-            $('#txtperiod').html(`${item.start_dd} s.d. ${item.end_dd}`)
+            $('#txtperiod').html(item.periode)
             $('#txttsi').html(`${item.curr_code} ${item.tsi}`)
 
             $('#clientName').html(`${item.name_wrt} (CLIENT)`)
@@ -457,10 +469,12 @@ function getCountAmount() {
             beforeSend: function () {
                 $('.loadingIndicator').show();
                 loadingIndicator = true;
+                $('#btnSaveAll').attr('disabled', true);
             },
             complete: function () {
                 $('.loadingIndicator').hide();
                 loadingIndicator = false;
+                $('#btnSaveAll').attr('disabled', false);
             }
         }).done(async function (response) {
             await $.each(response.data, function (i, item) {
@@ -489,54 +503,117 @@ function getCountAmount() {
 }
 
 function saveAllData() {
-    const form = new FormData();
-    $.each(dataClient, function (i, item) {
-        form.append("prod_no", "100041");
-        form.append("location", "jln tebet barat no 10");
-        form.append("caused", "73");
-        form.append("lossAdj", "1");
-        form.append("workshop", "1");
-        form.append("estimationAmt", "15000000");
-        form.append("claimAmt", "10000000");
-        form.append("deducAmt", "500000");
-        form.append("recoveryAmt", "200000");
-        form.append("netAmt", "9300000");
-    })
-    form.append("insr_id[]", "3110017");
-    form.append("fileUp[]", "/Users/faizalajikurniawan/Documents/2023-08-02 18.36.13.jpg");
-    form.append("claimInsAmt[]", "10000000");
-    form.append("deducInsAmt[]", "500000");
-    form.append("recoveryInsAmt[]", "200000");
-    form.append("netInsAmt[]", "9300000");
-    form.append("name_wrt", "HAKO PRIMA SUKSES, PT");
-    form.append("dol", "15-11-2023");
-    form.append("cob_code", "APB");
-    form.append("tsi", "165000000");
-    form.append("premi", "525000");
-    form.append("pol_no", "PST.0680/2006-00025");
-    form.append("start_dd", "2006-01-03");
-    form.append("end_dd", "2006-03-15");
-    form.append("curr_id", "1");
-    form.append("share[]", "100");
-    form.append("sppaId", "10601041");
-    form.append("insdId", "1056");
-    form.append("interest", "With effect from inception date, this insurance cover for  Paket Pengadaan Kitchen Equipment Yayasan Sukma, Pidie, Aceh\\r\\nP.O. No.PO-0002503\\r\\nBond Value: IDR.165,000,000.00");
-    form.append("cob_id", "66");
-    form.append("estimationInsAmt[]", "1200000");
+    if(loadingIndicator == false){
+        if(dataClient.length == 0) {
+            Swal.fire({
+                icon: "error",
+                text: "Mohon pilih client terlebih dahulu!",
+                allowOutsideClick: false,
+            });
 
-    $.ajax({
-        async: true,
-        crossDomain: true,
-        url: "/api/claim/input/insert",
-        method: "POST",
-        headers: {
-            Authorization: "Bearer " + $("#token").val(),
-        },
-        "processData": false,
-        "contentType": false,
-        "mimeType": "multipart/form-data",
-        "data": form
-    }).done(function (response) {
-        console.log(response);
-    });
+            return search()
+        }
+
+        if(claimAmount.length == 0) {
+            Swal.fire({
+                icon: "error",
+                text: "Mohon isi data claim terlebih dahulu!",
+                allowOutsideClick: false,
+            });
+
+            return search()
+        }
+
+        const form = new FormData();
+
+        $.each(dataClient, function (i, item) {
+            form.append("sppaId", item.DRAFT_NO);
+            form.append("prod_no", item.PROD_NO);
+            form.append("name_wrt", item.name_wrt);
+            form.append("cob_code", item.cob_code);
+            form.append("tsi", item.tsi);
+            form.append("pol_no", item.pol_no);
+            form.append("start_dd", item.start_dd);
+            form.append("end_dd", item.end_dd);
+            form.append("insdId", item.insd_id);
+            form.append("interest", item.interest_insured);
+            form.append("cob_id", item.cob_id);
+
+        })
+
+        $.each(claimAmount, function (i, item) {
+            form.append("insr_id[]", item.insr_code);;
+            form.append("share[]", item.share_pct);
+            form.append("estimationInsAmt[]", item.estAmt);
+            form.append("claimInsAmt[]", item.claimAmt);
+            form.append("deducInsAmt[]", item.deducAmt);
+            form.append("recoveryInsAmt[]", item.recovAmt);
+            form.append("netInsAmt[]", item.netAmt);
+        })
+
+        $('.btnfilesupd').each(function (i) {
+            if($(this).val() != ""){
+                for (var j = 0; j < $(this).get(0).files.length; ++j) {
+                    form.append('fileUp[]', $(this).get(0).files[j])
+                }
+            }
+        })
+
+        form.append("dol", $('#dateOfLoss').val());
+        form.append("location", $('#locationOfLoss').val());
+        form.append("caused", $('#causeId').val());
+        form.append("lossAdj", $('#lossAdjId').val());
+        form.append("workshop", $('#workshopId').val());
+        form.append("curr_id", $('#currId').val());
+        form.append("estimationAmt", $('#estAmt').val());
+        form.append("claimAmt", $('#claimAmt').val());
+        form.append("deducAmt", $('#deducAmt').val());
+        form.append("recoveryAmt", $('#recoveryAmt').val());
+        form.append("netAmt", $('#netClaimAmt').val());
+        form.append("premi", "525000");
+
+        $.ajax({
+            async: true,
+            crossDomain: true,
+            url: "/api/claim/input/insert",
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + $("#token").val(),
+            },
+            "processData": false,
+            "contentType": false,
+            "mimeType": "multipart/form-data",
+            "data": form
+        }).done(async function (response) {
+            var data = JSON.parse(response);
+            if(data.status == 200){
+                Swal.fire({
+                    icon: 'info',
+                    title: data.message,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+
+                setInterval(function () {
+                    return window.location.replace(`/claim/detail/` + $("#draftNo").val());
+                }, 3000);
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: data.message,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+            }
+
+        }).fail(async function(error){
+            Swal.fire({
+                icon: 'error',
+                title: error.responseJSON.message,
+                showConfirmButton: true,
+            });
+        });
+    } else {
+        return false
+    }
 }

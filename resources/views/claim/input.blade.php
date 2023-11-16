@@ -124,14 +124,13 @@
                                                     <input type="text" class="form-control" id="polisNo"
                                                         name="polisNo" placeholder="Policy" hidden>
                                                     <input type="text" class="form-control" id="draftNo"
-                                                        name="draftNo" placeholder="Draft Number" required="true" hidden>
+                                                        name="draftNo" placeholder="Draft Number" required hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Type of Cover</label>
                                                     <p id="txttypeOFCover"></p>
                                                     <input type="text" class="form-control" id="typeOFCover"
-                                                        name="typeOFCover" placeholder="Type of Cover" required="true"
-                                                        hidden>
+                                                        name="typeOFCover" placeholder="Type of Cover" required hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Insured Name</label>
@@ -152,16 +151,10 @@
                                                 <div class="form-group">
                                                     <label for="insured_name">Period</label>
                                                     <p id="txtperiod"></p>
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-6 mb-1">
-                                                            <input type="text" class="form-control" id="startDd"
-                                                                name="startDd" placeholder="Start Period" hidden>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-6 mb-1">
-                                                            <input type="text" class="form-control" id="endDd"
-                                                                name="endDd" placeholder="End Period" hidden>
-                                                        </div>
-                                                    </div>
+                                                    <input type="text" class="form-control" id="startDd"
+                                                        name="startDd" placeholder="Start Period" hidden>
+                                                    <input type="text" class="form-control" id="endDd"
+                                                        name="endDd" placeholder="End Period" hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Interest/Object Claim</label>
@@ -223,143 +216,173 @@
                         <!-- /.card -->
                     </div>
                 </div>
-                <div class="col-12" id="dataClaim" style="display: none;">
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">Claim Data</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="insured_name">Date of Loss</label>
-                                        <input type="text" class="form-control datetimepicker-input" id="dateOfLoss"
-                                            data-toggle="datetimepicker" data-target="#dateOfLoss" name="dateOfLoss"
-                                            placeholder="Date of Loss" required="true">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="insured_name">Location of Loss</label>
-                                        <textarea class="form-control" rows="3" style="width: 100%;" id="location" name="location"
-                                            placeholder="Location of Loss" required></textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="insured_name">Cause of Loss</label>
-                                        <select class="form-control select2bs4" id="causeId" name="causeId"
-                                            style="width: 100%;">
-
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="insured_name">Loss Adjuster</label>
-                                        <select class="form-control select2bs4" id="lossAdjId" name="lossAdjId"
-                                            style="width: 100%;">
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="insured_name">Workshop</label>
-                                        <select class="form-control select2bs4" id="workshopId" name="workshopId"
-                                            style="width: 100%;">
-                                        </select>
-                                    </div>
-
-
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="insured_name">Estimation Amount</label>
-                                        <input type="text" class="form-control money count-amount" id="estAmt"
-                                            name="estAmt" placeholder="Estimation Amount" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="insured_name">Claim Amount</label>
-                                        <input type="text" class="form-control money count-amount" id="claimAmt"
-                                            name="claimAmt" placeholder="Claim Amount" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="insured_name">Deduction Amount</label>
-                                        <input type="text" class="form-control money count-amount" id="deducAmt"
-                                            name="deducAmt" placeholder="Deduction Amount" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="insured_name">Recovery Amount</label>
-                                        <input type="text" class="form-control money count-amount" id="recoveryAmt"
-                                            name="recoveryAmt" placeholder="Recovery Amount" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="insured_name">Net Claim Amount</label>
-                                        <div class="input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text border-0">
-                                                    <i class="fas fa-sync-alt fa-spin font-weight-bold text-black loadingIndicator"
-                                                        style="display: none;font-size:18px"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control money count-amount border-left-0"
-                                                id="netClaimAmt" name="netClaimAmt" placeholder="Net Amount" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div id="uploadform">
-                                        <div class="form-group">
-                                            <label for="client">Upload File</label><br>
-                                            <input type="file" id="fileInputupd" class="form-control"
-                                                name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
-                                            <div id="opt"></div>
-                                            <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
-                                                    class="fa fa-upload"></i> Pilih
-                                                File</a>
-                                            <small>Tekan CTRL untuk memilih beberapa file</small>
-                                            <ul id="listfilesupd"></ul>
-                                        </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-12" id="dataAmount" style="display: none;">
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">Claim Amount</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <table id="tbclaimAmount" class="table table-bordered table-hover text-nowrap"
-                                        style="width: 100%">
-                                        <thead>
-                                            <tr class="bg-primary">
-                                                <th>Insurance Name</th>
-                                                <th>Share (%)</th>
-                                                <th>Claim Amount</th>
-                                                <th>Recovery Amount</th>
-                                                <th>Deduction Amount</th>
-                                                <th>Net Claim</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="overlayDataAmount" class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
-                            <div class="text-bold pt-2">Loading...</div>
-                        </div>
-                        <div class="card-footer" style="text-align: right;">
-                            <button class="btn btn-primary" onclick="submit();"><i class="fas fa-save mr-1"></i>
-                                Save All Data
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" name="prodNo" id="prodNo">
             </div>
+        </div>
+        <div class="container-fluid">
+            <form id="formSaveAll" role="form" method="POST" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <div class="row">
+                    <div class="col-12" id="dataClaim" style="display: none;">
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                                <h3 class="card-title">Claim Data</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row pt-2 bg-gray-light">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="insured_name">Date of Loss</label>
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                id="dateOfLoss" data-toggle="datetimepicker" data-target="#dateOfLoss"
+                                                name="dateOfLoss" placeholder="Date of Loss" required>
+                                        </div>
 
+                                        <div class="form-group">
+                                            <label for="insured_name">Location of Loss</label>
+                                            <textarea class="form-control" rows="3" style="width: 100%;" id="locationOfLoss" name="locationOfLoss"
+                                                placeholder="Location of Loss" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="insured_name">Report Date</label>
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                id="reportDate" data-toggle="datetimepicker" data-target="#reportDate"
+                                                name="reportDate" placeholder="Report Date" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="insured_name">Report Source</label>
+                                            <textarea class="form-control" rows="3" style="width: 100%;" id="reportSource" name="reportSource"
+                                                placeholder="Report Source" required></textarea>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="insured_name">Cause of Loss</label>
+                                            <select class="form-control select2bs4" id="causeId" name="causeId"
+                                                style="width: 100%;" required>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="insured_name">Loss Adjuster</label>
+                                            <select class="form-control select2bs4" id="lossAdjId" name="lossAdjId"
+                                                style="width: 100%;" required>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="insured_name">Workshop</label>
+                                            <select class="form-control select2bs4" id="workshopId" name="workshopId"
+                                                style="width: 100%;" required>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="insured_name">Currency</label>
+                                            <select class="form-control select2bs4" id="currId" name="currId"
+                                                style="width: 100%;" required>
+                                            </select>
+                                        </div>
+
+                                        <div id="uploadform">
+                                            <div class="form-group">
+                                                <label for="client">Unggah Dokumen</label><br>
+                                                <input type="file" id="fileInputupd" class="form-control"
+                                                    name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
+                                                <div id="opt"></div>
+                                                <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
+                                                        class="fa fa-upload"></i> Pilih Dokumen</a>
+                                                <small>Tekan CTRL untuk memilih beberapa dokumen</small>
+                                                <ul id="listfilesupd"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="insured_name">Estimation Amount</label>
+                                            <input type="text" class="form-control money count-amount" id="estAmt"
+                                                name="estAmt" placeholder="Estimation Amount" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="insured_name">Claim Amount</label>
+                                            <input type="text" class="form-control money count-amount" id="claimAmt"
+                                                name="claimAmt" placeholder="Claim Amount" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="insured_name">Deduction Amount</label>
+                                            <input type="text" class="form-control money count-amount" id="deducAmt"
+                                                name="deducAmt" placeholder="Deduction Amount" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="insured_name">Recovery Amount</label>
+                                            <input type="text" class="form-control money count-amount"
+                                                id="recoveryAmt" name="recoveryAmt" placeholder="Recovery Amount"
+                                                required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="insured_name">Net Claim Amount</label>
+                                            <div class="input-group">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text border-0">
+                                                        <i class="fas fa-sync-alt fa-spin font-weight-bold text-black loadingIndicator"
+                                                            style="display: none;font-size:18px"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text"
+                                                    class="form-control money count-amount border-left-0" id="netClaimAmt"
+                                                    name="netClaimAmt" placeholder="Net Amount" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12" id="dataAmount" style="display: none;">
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                                <h3 class="card-title">Claim Amount</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table id="tbclaimAmount" class="table table-bordered table-hover text-nowrap"
+                                            style="width: 100%">
+                                            <thead>
+                                                <tr class="bg-primary">
+                                                    <th>Insurance Name</th>
+                                                    <th>Share (%)</th>
+                                                    <th>Claim Amount</th>
+                                                    <th>Recovery Amount</th>
+                                                    <th>Deduction Amount</th>
+                                                    <th>Net Claim</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="overlayDataAmount" class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
+                                <div class="text-bold pt-2">Loading...</div>
+                            </div>
+                            <div class="card-footer" style="text-align: right;">
+                                <button id="btnSaveAll" class="btn btn-primary" disabled="false"><i
+                                        class="fas fa-save mr-1"></i>
+                                    Save All Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="prodNo" id="prodNo">
+                </div>
+            </form>
+        </div>
     </section>
 @endsection
 
