@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>List Klaim</h1>
+                    <h1>Input Klaim</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -61,9 +61,9 @@
                         </div>
 
                         <div class="card-body">
-                            <table id="tbsppa" class="table table-bordered table-hover" style="width: 100%">
+                            <table id="tbsppa" class="table table-bordered table-hover text-nowrap" style="width: 100%">
                                 <thead>
-                                    <tr>
+                                    <tr class="bg-primary">
                                         <th>D/N</th>
                                         <th>Polis</th>
                                         <th>Insured Name</th>
@@ -77,64 +77,59 @@
                         <div class="card-footer" style="text-align: right;">
                             <input type="text" name="sppa_id" id="sppa_id" hidden>
                             <input type="text" name="polis_id" id="polis_id" hidden>
-                            <button class="btn btn-primary" onclick="info();"><i class="fas fa-check mr-1"></i>
+                            <button class="btn btn-primary" onclick="getClientinfo();"><i class="fas fa-check mr-1"></i>
                                 Load</button>
                         </div>
 
                     </div>
                 </div>
                 {{-- client info --}}
-                <div class="col-12" id="c_info" style="display: none;">
+                <div class="col-12" id="clientInfo" style="display: none;">
                     <div class="card card-primary card-tabs">
                         <div class="card-header p-0 pt-1">
                             <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="interest-insured-tab" data-toggle="pill"
-                                        href="#interest-insured-tab-view" role="tab"
-                                        aria-controls="interest-insured-tab-view" aria-selected="true">Client Info</a>
+                                    <a class="nav-link active" id="client-info-tab" data-toggle="pill"
+                                        href="#client-info-tab-view" role="tab" aria-controls="client-info-tab-view"
+                                        aria-selected="true">Client Info</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="conditions-tab" data-toggle="pill" href="#conditions-tab-view"
-                                        role="tab" aria-controls="conditions-tab-view" aria-selected="false">Premium
+                                    <a class="nav-link" id="premium-info-tab" data-toggle="pill"
+                                        href="#premium-info-tab-view" role="tab" aria-controls="premium-info-tab-view"
+                                        aria-selected="false">Premium
                                         Info</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="main-exclusion-tab" data-toggle="pill"
-                                        href="#main-exclusion-tab-view" role="tab"
-                                        aria-controls="main-exclusion-tab-view" aria-selected="false">D/N Info</a>
+                                    <a class="nav-link" id="debit-note-tab" data-toggle="pill" href="#debit-note-tab-view"
+                                        role="tab" aria-controls="debit-note-tab-view" aria-selected="false">D/N
+                                        Info</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-one-tabContent">
-                                <div class="tab-pane fade show active" id="interest-insured-tab-view" role="tabpanel"
-                                    aria-labelledby="interest-insured-tab">
-                                    <div class="card-body">
+                                <div class="tab-pane fade show active" id="client-info-tab-view" role="tabpanel"
+                                    aria-labelledby="client-info-tab">
+                                    <div class="card-body p-0">
                                         <div class="overlay-wrapper">
                                             <div id="overlayClientInfo" class="overlay"><i
                                                     class="fas fa-3x fa-sync-alt fa-spin"></i>
-                                                <div class="text-bold pt-2">Loading...</div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6" style="border-right: 1px solid #ddd;">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="insured_name">Policy</label>
                                                     <input type="text" class="form-control" id="polisNo"
                                                         name="polisNo" placeholder="Policy" readonly>
-                                                    <input type="text" class="form-control" id="tsi"
-                                                        name="tsi" placeholder="tsi" hidden>
+                                                    <input type="text" class="form-control" id="draftNo"
+                                                        name="draftNo" placeholder="Draft Number" required="true" hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Type of Cover</label>
-                                                    <input type="text" class="form-control" id="c_type"
-                                                        name="c_type" placeholder="Type of Cover" required="true"
+                                                    <input type="text" class="form-control" id="typeOFCover"
+                                                        name="typeOFCover" placeholder="Type of Cover" required="true"
                                                         readonly>
-                                                    <input type="text" class="form-control" id="kode_cob"
-                                                        name="kode_cob" placeholder="Type of Cover" required="true"
-                                                        hidden>
-                                                    <input type="text" class="form-control" id="currCode"
-                                                        name="currCode" hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Insured Name</label>
@@ -143,22 +138,26 @@
                                                     <input type="text" class="form-control" id="insdId"
                                                         name="insdId" placeholder="insdId" hidden>
                                                 </div>
-
+                                                <div class="form-group">
+                                                    <label for="insured_name">Total Sum Insured</label>
+                                                    <input type="text" class="form-control" id="tsi"
+                                                        name="tsi" placeholder="tsi" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="insured_name">Period</label>
                                                     <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                                        <div class="col-lg-6 col-md-6 col-sm-6 mb-1">
                                                             <input type="text" class="form-control" id="startDd"
                                                                 name="startDd" placeholder="Start Period" readonly>
                                                         </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                                        <div class="col-lg-6 col-md-6 col-sm-6 mb-1">
                                                             <input type="text" class="form-control" id="endDd"
                                                                 name="endDd" placeholder="End Period" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="insured_name">Interest/Object Claim</label>
                                                     <textarea class="form-control" rows="10" style="width: 100%;" id="interestInsured" name="interestInsured"
@@ -171,48 +170,54 @@
                                     <input type="submit" id="saveBtn" style="display: none;">
                                     <input type="text" id="c_cob" name="c_cob" style="display: none;">
                                 </div>
-                                <div class="tab-pane fade" id="conditions-tab-view" role="tabpanel"
-                                    aria-labelledby="conditions-tab">
-                                    <div class="card-body">
+                                <div class="tab-pane fade" id="premium-info-tab-view" role="tabpanel"
+                                    aria-labelledby="premium-info-tab">
+                                    <div class="card-body p-0">
                                         <div class="overlay-wrapper">
                                             <div id="overlayPremiumInfo" class="overlay"><i
                                                     class="fas fa-3x fa-sync-alt fa-spin"></i>
-                                                <div class="text-bold pt-2">Loading...</div>
                                             </div>
                                         </div>
-                                        <table class="table" id="tablepremi">
-                                            <thead>
-                                                <tr
-                                                    style="border-style: solid none solid none; text-align: right; font-weight: bold;">
-                                                    <td>&nbsp;</td>
-                                                    <td>No. Nota</td>
-                                                    <td>No. Bukti</td>
-                                                    <td>Tanggal</td>
-                                                    <td>Jumlah</td>
-                                                    <td>Pelunasan</td>
-                                                    <td>Saldo</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive p-0">
+                                                    <table id="tbclientPremiumInfo" class="table table-hover text-nowrap">
+                                                        <thead>
+                                                            <tr>
+                                                                <th id="clientName" colspan="6"></th>
+                                                            </tr>
+                                                            <tr class="bg-primary">
+                                                                <th>No. Nota</th>
+                                                                <th>No. Bukti</th>
+                                                                <th>Tanggal</th>
+                                                                <th>Jumlah</th>
+                                                                <th>Pelunasan</th>
+                                                                <th>Saldo</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12" id="divPremiumInfo">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="main-exclusion-tab-view" role="tabpanel"
-                                    aria-labelledby="main-exclusion-tab">
+                                <div class="tab-pane fade" id="debit-note-tab-view" role="tabpanel"
+                                    aria-labelledby="debit-note-tab">
 
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer col-md-12" style="text-align: right;">
-                            <button class="btn btn-primary" onclick="dataKlaim();"><i class="fas fa-save"></i> Add Data
-                                Claim</button>
+                            <button class="btn btn-primary" onclick="addDataClaim();"><i class="fas fa-save mr-1"></i>
+                                Add Data Claim
+                            </button>
                         </div>
                         <!-- /.card -->
                     </div>
                 </div>
-                <div class="col-12" id="dataKlaim" style="display: none;">
+                <div class="col-12" id="dataClaim" style="display: none;">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Claim Data</h3>
@@ -316,28 +321,11 @@
                         <div class="card-header">
                             <h3 class="card-title">Claim Amount</h3>
                         </div>
-
                         <div class="card-body">
-
                             <div class="row">
                                 <div class="col-md-12">
-                                    <style type="text/css">
-                                        table.table-bordered {
-                                            border: 1px solid #ddd;
-                                            margin-top: 20px;
-                                        }
-
-                                        table.table-bordered>thead>tr>th {
-                                            border: 1px solid #ddd;
-                                        }
-
-                                        table.table-bordered>tbody>tr>td {
-                                            border: 1px solid #ddd;
-                                        }
-                                    </style>
-
-                                    <table class="table table-bordered table-striped table-hover dataTable"
-                                        id="tableklaim">
+                                    <table id="tbclaimAmount" class="table table-bordered table-hover text-nowrap"
+                                        style="width: 100%">
                                         <thead>
                                             <tr>
                                                 <th>Insurance Name</th>
@@ -346,23 +334,19 @@
                                                 <th>Recovery Amount</th>
                                                 <th>Deduction Amount</th>
                                                 <th>Net Claim</th>
-                                                <!-- <th>&nbsp;</th> -->
                                             </tr>
                                         </thead>
-                                        <tbody>
-
-                                        </tbody>
                                     </table>
-
-
                                 </div>
                             </div>
                         </div>
-
+                        <div id="overlayDataAmount" class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
+                            <div class="text-bold pt-2">Loading...</div>
+                        </div>
                         <div class="card-footer" style="text-align: right;">
                             <button class="btn btn-primary" onclick="submit();"><i class="fas fa-save"></i>
-                                Save All
-                                Data</button>
+                                Save All Data
+                            </button>
                         </div>
                     </div>
                 </div>
