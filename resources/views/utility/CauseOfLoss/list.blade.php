@@ -22,14 +22,14 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table
-                    id="tablecol"
+                    id="tablecfl"
                     class="table table-bordered table-striped">
                     <thead>
                       <tr class="table-primary">
                         <th>No.</th>
                         <th>COB</th>
                         <th>Description</th>
-                        <th>&nbsp;</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     
@@ -65,7 +65,7 @@
     <script src ="{{ asset('storage/utility/causedOfloss.js') }}"> </script>
     <script>
         $(function() {
-          getDataTable()
+          DataTablecfl()
         });
     </script>
 @endpush

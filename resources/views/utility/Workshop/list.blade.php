@@ -33,7 +33,7 @@
                         <th>Phone Name</th>
                         <th>PIC Name</th>
                         <th>PIC Phone</th>
-                        <th>&nbsp;</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                   </table>
