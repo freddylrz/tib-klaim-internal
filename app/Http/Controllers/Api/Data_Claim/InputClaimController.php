@@ -32,11 +32,13 @@ class InputClaimController extends Controller
                     "filterId" => 3,
                     "filterDesc" => 'DN'
                 ),
-                array(
-                    "filterId" => 4,
-                    "filterDesc" => 'Currency'
-                ),
             );
+
+            $curr = DB::select(
+                'SELECT
+                webapps_db.tb_curr.*
+                FROM
+                webapps_db.tb_curr');
 
             $cause = DB::select('SELECT
                 klaimapps_db.tb_caused.id as causeId,
@@ -66,6 +68,7 @@ class InputClaimController extends Controller
             return response()->json([
                 'status' => 200,
                 'filter' => $filter,
+                'curr' => $curr,
                 'cause' => $cause,
                 'lossAdj' => $lossAdj,
                 'workshop' => $workshop,
