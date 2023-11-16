@@ -34,6 +34,12 @@ class InputClaimController extends Controller
                 ),
             );
 
+            $curr = DB::select(
+                'SELECT
+                webapps_db.tb_curr.*
+                FROM
+                webapps_db.tb_curr');
+
             $cause = DB::select('SELECT
                 klaimapps_db.tb_caused.id as causeId,
                 klaimapps_db.tb_caused.description
@@ -62,6 +68,7 @@ class InputClaimController extends Controller
             return response()->json([
                 'status' => 200,
                 'filter' => $filter,
+                'curr' => $curr,
                 'cause' => $cause,
                 'lossAdj' => $lossAdj,
                 'workshop' => $workshop,
@@ -362,5 +369,9 @@ class InputClaimController extends Controller
                 'message' => 'Gagal memuat data! Silahkan coba lagi.',
             ], 500);
         }
+    }
+
+    public function detailClaim(){
+
     }
 }
