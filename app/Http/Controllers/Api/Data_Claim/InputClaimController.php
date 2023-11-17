@@ -310,7 +310,7 @@ class InputClaimController extends Controller
                 date('Y-m-d', strtotime($r->start_dd)),
                 date('Y-m-d', strtotime($r->end_dd)),
                 str_replace(",", "",$r->premi),
-                $r->tsi,
+                str_replace(",", "",$r->tsi),
                 date('Y-m-d H:i:s', strtotime(now()))
             ]);
 
