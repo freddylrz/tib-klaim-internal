@@ -67,6 +67,9 @@
                                         <th>D/N</th>
                                         <th>Polis</th>
                                         <th>Insured Name</th>
+                                        <th>Type of Cover</th>
+                                        <th>Period</th>
+                                        <th>Check</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -262,6 +265,14 @@
                                 <hr />
                                 <div class="row">
                                     <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label for="insured_name">Type of Cover</label>
+                                            <select class="form-control select2bs4" id="cobId" name="cobId"
+                                                style="width: 100%;" required>
+                                            </select>
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="insured_name">Cause of Loss</label>
                                             <select class="form-control select2bs4" id="causeId" name="causeId"
@@ -293,7 +304,7 @@
                                         <div id="uploadform">
                                             <div class="form-group">
                                                 <label for="client">Unggah Dokumen</label><br>
-                                                <input type="file" id="fileInputupd" class="form-control"
+                                                <input type="file" id="fileInputupd" class="form-control files"
                                                     name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
                                                 <div id="opt"></div>
                                                 <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
@@ -372,9 +383,8 @@
                                 <div class="text-bold pt-2">Loading...</div>
                             </div>
                             <div class="card-footer" style="text-align: right;">
-                                <button id="btnSaveAll" class="btn btn-primary" disabled="false"><i
-                                        class="fas fa-save mr-1"></i>
-                                    Save All Data
+                                <button id="btnSaveAll" class="btn btn-primary">
+                                    <i class="fas fa-save mr-1"></i> Save All Data
                                 </button>
                             </div>
                         </div>
