@@ -40,6 +40,16 @@ class InputClaimController extends Controller
                 FROM
                 webapps_db.tb_curr');
 
+            $cob = DB::select(
+                'SELECT
+                        webapps_db.tb_cob.id,
+                        webapps_db.tb_cob.cob_code,
+                        CONCAT(webapps_db.tb_cob.cob_code," | ",webapps_db.tb_cob.cob_name) as cob_desc
+                    FROM
+                        webapps_db.tb_cob
+                    WHERE
+                        webapps_db.tb_cob.cob_code <> " "');
+
             $cause = DB::select('SELECT
                 klaimapps_db.tb_caused.id as causeId,
                 klaimapps_db.tb_caused.description
@@ -69,6 +79,7 @@ class InputClaimController extends Controller
                 'status' => 200,
                 'filter' => $filter,
                 'curr' => $curr,
+                'cob' => $cob,
                 'cause' => $cause,
                 'lossAdj' => $lossAdj,
                 'workshop' => $workshop,
@@ -191,32 +202,32 @@ class InputClaimController extends Controller
                 $dAmnt = str_replace(",", "", $r->get('deducAmt'));
                 $rAmnt = str_replace(",", "", $r->get('recoveryAmt'));
                 $sum = $cAmnt - $dAmnt - $rAmnt;
-                $sisaEst = 0;
-                $sisaNet = 0;
-                $sisaClaim = 0;
-                $sisaDeduc = 0;
-                $sisaRec = 0;
+                $sisaNet = $sum;
+                $sisaEst = $eAmnt;
+                $sisaClaim = $cAmnt;
+                $sisaDeduc = $dAmnt;
+                $sisaRec = $rAmnt;
                 for ($i = 0; $i < count($listIns); $i++) {
                     if ($i != count($listIns) - 1 || $i == 0) {
                         //net
                         $netShare = $sum * ($listIns[$i]->share_pct / 100);
-                        $sisaNet = $sum - $netShare;
+                        $sisaNet = $sisaNet - $netShare;
 
                         //est
                         $estShare = $eAmnt * ($listIns[$i]->share_pct / 100);
-                        $sisaEst = $eAmnt - $estShare;
+                        $sisaEst = $sisaEst - $estShare;
 
                         //claim
                         $claimShare = $cAmnt * ($listIns[$i]->share_pct / 100);
-                        $sisaClaim = $cAmnt - $claimShare;
+                        $sisaClaim = $sisaClaim - $claimShare;
 
                         //deduc
                         $deducShare = $dAmnt * ($listIns[$i]->share_pct / 100);
-                        $sisaDeduc = $dAmnt - $deducShare;
+                        $sisaDeduc = $sisaDeduc - $deducShare;
 
                         //recov
                         $recShare = $rAmnt * ($listIns[$i]->share_pct / 100);
-                        $sisaRec = $rAmnt - $recShare;
+                        $sisaRec = $sisaRec - $recShare;
 
                         $listIns[$i]->estAmt = number_format($estShare, 0);
                         $listIns[$i]->claimAmt = number_format($claimShare, 0);
@@ -251,9 +262,7 @@ class InputClaimController extends Controller
 
     public function insert(Request $r)
     {
-//        dd($r->all());
         try {
-//            $no = DB::select('select klaimapps_db.tb_klaim.claim_no from klaimapps_db.tb_klaim order by klaimapps_db.tb_klaim.id desc limit 1');
             $last = tb_klaim::select('claim_no', 'claim_dd')->orderBy('id', 'desc')->first();
             $yearCode = ((string)$last->claim_no)[1];
             $lastYear = date('Y', strtotime($last->claim_dd));
@@ -270,95 +279,154 @@ class InputClaimController extends Controller
             $noDate = date('my');
             $claim_no = $claimNo . "/TIB/" . $noDate . "/" . $r->cob_code;
 
-            $klaim = new tb_klaim;
-            $klaim->claim_no = $claim_no;
-            $klaim->claim_dd = date('Y-m-d H:i:s', strtotime(now()));
-            $klaim->req_id = $r->sppaId;
-            $klaim->prod_no = $r->prod_no;
-            $klaim->name_wrt = $r->name_wrt;
-            $klaim->pol_no = $r->pol_no;
-            $klaim->insd_id = $r->insdId;
-            $klaim->dol = date('Y-m-d', strtotime($r->dol));
-            $klaim->interest = $r->interest;
-            $klaim->location = $r->location;
-            $klaim->start_dd = date('Y-m-d', strtotime($r->start_dd));
-            $klaim->end_dd = date('Y-m-d', strtotime($r->end_dd));
+            $klaimId = DB::select("CALL klaimapps_db.insert_klaim(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+                $claim_no,
+                $r->sppaId,
+                date('Y-m-d H:i:s', strtotime(now())),
+                $r->prod_no,
+                $r->insdId,
+                $r->name_wrt,
+                $r->pol_no,
+                date('Y-m-d', strtotime($r->dol)),
+                date('Y-m-d', strtotime($r->reportDate)),
+                $r->reportSource,
+                $r->interest,
+                $r->location,
+                $r->caused,
+                $r->lossAdj,
+                $r->curr_id,
+                str_replace(",", "",$r->estimationAmt),
+                str_replace(",", "",$r->claimAmt),
+                str_replace(",", "",$r->deducAmt),
+                str_replace(",", "",$r->recoveryAmt),
+                str_replace(",", "",$r->netAmt),
+                Auth::user()->id,
+                $r->cob_id,
+                $r->workshop,
+                date('Y-m-d', strtotime($r->start_dd)),
+                date('Y-m-d', strtotime($r->end_dd)),
+                str_replace(",", "",$r->premi),
+                $r->tsi,
+                date('Y-m-d H:i:s', strtotime(now()))
+            ]);
 
-            $klaim->caused = $r->caused;
-            $klaim->ladj = $r->lossAdj;
-            $klaim->ws_id = $r->workshop;
-            $klaim->cob_id = $r->cob_id;
-            $klaim->cur = $r->curr_id;
+            if(!empty($klaimId)){
+                if (!empty($r->file(['fileUp']))) {
+                    for ($i = 0; $i < count($r->file('fileUp')); $i++) {
+                        $fileup = $r->file(['fileUp'])[$i];
 
-            $klaim->tsi = str_replace(",", "", $r->tsi);
-            $klaim->est_amt = str_replace(",", "", $r->estimationAmt);
-            $klaim->claim_amt = str_replace(",", "", $r->claimAmt);
-            $klaim->deduct_amt = str_replace(",", "", $r->deducAmt);
-            $klaim->recv_amt = str_replace(",", "", $r->recoveryAmt);
-            $klaim->net_amt = str_replace(",", "", $r->netAmt);
-            $klaim->user_add = Auth::user()->id;
-
-            $klaim->save();
-
-            $klaimId = $klaim->id;
-
-            $cob = DB::select('SELECT
-                            webapps_db.tb_cob.cob_code
-                            FROM
-                            klaimapps_db.tb_klaim
-                            INNER JOIN webapps_db.tb_cob ON klaimapps_db.tb_klaim.cob_id = webapps_db.tb_cob.id
-                            WHERE
-                            klaimapps_db.tb_klaim.id = ' . $klaimId);
-
-            if (!empty($r->file(['fileUp']))) {
-                for ($i = 0; $i < count($r->file('fileUp')); $i++) {
-                    $fileup = $r->file(['fileUp'])[$i];
-
-                    if (!empty($fileup)) {
-                        $extension = $fileup->getClientOriginalName(); // getting image extension
-                        $fileName = $extension;
-                        $fileName = str_replace("#", " ", $fileName);
-                        $destinationPath = 'upload/' . $cob[0]->cob_code . '/' . $klaimId;
-                        $fileup->move($destinationPath, $fileName);
-                        $upload = new tb_uploads;
-                        $upload->klaim_id = $klaimId;
-                        $upload->file_name = $fileName;
-                        $upload->file_path = $destinationPath;
-                        $upload->date_uploaded = date('Y-m-d', strtotime(now()));
-                        $upload->klaim_cob = $cob[0]->cob_code;
-                        $upload->status = $r->stat;
-                        $upload->save();
+                        if (!empty($fileup)) {
+                            $extension = $fileup->getClientOriginalName(); // getting image extension
+                            $fileName = $extension;
+                            $fileName = str_replace("#", " ", $fileName);
+                            $destinationPath = 'upload/' . $r->cob_code . '/' . $klaimId[0]->id_klaim;
+                            $fileup->move($destinationPath, $fileName);
+                            $upload = new tb_uploads;
+                            $upload->klaim_id = $klaimId[0]->id_klaim;
+                            $upload->file_name = $fileName;
+                            $upload->file_path = $destinationPath;
+                            $upload->date_uploaded = date('Y-m-d', strtotime(now()));
+                            $upload->klaim_cob = $r->cob_code;
+                            $upload->status = $r->stat;
+                            $upload->save();
+                        }
                     }
+                }
+
+                for ($i = 0; $i < count($r->insr_id); $i++) {
+                    $klaimIdIns[] = DB::select("CALL klaimapps_db.insert_klaim_ins(?,?,?,?,?,?,?,?,?,?,?)", [
+                        $klaimId[0]->id_klaim,
+                        $r->insr_id[$i],
+                        $r->curr_id,
+                        $r->share[$i],
+                        str_replace(",", "", $r->estimationInsAmt[$i]),
+                        str_replace(",", "", $r->claimInsAmt[$i]),
+                        str_replace(",", "", $r->deducInsAmt[$i]),
+                        str_replace(",", "", $r->recoveryInsAmt[$i]),
+                        str_replace(",", "", $r->netInsAmt[$i]),
+                        str_replace(",", "",$r->premi),
+                        date('Y-m-d H:i:s', strtotime(now()))
+                        ]);
                 }
             }
 
-            $log = new tb_klaim_log;
-            $log->klaim_id = $klaimId;
-            $log->klaim_stat_id = 1;
-            $log->user_id = Auth::user()->id;
-            $log->save();
 
-            $datalog = tb_klaim::find($klaimId);
-            $datalog->klaim_log_id = $log->id;
-            $datalog->save();
 
-//            self::teleNotification($klaimId);
-            for ($i = 0; $i < count($r->insr_id); $i++) {
-                $ins = new tb_klaim_ins;
-                $ins->klaim_id = $klaim->id;
-                $ins->insr_id = $r->insr_id[$i];
-                $ins->share = $r->share[$i];
-                $ins->est_amt = str_replace(",", "", $r->estimationInsAmt[$i]);
-                $ins->claim_amt = str_replace(",", "", $r->claimInsAmt[$i]);
-                $ins->deduct_amt = str_replace(",", "", $r->deducInsAmt[$i]);
-                $ins->recv_amt = str_replace(",", "", $r->recoveryInsAmt[$i]);
-                $ins->net_claim = str_replace(",", "", $r->netInsAmt[$i]);
-                $ins->save();
-            }
+//            $klaim = new tb_klaim;
+//            $klaim->claim_no = $claim_no;
+//            $klaim->claim_dd = date('Y-m-d H:i:s', strtotime(now()));
+//            $klaim->req_id = $r->sppaId;
+//            $klaim->prod_no = $r->prod_no;
+//            $klaim->name_wrt = $r->name_wrt;
+//            $klaim->pol_no = $r->pol_no;
+//            $klaim->insd_id = $r->insdId;
+//            $klaim->dol = date('Y-m-d', strtotime($r->dol));
+//            $klaim->interest = $r->interest;
+//            $klaim->location = $r->location;
+//            $klaim->start_dd = date('Y-m-d', strtotime($r->start_dd));
+//            $klaim->end_dd = date('Y-m-d', strtotime($r->end_dd));
+//
+//            $klaim->caused = $r->caused;
+//            $klaim->ladj = $r->lossAdj;
+//            $klaim->ws_id = $r->workshop;
+//            $klaim->cob_id = $r->cob_id;
+//            $klaim->cur = $r->curr_id;
+//
+//            $klaim->tsi = str_replace(",", "", $r->tsi);
+//            $klaim->est_amt = str_replace(",", "", $r->estimationAmt);
+//            $klaim->claim_amt = str_replace(",", "", $r->claimAmt);
+//            $klaim->deduct_amt = str_replace(",", "", $r->deducAmt);
+//            $klaim->recv_amt = str_replace(",", "", $r->recoveryAmt);
+//            $klaim->net_amt = str_replace(",", "", $r->netAmt);
+//            $klaim->user_add = Auth::user()->id;
+//
+//            $klaim->save();
+//
+//            $klaimId = $klaim->id;
+//            for ($i = 0; $i < count($r->insr_id); $i++) {
+//                $klaimIdIns = DB::select("CALL klaimapps_db.insert_klaim(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+//                    $klaimId[0]->id_klaim,
+//                    $r->insr_id[$i],
+//                    $r->share[$i],
+//                    str_replace(",", "", $r->estimationInsAmt[$i]),
+//                    str_replace(",", "", $r->claimInsAmt[$i]),
+//                    str_replace(",", "", $r->deducInsAmt[$i]),
+//                    str_replace(",", "", $r->recoveryInsAmt[$i]),
+//                    str_replace(",", "", $r->netInsAmt[$i]),
+//                    str_replace(",", "",$r->premi),
+//                    date('Y-m-d H:i:s', strtotime(now()))
+//
+//                ]);
+//                $ins = new tb_klaim_ins;
+//                $ins->klaim_id = $klaim->id;
+//                $ins->insr_id = $r->insr_id[$i];
+//                $ins->share = $r->share[$i];
+//                $ins->est_amt = str_replace(",", "", $r->estimationInsAmt[$i]);
+//                $ins->claim_amt = str_replace(",", "", $r->claimInsAmt[$i]);
+//                $ins->deduct_amt = str_replace(",", "", $r->deducInsAmt[$i]);
+//                $ins->recv_amt = str_replace(",", "", $r->recoveryInsAmt[$i]);
+//                $ins->net_claim = str_replace(",", "", $r->netInsAmt[$i]);
+//                $ins->save();
+//            }
+
+//
+//            $log = new tb_klaim_log;
+//            $log->klaim_id = $klaimId;
+//            $log->klaim_stat_id = 1;
+//            $log->user_id = Auth::user()->id;
+//            $log->save();
+//
+//            $datalog = tb_klaim::find($klaimId);
+//            $datalog->klaim_log_id = $log->id;
+//            $datalog->save();
+//
+////            self::teleNotification($klaimId);
+
 
             return response()->json([
                 'status' => 200,
                 'message' => 'Berhasil menyimpan data!',
+                'klaimId'=> $klaimId[0]->id_klaim
             ], 200);
 
         } catch (Throwable $exception) {
@@ -369,9 +437,5 @@ class InputClaimController extends Controller
                 'message' => 'Gagal memuat data! Silahkan coba lagi.',
             ], 500);
         }
-    }
-
-    public function detailClaim(){
-
     }
 }
