@@ -119,6 +119,28 @@ function getDataAsset() {
             "Authorization": "Bearer " + $('#token').val()
         },
     }).done(function (response) {
+        $('#causeId').append($('<option>', {
+            value: '',
+            text : "-- Choose Cause of Loss --"
+        }));
+        $('#lossAdjId').append($('<option>', {
+            value: '',
+            text : "-- Choose Loss Adjuster --"
+        }));
+        $('#workshopId').append($('<option>', {
+            value: '',
+            text : "-- Choose Workshop --"
+        }));
+        $('#currId').append($('<option>', {
+            value: '',
+            text : "-- Choose Currency --"
+        }));
+        $('#cobId').append($('<option>', {
+            value: '',
+            text : "-- Choose Type of Cover --"
+        }));
+
+
         $.each(response.filter, function (i, item) {
             $('#parameterId').append($('<option>', {
                 value: item.filterId,
@@ -147,6 +169,12 @@ function getDataAsset() {
             $('#currId').append($('<option>', {
                 value: item.id,
                 text: `${item.curr_code} | ${item.curr_name}`
+            }));
+        });
+        $.each(response.cob, function (i, item) {
+            $('#cobId').append($('<option>', {
+                value: item.id,
+                text: item.cob_desc
             }));
         });
 
@@ -196,13 +224,17 @@ function search() {
             columns: [
                 { data: "draft_no" },
                 { data: "policy_no" },
+                { data: "insured_name" },
+                { data: "type_cover" },
+                { data: "periode" },
                 {
-                    data: "insured_name",
+                    data: "prod_no",
                     render: function(data, type, row) {
                         return `
-                            ${data} <span class="float-right badge bg-primary tanda" style="display: none;" data-prod="${row.prod_no}"><i class="fas fa-check"></i></span>
+                            <span class="badge bg-primary py-2 tanda" style="display: none;" data-prod="${row.prod_no}"><i class="fas fa-check"></i></span>
                         `;
-                    }
+                    },
+                    orderable: false,
                 }
             ],
         });
@@ -245,13 +277,26 @@ function getClientinfo() {
             prod_no: $('#prodNo').val(),
         }
     })
-    .done(async function (response) {
-        await $.each(response.data, function (i, item) {
+    .done(function (response) {
+        response.data.forEach(function (item) {
             $('#draftNo').val(item.DRAFT_NO)
             $('#prodNo').val(item.PROD_NO)
             $('#insdId').val(item.insd_id)
             $('#nameWrt').val(item.name_wrt)
             $('#typeOFCover').val(item.type_of_cover)
+
+            $('#cobId').val(item.cob_id)
+            $('#cobId').trigger('change');
+
+            if (item.cob_id !== null) {
+                $('#cobId').prop('disabled', true);
+            } else {
+                $('#cobId').prop('disabled', false);
+            }
+
+            $('#currId').val(item.curr_id)
+            $('#currId').trigger('change');
+
             $('#polisNo').val(item.pol_no)
             $('#interestInsured').val(item.interest_insured)
             $('#startDd').val(item.start_dd)
@@ -266,6 +311,14 @@ function getClientinfo() {
             $('#txttsi').html(`${item.curr_code} ${item.tsi}`)
 
             $('#clientName').html(`${item.name_wrt} (CLIENT)`)
+        });
+
+        $('#currId').on('change', function () {
+            $(this).val();
+        });
+
+        $('#cobId').on('change', function () {
+            $(this).val();
         });
 
         dataClient = response.data
@@ -413,17 +466,17 @@ function addDataClaim() {
                     className: 'dt-body-right'
                 },
                 {
-                    data: "recovAmt",
+                    data: "deducAmt",
                     render: function(data, type, row) {
-                        return `<span id="recoveryAmount${row.insr_id}">${data}</span>`;
+                        return `<span id="deductionAmount${row.insr_id}">${data}</span>`;
                     },
                     orderable: false,
                     className: 'dt-body-right'
                 },
                 {
-                    data: "deducAmt",
+                    data: "recovAmt",
                     render: function(data, type, row) {
-                        return `<span id="deductionAmount${row.insr_id}">${data}</span>`;
+                        return `<span id="recoveryAmount${row.insr_id}">${data}</span>`;
                     },
                     orderable: false,
                     className: 'dt-body-right'
@@ -538,12 +591,13 @@ function saveAllData() {
             form.append("insdId", item.insd_id);
             form.append("interest", item.interest_insured);
             form.append("cob_id", item.cob_id);
-
+            form.append("premi", item.premi);
         })
 
         $.each(claimAmount, function (i, item) {
             form.append("insr_id[]", item.insr_code);;
             form.append("share[]", item.share_pct);
+            form.append("premiIns[]", item.premi);
             form.append("estimationInsAmt[]", item.estAmt);
             form.append("claimInsAmt[]", item.claimAmt);
             form.append("deducInsAmt[]", item.deducAmt);
@@ -551,13 +605,15 @@ function saveAllData() {
             form.append("netInsAmt[]", item.netAmt);
         })
 
-        $('.btnfilesupd').each(function (i) {
-            if($(this).val() != ""){
-                for (var j = 0; j < $(this).get(0).files.length; ++j) {
-                    form.append('fileUp[]', $(this).get(0).files[j])
+        $('#fileInputupd').each(function () {
+            const files = $(this).prop('files');
+
+            if (files.length > 0) {
+                for (let j = 0; j < files.length; j++) {
+                    form.append('fileUp[]', files[j]);
                 }
             }
-        })
+        });
 
         form.append("dol", $('#dateOfLoss').val());
         form.append("location", $('#locationOfLoss').val());
@@ -565,12 +621,14 @@ function saveAllData() {
         form.append("lossAdj", $('#lossAdjId').val());
         form.append("workshop", $('#workshopId').val());
         form.append("curr_id", $('#currId').val());
+        form.append("cob_id", $('#cobId').val());
+        form.append("reportDate", $('#reportDate').val());
+        form.append("reportSource", $('#reportSource').val());
         form.append("estimationAmt", $('#estAmt').val());
         form.append("claimAmt", $('#claimAmt').val());
         form.append("deducAmt", $('#deducAmt').val());
         form.append("recoveryAmt", $('#recoveryAmt').val());
         form.append("netAmt", $('#netClaimAmt').val());
-        form.append("premi", "525000");
 
         $.ajax({
             async: true,
