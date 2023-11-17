@@ -1,4 +1,4 @@
-function DataTablecfl() {
+function datatabelLar() {
     Swal.fire({
         icon: "info",
         title: "loading",
@@ -6,7 +6,7 @@ function DataTablecfl() {
         allowOutsideClick: false,
     });
     $.ajax({
-        url: "/api/utiliy/cause-of-loss",
+        url: "/api/utiliy/loss-adjuster",
         method: "GET",
         timeout: 0,
         headers: {
@@ -14,7 +14,7 @@ function DataTablecfl() {
         },
     })
         .done(async function (response) {
-            await $("#tablecfl").DataTable({
+            await $("#tableLar").DataTable({
                 processing: false,
                 pageLength: 10,
                 autoWidth: false,
@@ -25,31 +25,33 @@ function DataTablecfl() {
                 data: response.data,
                 columns: [
                     { data: null, render: "id" },
-                    { data: "cob_desc" },
-                    { data: "description" },
+                    { data: "adj_name" },
+                    { data: "adj_phone" },
+                    { data: "adj_email" },
+                    { data: "adj_pic" },
+
                     {
                         data: "id",
                         render: function (data, type, row, meta) {
-                            return `
-                                <a href="/admin/settings/branch/update/${data}" class="btn btn-warning">
+                            return `  <a href="/admin/settings/branch/update/${data}" class="btn btn-warning">
                                     <i class="fa fa-edit"> </i>
                                 </a>
                                 <button class="btn btn-primary " onclick="onDelete(${data})">
                                     <i class="fa fa-eye"> </i>
                                 </button>
-                            `;
+                                `;
                         },
                     },
                 ],
                 drawCallback: function () {
-                    $("#tablecfl tr td:nth-child(4)").css(
+                    $("#tableLar tr td:nth-child(6)").css(
                         "text-align",
                         "center"
                     );
                 },
             });
-            $("#tablecfl tr td:nth-child(4)").css("text-align", "center");
             Swal.close();
+            $("#tableLar tr td:nth-child(6)").css("text-align", "center");
         })
         .fail(async function (response) {
             console.log(response);

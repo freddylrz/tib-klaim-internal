@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-        <div class="content-header">
+        <div class="content-header ">
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
@@ -18,19 +18,18 @@
         <section class="content">
           <div class="row">
             <div class="col-12">
-
-              <div class="card">
+                <div class="card card-primary card-outline">
                 <!-- /.card-header -->
                 <div class="card-body">
                   <table
-                    id="tablecol"
+                    id="tablecfl"
                     class="table table-bordered table-striped">
                     <thead>
                       <tr class="table-primary">
                         <th>No.</th>
                         <th>COB</th>
                         <th>Description</th>
-                        <th>&nbsp;</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     
@@ -66,7 +65,7 @@
     <script src ="{{ asset('storage/utility/causedOfloss.js') }}"> </script>
     <script>
         $(function() {
-          getDataTable()
+          DataTablecfl()
         });
     </script>
 @endpush

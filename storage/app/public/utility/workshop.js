@@ -1,4 +1,4 @@
-function DataTablecfl() {
+function Wsdatatabel() {
     Swal.fire({
         icon: "info",
         title: "loading",
@@ -6,7 +6,7 @@ function DataTablecfl() {
         allowOutsideClick: false,
     });
     $.ajax({
-        url: "/api/utiliy/cause-of-loss",
+        url: "/api/utiliy/workshop",
         method: "GET",
         timeout: 0,
         headers: {
@@ -14,7 +14,7 @@ function DataTablecfl() {
         },
     })
         .done(async function (response) {
-            await $("#tablecfl").DataTable({
+            await $("#tableWs").DataTable({
                 processing: false,
                 pageLength: 10,
                 autoWidth: false,
@@ -25,31 +25,32 @@ function DataTablecfl() {
                 data: response.data,
                 columns: [
                     { data: null, render: "id" },
-                    { data: "cob_desc" },
-                    { data: "description" },
+                    { data: "ws_name" },
+                    { data: "ws_pic" },
+                    { data: "ws_email" },
+                    { data: "ws_phone" },
                     {
                         data: "id",
                         render: function (data, type, row, meta) {
-                            return `
-                                <a href="/admin/settings/branch/update/${data}" class="btn btn-warning">
+                            return `<a href="/admin/settings/branch/update/${data}" class="btn btn-warning">
                                     <i class="fa fa-edit"> </i>
                                 </a>
                                 <button class="btn btn-primary " onclick="onDelete(${data})">
                                     <i class="fa fa-eye"> </i>
                                 </button>
-                            `;
+                           <a> `;
                         },
                     },
                 ],
-                drawCallback: function () {
-                    $("#tablecfl tr td:nth-child(4)").css(
+                drawCallback: function (settings) {
+                    $("#tablecfl tr td:nth-child(6)").css(
                         "text-align",
                         "center"
                     );
                 },
             });
-            $("#tablecfl tr td:nth-child(4)").css("text-align", "center");
             Swal.close();
+            $("#tablecfl tr td:nth-child(6)").css("text-align", "center");
         })
         .fail(async function (response) {
             console.log(response);
