@@ -310,7 +310,7 @@ class InputClaimController extends Controller
                 date('Y-m-d', strtotime($r->start_dd)),
                 date('Y-m-d', strtotime($r->end_dd)),
                 str_replace(",", "",$r->premi),
-                $r->tsi,
+                str_replace(",", "",$r->tsi),
                 date('Y-m-d H:i:s', strtotime(now()))
             ]);
 
@@ -348,7 +348,7 @@ class InputClaimController extends Controller
                         str_replace(",", "", $r->deducInsAmt[$i]),
                         str_replace(",", "", $r->recoveryInsAmt[$i]),
                         str_replace(",", "", $r->netInsAmt[$i]),
-                        str_replace(",", "",$r->premi),
+                        str_replace(",", "",$r->premiIns[$i]),
                         date('Y-m-d H:i:s', strtotime(now()))
                         ]);
                 }
