@@ -98,6 +98,10 @@ class InputClaimController extends Controller
     {
         try {
             $data = DB::select("CALL klaimapps_db.getPolis(?,?)", [$r->get("type"), $r->get("search")]);
+            if($data){
+                foreach ($data as $dt)
+                    $dt->periode = HelperController::changeDate($dt->start_date).' s/d '.HelperController::changeDate($dt->end_date);
+            }
 
             return response()->json([
                 'status' => 200,
@@ -229,18 +233,18 @@ class InputClaimController extends Controller
                         $recShare = $rAmnt * ($listIns[$i]->share_pct / 100);
                         $sisaRec = $sisaRec - $recShare;
 
-                        $listIns[$i]->estAmt = number_format($estShare, 0);
-                        $listIns[$i]->claimAmt = number_format($claimShare, 0);
-                        $listIns[$i]->deducAmt = number_format($deducShare, 0);
-                        $listIns[$i]->recovAmt = number_format($recShare, 0);
-                        $listIns[$i]->netAmt = number_format($netShare, 0);
+                        $listIns[$i]->estAmt = number_format($estShare, 2);
+                        $listIns[$i]->claimAmt = number_format($claimShare, 2);
+                        $listIns[$i]->deducAmt = number_format($deducShare, 2);
+                        $listIns[$i]->recovAmt = number_format($recShare, 2);
+                        $listIns[$i]->netAmt = number_format($netShare, 2);
 
                     } else {
-                        $listIns[$i]->estAmt = number_format($sisaEst, 0);
-                        $listIns[$i]->claimAmt = number_format($sisaClaim, 0);
-                        $listIns[$i]->deducAmt = number_format($sisaDeduc, 0);
-                        $listIns[$i]->recovAmt = number_format($sisaRec, 0);
-                        $listIns[$i]->netAmt = number_format($sisaNet, 0);
+                        $listIns[$i]->estAmt = number_format($sisaEst, 2);
+                        $listIns[$i]->claimAmt = number_format($sisaClaim, 2);
+                        $listIns[$i]->deducAmt = number_format($sisaDeduc, 2);
+                        $listIns[$i]->recovAmt = number_format($sisaRec, 2);
+                        $listIns[$i]->netAmt = number_format($sisaNet, 2);
                     }
                 }
             }
