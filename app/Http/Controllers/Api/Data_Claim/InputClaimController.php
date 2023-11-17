@@ -98,6 +98,10 @@ class InputClaimController extends Controller
     {
         try {
             $data = DB::select("CALL klaimapps_db.getPolis(?,?)", [$r->get("type"), $r->get("search")]);
+            if($data){
+                foreach ($data as $dt)
+                    $dt->periode = HelperController::changeDate($dt->start_date).' s/d '.HelperController::changeDate($dt->end_date);
+            }
 
             return response()->json([
                 'status' => 200,
