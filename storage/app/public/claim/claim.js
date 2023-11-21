@@ -557,6 +557,13 @@ function getCountAmount() {
 
 function saveAllData() {
     if(loadingIndicator == false){
+        Swal.fire({
+            icon: "info",
+            text: "loading",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+        });
+
         if(dataClient.length == 0) {
             Swal.fire({
                 icon: "error",

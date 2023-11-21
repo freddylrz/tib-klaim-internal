@@ -370,8 +370,8 @@
                                                     <th>Insurance Name</th>
                                                     <th>Share (%)</th>
                                                     <th>Claim Amount</th>
-                                                    <th>Recovery Amount</th>
                                                     <th>Deduction Amount</th>
+                                                    <th>Recovery Amount</th>
                                                     <th>Net Claim</th>
                                                 </tr>
                                             </thead>
