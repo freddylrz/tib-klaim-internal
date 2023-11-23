@@ -23,14 +23,8 @@ class DataClaimController extends Controller
             $log = DB::select("CALL klaimapps_db.detail_claim(?,?)", [$r->get("claimId"),3]);
             if($client){
                 $client[0]->dol = date("d-m-Y", strtotime($client[0]->dol));
-                $client[0]->report_date = date("d-m-Y", strtotime($client[0]->report_date));
-                $client[0]->est_amt = number_format( $client[0]->est_amt, 2);
-                $client[0]->claim_amt = number_format( $client[0]->claim_amt, 2);
-                $client[0]->deduct_amt = number_format(  $client[0]->deduct_amt, 2);
-                $client[0]->recv_amt = number_format( $client[0]->recv_amt, 2);
-                $client[0]->net_amt = number_format($client[0]->net_amt, 2);
 
-                $clientInfo = DB::select("CALL klaimapps_db.getClientInfo(?)", [ $client[0]->prod_no]);
+                $clientInfo = DB::select("CALL klaimapps_db.getClientInfo(?,?)", [ $client[0]->prod_no, $client[0]->draft_no]);
                 if($clientInfo){
                     $clientInfo[0]->periode =  HelperController::changeDate($clientInfo[0]->start_dd).' s/d '.HelperController::changeDate($clientInfo[0]->end_dd);
                     $clientInfo[0]->start_dd = date("d-m-Y", strtotime($clientInfo[0]->start_dd));
