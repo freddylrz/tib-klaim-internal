@@ -143,7 +143,7 @@ class InputClaimController extends Controller
     public function getDataPremium(Request $r)
     {
         try {
-            $prem = DB::select("CALL klaimapps_db.getPremiumInfo(?)", [$r->get("prod_no")]);
+            $prem = DB::select("CALL klaimapps_db.getClientInfo(?,?)", [$r->get("prod_no"), $r->get("draft_no")]);
             $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)", ['1', $r->get("draft_no"), '', '']);
 
             if ($listIns)
