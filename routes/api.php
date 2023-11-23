@@ -29,7 +29,7 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
             Route::get('/share-insurance', ['uses' => 'Api\Data_Claim\InputClaimController@getDataIns']);
             Route::get('/claim-amount', ['uses' => 'Api\Data_Claim\InputClaimController@getClaimAmount']);
         });
-        Route::get('/detail', ['uses' => 'Api\Data_Claim\DataClaimController@detailClaim']);
+        Route::get('/detail-claim', ['uses' => 'Api\Data_Claim\DataClaimController@detailClaim']);
         Route::get('/list-claim', ['uses' => 'Api\Data_Claim\DataClaimController@listClaim']);
         Route::get('/update-claim', ['uses' => 'Api\Data_Claim\DataClaimController@updateClaim']);
 

@@ -120,7 +120,7 @@ class InputClaimController extends Controller
     public function getDataClient(Request $r)
     {
         try {
-            $data = DB::select("CALL klaimapps_db.getClientInfo(?)", [$r->get("prod_no")]);
+            $data = DB::select("CALL klaimapps_db.getClientInfo(?,?)", [$r->get("prod_no"),$r->get("draft_no")]);
             if($data){
                 $data[0]->periode =  HelperController::changeDate($data[0]->start_dd).' s/d '.HelperController::changeDate($data[0]->end_dd);
                 $data[0]->start_dd = date("d-m-Y", strtotime($data[0]->start_dd));
@@ -152,6 +152,7 @@ class InputClaimController extends Controller
             foreach ($listIns as $l) {
                 $l->premium = $premIns;
             }
+
             $data = array(
                 "client" => $prem,
                 "ins" => $listIns,
