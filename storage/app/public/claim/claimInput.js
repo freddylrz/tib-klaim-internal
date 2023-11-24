@@ -1,7 +1,6 @@
 var loadPremiumInfo = 0;
 var loadingIndicator = false;
 var claimAmount = [];
-dataClient= [];
 var dataClient = [];
 
 $(function() {
@@ -34,6 +33,7 @@ $(function() {
         $(this).closest('tr').find('.tanda').css('display', 'block');
 
         $('#prodNo').val($(this).closest('tr').find('.tanda').data('prod'));
+        $('#draftNo').val($(this).closest('tr').find('.tanda').data('draft'));
 
         $('#clientInfo').slideUp();
         $('#overlayClientInfo').fadeIn();
@@ -48,6 +48,7 @@ $(function() {
             $('#dataClient').slideUp();
             $('#overlayDataClient').fadeIn();
             $('#prodNo').val('')
+            $('#draftNo').val('')
             $('#clientInfo').slideUp();
             $('#overlayClientInfo').fadeIn();
             $('#overlayPremiumInfo').fadeIn();
@@ -66,6 +67,10 @@ $(function() {
         }
     });
 
+    $('#btnDataCLaim').on('click', function(e) {
+        addDataClaim()
+	});
+
     // Event listener for input count amount
     $('.count-amount').on('keyup', function(e) {
         getCountAmount()
@@ -79,8 +84,10 @@ $(function() {
 		var thefiles = $('#fileInputupd').get(0).files.length;
 		$('#listfilesupd').html('');
 		for (var i = 0; i < thefiles; ++i) {
-			var name = $(this).get(0).files.item(i).name;
-			$('#listfilesupd').append(`<li>${name}</li>`);
+            var file = $(this).get(0).files.item(i);
+            var name = file.name;
+            var fileUrl = URL.createObjectURL(file); // Create URL for the file
+			$('#listfilesupd').append(`<li><a href="${fileUrl}" target="_blank">${name}</a></li>`);
 		}
 	});
 
@@ -123,13 +130,25 @@ function getDataAsset() {
             value: '',
             text : "-- Choose Cause of Loss --"
         }));
+        $('#causeId').append($('<option>', {
+            value: 0,
+            text : "-"
+        }));
         $('#lossAdjId').append($('<option>', {
             value: '',
             text : "-- Choose Loss Adjuster --"
         }));
+        $('#lossAdjId').append($('<option>', {
+            value: 0,
+            text : "-"
+        }));
         $('#workshopId').append($('<option>', {
             value: '',
             text : "-- Choose Workshop --"
+        }));
+        $('#workshopId').append($('<option>', {
+            value: 0,
+            text : "-"
         }));
         $('#currId').append($('<option>', {
             value: '',
@@ -231,7 +250,7 @@ function search() {
                     data: "prod_no",
                     render: function(data, type, row) {
                         return `
-                            <span class="badge bg-primary py-2 tanda" style="display: none;" data-prod="${row.prod_no}"><i class="fas fa-check"></i></span>
+                            <span class="badge bg-primary py-2 tanda" style="display: none;" data-draft="${row.draft_no}" data-prod="${data}"><i class="fas fa-check"></i></span>
                         `;
                     },
                     orderable: false,
@@ -246,7 +265,9 @@ function search() {
     $('#dataClaim').slideUp();
     $('#dataAmount').slideUp();
     $('#prodNo').val('');
+    $('#draftNo').val('');
     $('#dataClient').slideDown();
+    $('#clientInfoFooter').slideDown();
     $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
     loadPremiumInfo = 0;
     claimAmount = [];
@@ -255,7 +276,7 @@ function search() {
 
 // Fungsi button "Load"
 function getClientinfo() {
-    if($('#prodNo').val() == '') {
+    if($('#prodNo').val() == '' || $('#draftNo').val() == '') {
         Swal.fire({
             icon: "error",
             text: "Mohon pilih client terlebih dahulu!",
@@ -275,6 +296,7 @@ function getClientinfo() {
         },
         data: {
             prod_no: $('#prodNo').val(),
+            draft_no: $('#draftNo').val(),
         }
     })
     .done(function (response) {
@@ -427,6 +449,7 @@ function getPremiuminfo() {
 }
 
 function addDataClaim() {
+    $('#clientInfoFooter').slideUp();
     $('#dataClient').slideUp();
     $('#dataClaim').slideDown();
     $('#dataAmount').slideDown();
@@ -660,7 +683,7 @@ function saveAllData() {
                 });
 
                 setInterval(function () {
-                    return window.location.replace(`/claim/detail/` + $("#draftNo").val());
+                    return window.location.replace(`/claim/detail/${data.klaimId}`);
                 }, 3000);
             } else {
                 Swal.fire({

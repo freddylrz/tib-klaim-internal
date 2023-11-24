@@ -5,18 +5,23 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Input Klaim</h1>
+                    <h1>Claim Input</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Klaim Data</a></li>
-                        <li class="breadcrumb-item active">List</li>
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">Claim Input</li>
                     </ol>
                 </div>
             </div>
         </div>
     </section>
 
+    <style type="text/css">
+        div.form-group label {
+            text-transform: uppercase;
+        }
+    </style>
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -128,6 +133,8 @@
                                                         name="polisNo" placeholder="Policy" hidden>
                                                     <input type="text" class="form-control" id="draftNo"
                                                         name="draftNo" placeholder="Draft Number" required hidden>
+                                                    <input type="text" class="form-control" name="prodNo"
+                                                        id="prodNo" hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Type of Cover</label>
@@ -211,8 +218,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer col-md-12" style="text-align: right;">
-                            <button class="btn btn-primary" onclick="addDataClaim();"><i class="fas fa-plus mr-1"></i>
+                        <div id="clientInfoFooter" class="card-footer col-md-12" style="text-align: right;">
+                            <button class="btn btn-primary" id="btnDataCLaim"><i class="fas fa-plus mr-1"></i>
                                 Add Data Claim
                             </button>
                         </div>
@@ -303,13 +310,13 @@
 
                                         <div id="uploadform">
                                             <div class="form-group">
-                                                <label for="client">Unggah Dokumen</label><br>
+                                                <label for="client">upload document</label><br>
                                                 <input type="file" id="fileInputupd" class="form-control files"
                                                     name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
                                                 <div id="opt"></div>
                                                 <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
-                                                        class="fa fa-upload"></i> Pilih Dokumen</a>
-                                                <small>Tekan CTRL untuk memilih beberapa dokumen</small>
+                                                        class="fa fa-upload mr-1"></i> Choose Document</a>
+                                                <small>Press CTRL to select multiple documents</small>
                                                 <ul id="listfilesupd"></ul>
                                             </div>
                                         </div>
@@ -389,7 +396,6 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="prodNo" id="prodNo">
                 </div>
             </form>
         </div>
@@ -420,5 +426,5 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     {{-- custom js --}}
-    <script src="{{ asset('storage/claim/claim.js') }}"></script>
+    <script src="{{ asset('storage/claim/claimInput.js') }}"></script>
 @endpush
