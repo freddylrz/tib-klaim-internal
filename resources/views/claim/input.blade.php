@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Input Klaim</h1>
+                    <h1>Claim Input</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Klaim Data</a></li>
-                        <li class="breadcrumb-item active">List</li>
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">Claim Input</li>
                     </ol>
                 </div>
             </div>
@@ -426,5 +426,5 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     {{-- custom js --}}
-    <script src="{{ asset('storage/claim/claim.js') }}"></script>
+    <script src="{{ asset('storage/claim/claimInput.js') }}"></script>
 @endpush
