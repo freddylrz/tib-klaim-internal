@@ -77,10 +77,10 @@ Route::group(['prefix' => 'ws', 'as' => 'ws::', 'middleware' => 'auth:web'], fun
         return view('utility.Workshop.list');
     });
     Route::get('/show/{idws}', function () {
-        return view('utility.LossAdjuster.show');
+        return view('utility.Workshop.show');
     });
     Route::get('/update/{idws}', function () {
-        return view('utility.LossAdjuster.update');
+        return view('utility.Workshop.update');
     });
 });
 });

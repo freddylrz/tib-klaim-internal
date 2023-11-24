@@ -4,12 +4,12 @@
   <div class="container-fluid">
 	<div class="row mb-2">
 	  <div class="col-sm-6">
-		<h1 class="m-0"><b>Loss Adjuster Management</b> Edit</h1>
+		<h1 class="m-0"><b>Workshop Management</b> Edit</h1>
 	  </div><!-- /.col -->
 	  <div class="col-sm-6">
 		<ol class="breadcrumb float-sm-right">
 			<li class="breadcrumb-item"><a href="/">Home</a></li>
-			<li class="breadcrumb-item active">Loss Adjuster Management Edit</li>
+			<li class="breadcrumb-item active">Workshop Management</li>
 		</ol>
 	  </div><!-- /.col -->
 	</div><!-- /.row -->
