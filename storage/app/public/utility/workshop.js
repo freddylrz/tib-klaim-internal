@@ -21,7 +21,7 @@ function Wsdatatabel() {
                 order: [],
                 bDestroy: true,
                 searching: true,
-                scrollX: true,
+                // scrollX: true,
                 data: response.data,
                 columns: [
                     { data: null, render: "id" },
@@ -32,13 +32,13 @@ function Wsdatatabel() {
                     {
                         data: "id",
                         render: function (data, type, row, meta) {
-                            return `<a href="/admin/settings/branch/update/${data}" class="btn btn-warning">
+                            return `  <a href="/utility/ws/update/${data}" class="btn btn-warning">
                                     <i class="fa fa-edit"> </i>
                                 </a>
-                                <button class="btn btn-primary " onclick="onDelete(${data})">
+                                 <a href="/utility/ws/show/${data}" class="btn btn-primary">
                                     <i class="fa fa-eye"> </i>
-                                </button>
-                           <a> `;
+                                </a>
+                            `;
                         },
                     },
                 ],
@@ -49,6 +49,7 @@ function Wsdatatabel() {
                     );
                 },
             });
+            $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
             Swal.close();
             $("#tablecfl tr td:nth-child(6)").css("text-align", "center");
         })

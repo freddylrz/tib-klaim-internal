@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0"><b>Claim No.</b> CB0097/TIB/1123/CGL</h1>
+                    <h1 class="m-0"><b>Claim No.</b> <span id="headClaimNo"></span></h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -22,373 +22,273 @@
     <style type="text/css">
         div.form-group label {
             text-transform: uppercase;
-            text-decoration: underline;
         }
     </style>
-    <input type="text" name="klaim_id" id="klaim_id" value="8423" hidden>
+    <input type="text" name="claimId" id="claimId" value="{{ request()->claimId }}" hidden>
     <div class="content">
         <div class="container-fluid">
-            <div class="card card-primary card-tabs" id="c_info">
-                <div class="card-header p-0 pt-1">
-                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="interest-insured-tab" data-toggle="pill"
-                                href="#interest-insured-tab-view" role="tab" aria-controls="interest-insured-tab-view"
-                                aria-selected="true">Client Info</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="conditions-tab" data-toggle="pill" href="#conditions-tab-view"
-                                role="tab" aria-controls="conditions-tab-view" aria-selected="false">Premium Info</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="main-exclusion-tab" data-toggle="pill" href="#main-exclusion-tab-view"
-                                role="tab" aria-controls="main-exclusion-tab-view" aria-selected="false">D/N Info</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content" id="custom-tabs-one-tabContent">
-                        <div class="tab-pane fade show active" id="interest-insured-tab-view" role="tabpanel"
-                            aria-labelledby="interest-insured-tab">
-                            <div class="row">
-                                <div class="col-md-6" style="border-right: 1px solid #ddd;">
-
-                                    <div class="form-group">
-                                        <label for="insured_name"><u>Policy</u></label>
-                                        <p>1809082200027 &amp; 1809082200028</p>
-                                        <input type="text" class="form-control" id="c_policy" name="c_policy"
-                                            value="1809082200027 &amp; 1809082200028" placeholder="Policy" hidden="true">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="insured_name"><u>Type of Cover</u></label>
-                                        <p>CGL</p>
-                                        <input type="text" class="form-control" id="c_type" name="c_type"
-                                            placeholder="Type of Cover" value="CGL" hidden="true">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="insured_name"><u>Insured Name</u></label>
-                                        <p>HYUNDAI MOTOR INDONESIA, PT</p>
-                                        <input type="text" class="form-control" id="c_insured_name" name="c_insured_name"
-                                            value="HYUNDAI MOTOR INDONESIA, PT" hidden="true">
-
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="insured_name"><u>Period</u></label>
-                                        <p>31 December 2022 <b>TO</b> 31 December 2023</p>
-                                        <div class="row">
-                                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                                <input type="text" class="form-control" id="c_period" name="c_period"
-                                                    value="2022-12-31" hidden="true">
+            <div class="row">
+                {{-- client info --}}
+                <div class="col-12" id="clientInfo">
+                    <div class="card card-primary card-tabs">
+                        <div class="card-header p-0 pt-1">
+                            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="client-info-tab" data-toggle="pill"
+                                        href="#client-info-tab-view" role="tab" aria-controls="client-info-tab-view"
+                                        aria-selected="true">Client Info</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="premium-info-tab" data-toggle="pill"
+                                        href="#premium-info-tab-view" role="tab" aria-controls="premium-info-tab-view"
+                                        aria-selected="false">Premium
+                                        Info</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="debit-note-tab" data-toggle="pill" href="#debit-note-tab-view"
+                                        role="tab" aria-controls="debit-note-tab-view" aria-selected="false">D/N
+                                        Info</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                                <div class="tab-pane fade show active" id="client-info-tab-view" role="tabpanel"
+                                    aria-labelledby="client-info-tab">
+                                    <div class="card-body p-0">
+                                        <div class="overlay-wrapper">
+                                            <div id="overlayClientInfo" class="overlay"><i
+                                                    class="fas fa-3x fa-sync-alt fa-spin"></i>
                                             </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                                <input type="text" class="form-control" id="c_periodEnd"
-                                                    name="c_periodEnd" value="2023-12-31" hidden="true">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Policy</label>
+                                                    <p id="txtpolisNo"></p>
+                                                    <input type="text" class="form-control" id="draftNo" name="draftNo"
+                                                        placeholder="Draft Number" required hidden>
+                                                    <input type="text" class="form-control" name="prodNo" id="prodNo"
+                                                        hidden>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Type of Cover</label>
+                                                    <p id="txttypeOFCover"></p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Insured Name</label>
+                                                    <p id="txtnameWrt"></p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Total Sum Insured</label>
+                                                    <p id="txttsi"></p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Period</label>
+                                                    <p id="txtperiod"></p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Interest/Object Claim</label>
+                                                    <p id="txtinterestInsured"></p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="submit" id="saveBtn" style="display: none;">
+                                    <input type="text" id="c_cob" name="c_cob" style="display: none;">
+                                </div>
+                                <div class="tab-pane fade" id="premium-info-tab-view" role="tabpanel"
+                                    aria-labelledby="premium-info-tab">
+                                    <div class="card-body p-0">
+                                        <div class="overlay-wrapper">
+                                            <div id="overlayPremiumInfo" class="overlay"><i
+                                                    class="fas fa-3x fa-sync-alt fa-spin"></i>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive p-0">
+                                                    <table id="tbclientPremiumInfo" class="table table-hover text-nowrap">
+                                                        <thead>
+                                                            <tr>
+                                                                <th id="clientName" colspan="6"></th>
+                                                            </tr>
+                                                            <tr class="bg-primary">
+                                                                <th>No. Nota</th>
+                                                                <th>No. Bukti</th>
+                                                                <th>Tanggal</th>
+                                                                <th>Jumlah</th>
+                                                                <th>Pelunasan</th>
+                                                                <th>Saldo</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12" id="divPremiumInfo">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="insured_name"><u>Interest/Object Claim</u></label>
-                                        <p>Cover Comprehensive General Libility with Contractual Liability Insurance for
-                                            All Hyundai Creta and Stargazer
-                                            # Installment 4 of 4 : IDR. 5,826,881,448.00</p>
-                                        <textarea class="form-control" rows="10" style="width: 100%; white-space: pre-wrap;" id="c_interest"
-                                            name="c_interest" hidden="true">Cover Comprehensive General Libility with Contractual Liability Insurance for All Hyundai Creta and Stargazer
-# Installment 4 of 4 : IDR. 5,826,881,448.00</textarea>
-                                    </div>
+                                <div class="tab-pane fade" id="debit-note-tab-view" role="tabpanel"
+                                    aria-labelledby="debit-note-tab">
 
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="conditions-tab-view" role="tabpanel"
-                            aria-labelledby="conditions-tab">
-                            <table class="table">
-                                <thead>
-                                    <tr style="border-style: solid none solid none; text-align: right;">
-                                        <td>&nbsp;</td>
-                                        <td>No. Nota</td>
-                                        <td>No. Bukti</td>
-                                        <td>Tanggal</td>
-                                        <td>Jumlah</td>
-                                        <td>Pelunasan</td>
-                                        <td>Saldo</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="7"><b>HYUNDAI MOTOR INDONESIA, PT</b></td>
-                                    </tr>
-                                    <tr style="text-align: right;">
-                                        <td>&nbsp;</td>
-                                        <td>12306004.01</td>
-                                        <td>&nbsp;</td>
-                                        <td>2023-07-31</td>
-                                        <td>5,826,881,448.00</td>
-                                        <td> - </td>
-                                        <td>5,826,881,448.00</td>
-                                    </tr>
-                                    <tr style="text-align: right;">
-                                        <td>&nbsp;</td>
-                                        <td>12306004.01</td>
-                                        <td>MEP231149</td>
-                                        <td>2023-07-07</td>
-                                        <td> - </td>
-                                        <td>5,826,881,448.00</td>
-                                        <td>0.00</td>
-                                    </tr>
-
-
-                                    <tr style="text-align: right; border-bottom: solid; border-bottom-color: #808080">
-                                        <td colspan="4">&nbsp;</td>
-                                        <td>5,826,881,448.00</td>
-                                        <td>5,826,881,448.00</td>
-                                        <td>0.00</td>
-                                    </tr>
-
-
-                                    <tr>
-                                        <td colspan="7"></td>
-                                    </tr>
-                                    <tr style="border-top: solid; border-top-color: #808080">
-                                        <td colspan="7"><b>LIPPO GENERAL INSURANCE TBK, PT</b></td>
-                                    </tr>
-                                    <tr style="text-align: right;">
-                                        <td>&nbsp;</td>
-                                        <td>12306004.01</td>
-                                        <td>&nbsp;</td>
-                                        <td>2023-01-31 00:00:00</td>
-                                        <td>5,098,521,267.00</td>
-                                        <td> - </td>
-                                        <td>5,098,521,267.00</td>
-                                    </tr>
-
-                                    <tr style="text-align: right;">
-                                        <td>&nbsp;</td>
-                                        <td>12306004.01</td>
-                                        <td>PV231332</td>
-                                        <td>2023-07-13</td>
-                                        <td> - </td>
-                                        <td>5,098,521,267.00</td>
-                                        <td>0.00</td>
-                                    </tr>
-
-
-
-                                    <tr style="text-align: right; border-bottom: solid; border-bottom-color: #808080">
-                                        <td colspan="4">&nbsp;</td>
-                                        <td>5,098,521,267.00</td>
-                                        <td>5,098,521,267.00</td>
-                                        <td>0.00</td>
-                                    </tr>
-
-
-
-
-
-
-
-
-
-
-                                </tbody>
-                            </table>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                {{-- claim data --}}
+                <div class="col-12" id="clientData">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">Claim Data</h3>
                         </div>
-                        <div class="tab-pane fade" id="main-exclusion-tab-view" role="tabpanel"
-                            aria-labelledby="main-exclusion-tab">
+                        <div class="card-body">
+                            <div class="row pt-2 bg-gray-light">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Date of Loss</label>
+                                        <p id="dateofLoss"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Location of Loss</label>
+                                        <p id="location"></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Report Date</label>
+                                        <p id="reportDate"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Report Source</label>
+                                        <p id="reportSource"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-2">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Claim No.</label>
+                                        <p id="claimNo"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Cause of Loss</label>
+                                        <p id="causedDesc"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Loss Adjuster</label>
+                                        <p id="lossAdjusterDesc"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Workshop</label>
+                                        <p id="workshopDesc"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Currency</label>
+                                        <p id="currDesc"></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Estimation Amount</label>
+                                        <p id="estAmt"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Claim Amount</label>
+                                        <p id="claimAmt"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Deduction Amount</label>
+                                        <p id="deductAmt"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Recovery Amount</label>
+                                        <p id="recvAmt"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Net Claim Amount</label>
+                                        <p id="netAmt"></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Uploaded Attachment</label>
+                                        <ul id="uploadedAttachment"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="overlayClientData" class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
                         </div>
                     </div>
                 </div>
-                <!-- /.card -->
-            </div>
-
-            <div class="card card-primary card-outline" id="dataKlaim">
-                <div class="card-header">
-                    <h3 class="card-title"><b>Claim </b>Data</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6" style="border-right: 1px solid #ddd;">
-                            <div class="form-group">
-                                <label for="insured_name">Claim No.</label>
-                                <p>CB0097/TIB/1123/CGL</p>
-                            </div>
-                            <div class="form-group">
-                                <label for="insured_name"><u>Date of Loss</u></label>
-                                <p>2023-10-25</p>
-                                <input class="form-control" id="inputContact1" type="text" placeholder=""
-                                    value="2023-10-25" hidden="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="insured_name"><u>Location of Loss</u></label>
-                                <p>Tol Jagorawi Km 6</p>
-                                <input class="form-control" id="inputContact1" type="text" placeholder=""
-                                    value="Tol Jagorawi Km 6" hidden="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="insured_name"><u>Cause of Loss</u></label>
-                                <p>-</p>
-                                <input class="form-control" id="inputContact1" type="text" placeholder=""
-                                    value="-" hidden="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="insured_name"><u>Loss Adjuster</u></label>
-                                <p>-</p>
-                                <input class="form-control" id="inputContact1" type="text" placeholder=""
-                                    value="-" hidden="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="insured_name"><u>Workshop</u></label>
-                                <p>-</p>
-                                <input class="form-control" id="inputContact1" type="text" placeholder=""
-                                    value="-" hidden="true">
-                            </div>
-
-
+                {{-- data amount --}}
+                <div class="col-12" id="dataAmount">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">Claim Amount</h3>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="insured_name"><u>Estimation Amount</u></label>
-                                <p>IDR 310,000,000</p>
-                                <input class="form-control" id="est_amt" type="text" placeholder=""
-                                    value="310,000,000" hidden="true">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table id="tbclaimAmount" class="table table-bordered table-hover text-nowrap"
+                                        style="width: 100%">
+                                        <thead>
+                                            <tr class="bg-primary">
+                                                <th>Insurance Name</th>
+                                                <th>Share (%)</th>
+                                                <th>Estimate Amount</th>
+                                                <th>Claim Amount</th>
+                                                <th>Deduction Amount</th>
+                                                <th>Recovery Amount</th>
+                                                <th>Net Claim</th>
+                                                <th>Paid Date</th>
+                                                <th>Aging</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="insured_name"><u>Claim Amount</u></label>
-                                <p>IDR 310,000,000</p>
-                                <input class="form-control" id="claim_amt" type="text" placeholder=""
-                                    value="310,000,000" hidden="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="insured_name"><u>Deduction Amount</u></label>
-                                <p>IDR 0</p>
-                                <input class="form-control" id="deduct_amt" type="text" placeholder=""
-                                    value="0" hidden="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="insured_name"><u>Recovery Amount</u></label>
-                                <p>IDR 0</p>
-                                <input class="form-control" id="inputContact1" type="text" placeholder=""
-                                    value="0" hidden="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="insured_name"><u>Net Claim Amount</u></label>
-                                <p>IDR 310,000,000</p>
-                                <input class="form-control" id="net_amt" type="text" placeholder=""
-                                    value="310,000,000" hidden="true">
-                            </div>
-                            <div class="form-group">
-                                <label for="txtRequestNotes"><u>Uploaded Attachment</u></label><br>
-                                <p><a href="https://klaimapp.tib.co.id/upload/CGL/8423/Data stargazer.pdf"
-                                        target="_blank">1. Data stargazer.pdf</a></p>
-                            </div>
-
                         </div>
-                        <div class="col-md-6">
-                            <div id="uploadform">
-                            </div>
+                        <div id="overlayDataAmount" class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="card card-primary card-outline" id="dataAmount">
-                <div class="card-header">
-                    <h3 class="card-title"><b>Claim</b> Amount</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <style type="text/css">
-                                table.table-bordered {
-                                    border: 1px solid #ddd;
-                                    margin-top: 20px;
-                                }
-
-                                table.table-bordered>thead>tr>th {
-                                    border: 1px solid #ddd;
-                                }
-
-                                table.table-bordered>tbody>tr>td {
-                                    border: 1px solid #ddd;
-                                }
-                            </style>
-
-                            <table class="table table-bordered table-striped table-hover dataTable" id="tableklaim">
-                                <thead>
-                                    <tr>
-                                        <th>Insurance Name</th>
-                                        <th>Share (%)</th>
-                                        <th>Claim Amount</th>
-                                        <th>Deduction</th>
-                                        <th>Recovery</th>
-                                        <th>Net Amount</th>
-                                        <th>Payment Date</th>
-                                        <th>Aging</th>
-                                        <!-- <th>&nbsp;</th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>LIPPO GENERAL INSURANCE TBK, PT</td>
-                                        <td style="text-align: right;">100</td>
-                                        <td style="text-align: right;">310,000,000</td>
-                                        <td style="text-align: right;">0</td>
-                                        <td style="text-align: right;">0</td>
-                                        <td style="text-align: right;">310,000,000</td>
-                                        <td style="text-align: right;"></td>
-                                        <td style="text-align: right;">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                {{-- log status --}}
+                <div class="col-12" id="logStatus">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">Log Status</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table id="tblogStatus" class="table table-bordered table-hover text-nowrap"
+                                        style="width: 100%">
+                                        <thead>
+                                            <tr class="bg-primary">
+                                                <td>#</td>
+                                                <td>Tanggal</td>
+                                                <td>Status</td>
+                                                <td>Aging</td>
+                                                <td>Deskripsi</td>
+                                                <td>User</td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="overlayLogStatus" class="overlay"><i class="fas fa-3x fa-sync-alt fa-spin"></i>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- /.box -->
-            <div class="card card-primary card-outline">
-                <div class="card-header">
-                    <h3 class="card-title"><b>Log</b> Status</h3>
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <td>Tanggal</td>
-                                <td>Status</td>
-                                <td>Aging</td>
-                                <td>Deskripsi</td>
-                                <td>User</td>
-                                <td>&nbsp;</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td hidden="true">33877</td>
-                                <td>2023-11-01 14:59</td>
-                                <td>Laporan awal klaim</td>
-                                <td>12</td>
-                                <td></td>
-                                <td>DOFAN -</td>
-                                <td>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td hidden="true">33878</td>
-                                <td>2023-11-01 15:00</td>
-                                <td>Proses kelengkapan dokumen</td>
-                                <td>12</td>
-                                <td>B 1521 RKZ- Baru laporan awal, masih menunggu kelengkapan dokumen lainnya</td>
-                                <td>DOFAN -</td>
-                                <td>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-
             </div>
 
             <div class="card card-primary card-outline">
@@ -779,3 +679,22 @@
 
     </div>
 @endsection
+
+@push('levelPluginsJsh')
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+@endpush
+
+@push('levelPluginsJs')
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    {{-- custom js --}}
+    <script src="{{ asset('storage/claim/claimDetail.js') }}"></script>
+@endpush
