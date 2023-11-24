@@ -18,6 +18,11 @@
     </div>
     <!-- /.content-header -->
     <!-- Main content -->
+    <style type="text/css">
+        div.form-group label {
+            text-transform: uppercase;
+        }
+    </style>
     <div class="content">
         <div class="container-fluid">
             <div class="card card-primary card-tabs" id="c_info">
