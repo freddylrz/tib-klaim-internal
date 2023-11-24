@@ -243,7 +243,6 @@
                                             <tr class="bg-primary">
                                                 <th>Insurance Name</th>
                                                 <th>Share (%)</th>
-                                                <th>Estimate Amount</th>
                                                 <th>Claim Amount</th>
                                                 <th>Deduction Amount</th>
                                                 <th>Recovery Amount</th>
@@ -273,12 +272,12 @@
                                         style="width: 100%">
                                         <thead>
                                             <tr class="bg-primary">
-                                                <td>#</td>
-                                                <td>Tanggal</td>
-                                                <td>Status</td>
-                                                <td>Aging</td>
-                                                <td>Deskripsi</td>
-                                                <td>User</td>
+                                                <th>#</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Aging</th>
+                                                <th>Description</th>
+                                                <th>User</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -297,13 +296,16 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lod">
                         Propose Adjustment
                     </button>
-                    <button class="btn btn-primary" onclick="location.href='/claim/update/4232'"><i
-                            class="fas fa-edit"></i> Edit Data</button>
+                    <a href="/claim/update/{{ request()->claimId }}" class="btn btn-primary"><i
+                            class="fas fa-edit mr-1"></i> Edit Data</a>
 
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-onpro">
                         On Process
                     </button>
 
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-onpro">
+                        Rollback Status
+                    </button>
 
                 </div>
             </div>
