@@ -33,12 +33,12 @@ function datatabelLar() {
                     {
                         data: "id",
                         render: function (data, type, row, meta) {
-                            return `  <a href="/admin/settings/branch/update/${data}" class="btn btn-warning">
+                            return `   <a href="/utility/lar/update/${data}" class="btn btn-warning">
                                     <i class="fa fa-edit"> </i>
                                 </a>
-                                <button class="btn btn-primary " onclick="onDelete(${data})">
+                                 <a href="/utility/lar/show/${data}" class="btn btn-primary">
                                     <i class="fa fa-eye"> </i>
-                                </button>
+                                </a>
                                 `;
                         },
                     },
@@ -50,6 +50,7 @@ function datatabelLar() {
                     );
                 },
             });
+            $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
             Swal.close();
             $("#tableLar tr td:nth-child(6)").css("text-align", "center");
         })
