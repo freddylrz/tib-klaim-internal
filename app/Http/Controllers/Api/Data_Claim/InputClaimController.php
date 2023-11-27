@@ -202,10 +202,9 @@ class InputClaimController extends Controller
     public function getClaimAmount(Request $r)
     {
         try {
-            if($r->get('type') == 1){
+            if ($r->get('type') == 1) {
                 $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)", ['3', $r->get("draft_no"), '', '']);
-            }
-            else {
+            } else {
                 $listIns = DB::select("select user_db.tb_security.crt_name AS insName,
                kins.id AS insId,
                CONCAT( FORMAT( kins.share, 2 ), ' %' ) AS insShare,
@@ -217,7 +216,7 @@ class InputClaimController extends Controller
                LEFT JOIN user_db.tb_security ON kins.insr_id = user_db.tb_security.insr_id
                LEFT JOIN ( SELECT kl.created_at, kl.klaim_id FROM klaimapps_db.tb_klaim_log AS kl WHERE kl.klaim_id = 8368 AND kl.klaim_stat_id = 5 ) AS x ON kins.klaim_id = x.klaim_id
               WHERE
-               kins.klaim_id = ".$r->get("draft_no")." ORDER BY kins.share DESC");
+               kins.klaim_id = " . $r->get("draft_no") . " ORDER BY kins.share DESC");
             }
             $eAmnt = str_replace(",", "", $r->get('estAmt'));
             $cAmnt = str_replace(",", "", $r->get('claimAmt'));
@@ -232,14 +231,14 @@ class InputClaimController extends Controller
                 $sisaDeduc = $dAmnt;
                 $sisaRec = $rAmnt;
                 for ($i = 0; $i < count($listIns); $i++) {
-                    if($r->get('type') == 1)
+                    if ($r->get('type') == 1)
                         $share = $listIns[$i]->share_pct / 100;
                     else
                         $share = $listIns[$i]->share / 100;
 
                     if ($i != count($listIns) - 1 || $i == 0) {
                         //net
-                        $netShare = $sum * $share ;
+                        $netShare = $sum * $share;
                         $sisaNet = $sisaNet - $netShare;
 
                         //est
@@ -348,7 +347,7 @@ class InputClaimController extends Controller
                         $ins->klaim_id = $klaimId;
                         $ins->insr_id = $r->insr_id[$i];
                         $ins->curr_id = $r->curr_id;
-                        $ins->share = $r->share[$i];
+                            $ins->share = $r->share[$i];
                         $ins->est_amt = str_replace(",", "", $r->estimationInsAmt[$i]);
                         $ins->claim_amt = str_replace(",", "", $r->claimInsAmt[$i]);
                         $ins->deduct_amt = str_replace(",", "", $r->deducInsAmt[$i]);
@@ -375,26 +374,7 @@ class InputClaimController extends Controller
             try {
                 if (!empty($klaimId)) {
                     if (!empty($r->file(['fileUp']))) {
-                        for ($i = 0; $i < count($r->file('fileUp')); $i++) {
-                            $fileup = $r->file(['fileUp'])[$i];
-
-                            if (!empty($fileup)) {
-                                $extension = $fileup->getClientOriginalName(); // getting image extension
-                                $fileName = $extension;
-                                $fileName = str_replace("#", " ", $fileName);
-                                $destinationPath = 'upload/' . $r->cob_code . '/' . $klaimId;
-                                $fileup->move($destinationPath, $fileName);
-                                $upload = new tb_uploads;
-                                $upload->klaim_id = $klaimId;
-                                $upload->file_name = $fileName;
-                                $upload->file_path = $destinationPath;
-                                $upload->date_uploaded = date('Y-m-d', strtotime(now()));
-                                $upload->klaim_cob = $r->cob_code;
-                                $upload->status = $r->stat;
-                                $upload->save();
-                                $uploadId [] = $upload->id;
-                            }
-                        }
+                        $uploadId = $this->uploadFile($klaimId, $r->file(['fileUp']), $r->cob_code,1);
                     }
                 }
             } catch (Throwable $exception) {
@@ -448,6 +428,136 @@ class InputClaimController extends Controller
                 'status' => 200,
                 'message' => 'Berhasil menyimpan data!',
                 'klaimId' => $klaimId
+            ], 200);
+
+        } catch (Throwable $exception) {
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+
+    public function uploadFile($klaimId, $fileUpd, $cob_code, $stat){
+        for ($i = 0; $i < count($fileUpd); $i++) {
+            $fileup = $fileUpd[$i];
+
+            if (!empty($fileup)) {
+                $extension = $fileup->getClientOriginalName(); // getting image extension
+                $fileName = $extension;
+                $fileName = str_replace("#", " ", $fileName);
+                $destinationPath = 'upload/' . $cob_code . '/' . $klaimId;
+                $fileup->move($destinationPath, $fileName);
+                $upload = new tb_uploads;
+                $upload->klaim_id = $klaimId;
+                $upload->file_name = $fileName;
+                $upload->file_path = $destinationPath;
+                $upload->date_uploaded = date('Y-m-d', strtotime(now()));
+                $upload->klaim_cob = $cob_code;
+                $upload->status = $stat;
+                $upload->save();
+                $uploadId [] = $upload->id;
+            }
+        }
+        return $uploadId;
+    }
+
+    public function deleteUpload(Request $r)
+    {
+        try {
+            $upload = DB::select('SELECT
+                 klaimapps_db.tb_uploads.*
+                FROM
+                 klaimapps_db.tb_uploads
+                WHERE
+                 klaimapps_db.tb_uploads.id = ' . $r->get('id'));
+
+            $delup = tb_uploads::findOrFail($upload[0]->id);
+
+            if (!empty($delup->file_path . '/' . $delup->file_name)) {
+                unlink(public_path($delup->file_path . '/' . $delup->file_name));
+            }
+
+            $delup->delete();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil menghapus dokumen!',
+                'document' =>  DB::select('SELECT
+                                 klaimapps_db.tb_uploads.*
+                                FROM
+                                 klaimapps_db.tb_uploads
+                                WHERE
+                                 klaimapps_db.tb_uploads.klaim_id = ' . $delup->klaim_id)
+
+            ], 200);
+
+        } catch (Throwable $exception) {
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal menghapus dokumen! Silahkan coba lagi.',
+            ], 500);
+        }
+
+    }
+
+    public function updateClaim(Request $r)
+    {
+        try {
+            $klaim = tb_klaim::find($r->claimId);
+            $klaim->claim_dd = date('Y-m-d H:i:s', strtotime(now()));
+            $klaim->dol = date('Y-m-d', strtotime($r->dol));
+            $klaim->report_date = date('Y-m-d', strtotime($r->reportDate));
+            $klaim->report_source = $r->reportSource;
+            $klaim->interest = $r->interest;
+            $klaim->location = $r->location;
+            $klaim->caused = $r->caused;
+            $klaim->ladj = $r->lossAdj;
+            $klaim->cur = $r->curr_id;
+            $klaim->est_amt = str_replace(",", "", $r->estimationAmt);
+            $klaim->claim_amt = str_replace(",", "", $r->claimAmt);
+            $klaim->deduct_amt = str_replace(",", "", $r->deducAmt);
+            $klaim->recv_amt = str_replace(",", "", $r->recoveryAmt);
+            $klaim->net_amt = str_replace(",", "", $r->netAmt);
+            $klaim->user_update = Auth::user()->id;
+            $klaim->cob_id = $r->cob_id;
+            $klaim->ws_id = $r->workshop;
+
+            $klaim->save();
+
+            $listIns = DB::select('SELECT
+                 klaimapps_db.tb_klaim_ins.*
+                FROM
+                 klaimapps_db.tb_klaim_ins
+                WHERE
+                 klaimapps_db.tb_klaim_ins.klaim_id = ' . $r->claimId);
+
+            for ($i = 0; $i < count($r->insr_id); $i++) {
+                $ins = tb_klaim_ins::find($listIns[$i]->id);
+                $ins->curr_id = $r->curr_id;
+                $ins->est_amt = str_replace(",", "", $r->estimationInsAmt[$i]);
+                $ins->claim_amt = str_replace(",", "", $r->claimInsAmt[$i]);
+                $ins->deduct_amt = str_replace(",", "", $r->deducInsAmt[$i]);
+                $ins->recv_amt = str_replace(",", "", $r->recoveryInsAmt[$i]);
+                $ins->net_claim = str_replace(",", "", $r->netInsAmt[$i]);
+
+                $ins->save();
+            }
+
+            if (!empty($r->file(['fileUp']))) {
+                $this->uploadFile($r->claimId, $r->file(['fileUp']), $r->cob_code,1);
+            }
+
+            ////            self::teleNotification($klaimId);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil menyimpan data!',
+                'klaimId' => $r->claimId
             ], 200);
 
         } catch (Throwable $exception) {
