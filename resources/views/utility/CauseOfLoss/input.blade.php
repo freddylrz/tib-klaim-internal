@@ -22,17 +22,15 @@
     <div class="col-12">
       <div class="card-body">
         <div class="card card-primary card-outline">
-          <form role="form">
+          <form id="fcfl" role="form" method="post" enctype="multipart/form-data">
+    {{ csrf_field() }}
             <div class="card-body">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="exampleDropdown">Select an option <span style="color: red;">*</span></label>
-                    <select class="form-control" id="exampleDropdown"required>
-                       <option value="">pilih opsi </option>
-                      <option value="option1">Option 1</option>
-                      <option value="option2">Option 2</option>
-                      <option value="option3">Option 3</option>
+                    <label for="exampleDropdown"> type of cover <span style="color: red;">*</span></label>
+                    <select class="form-control" name="cobId" id="cobid"required>
+                       
                     </select>
                     <!-- <small class="text-muted">Please select an option from the dropdown.</small> -->
                     <br>
@@ -42,8 +40,10 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="exampleTextarea">Textarea</label>
-                    <textarea class="form-control" id="exampleTextarea" rows="5" placeholder="Enter text"></textarea>
+                    
+                    <label for="exampleTextarea" type="text" > description <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" id="deskripsi" name="description"></input>
+                    <!-- <textarea class="form-control" name="description" id="deskripsi" rows="1" placeholder="Enter text"required></textarea> -->
                     
                   </div>
                 </div>
@@ -51,7 +51,7 @@
             </div>
             <div class="card-footer">
             <em style="text-align: left;">note: tanda<strong> (<span style="color: red;">*</span>) </strong> wajib diisi</em>
-              <button class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
+              <button type="button" class="btn btn-primary float-right" onclick="saveAllData()" ><i class="fas fa-save"></i> Save</button>
             </div>
           </form>
         </div>
@@ -64,6 +64,7 @@
 @push('levelPluginsJsh')
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endpush
 
@@ -74,17 +75,11 @@
     <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+     <script src ="{{ asset('storage/utility/causedOfloss.js') }}"> </script>
     <script>
         $(function() {
-            $('#example1').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "scrollX": true
-            });
+            getDataAsset()
         });
     </script>
 @endpush

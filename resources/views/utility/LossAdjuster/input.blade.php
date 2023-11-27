@@ -44,7 +44,8 @@
                   <label for="insured_name">Phone <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="phone_no" name="phone_no" placeholder="Phone" required="true">
                 </div>
-
+              </div>
+            <div class="col-md-6">
                 <div class="form-group">
                   <label for="insured_name">Email <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="email" name="email" placeholder="Email" required="true">
@@ -55,8 +56,7 @@
                   <input type="text" class="form-control" id="npwp" name="npwp" placeholder="NPWP" required="true">
                 </div>
                 <!-- <hr> -->
-              </div>
-              <div class="col-md-6">
+              
                 <div class="form-group">
                   <label for="insured_name">PIC <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="pic" name="pic" placeholder="PIC" required="true">
@@ -71,7 +71,6 @@
                   <label for="insured_name">PIC Email <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="pic_email" name="pic_email" placeholder="PIC Email" required="true">
                 </div>
-                 <hr>
               </div>
               
             </div>
