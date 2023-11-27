@@ -48,7 +48,8 @@ $(function() {
     });
 
     $('.btnfilesupd').on('click', function(e) {
-		$('#fileInputupd').click();
+        e.preventDefault(); // Prevent default button behavior
+        $('#fileInputupd').trigger('click');
 	});
 
     $('#fileInputupd').on('change', function(e) {
@@ -215,6 +216,11 @@ function getDetail() {
             $('#reportSource').val(item.report_source)
             $('#cobId').val(item.cob_id)
             $('#cobId').trigger('change');
+            if (item.cob_id !== null) {
+                $('#cobId').prop('disabled', true);
+            } else {
+                $('#cobId').prop('disabled', false);
+            }
             $('#causeId').val(item.causedId)
             $('#causeId').trigger('change');
             $('#lossAdjId').val(item.lossAdjusterId)
@@ -231,8 +237,12 @@ function getDetail() {
         });
 
         response.dokument.forEach(function (item) {
-            $('#listfilesupd').append(`<li><a href="/${item.file_path}"
-            target="_blank">${item.file_name}</a></li>`)
+            $('#listUpload').append(`
+                <li class="mb-1">
+                    <a href="/${item.file_path}" target="_blank">${item.file_name}</a>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
+                </li>
+            `)
         });
 
         await $("#tbclaimAmount").DataTable({
@@ -452,6 +462,194 @@ function getCountAmount() {
         })
 
         $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+    } else {
+        return false
+    }
+}
+
+async function deleteDocument( docid ){
+
+    var confirmDel = true
+
+    if(docid !== undefined) {
+        await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin ingin menghapus file?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                return confirmDel = true
+            } else if (result.isDenied) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File tidak dihapus',
+                    showConfirmButton: true,
+                });
+                return confirmDel = false;
+            }
+        })
+    } else {
+        return Swal.fire({
+            icon: 'error',
+            title: 'Document tidak ditemukan!',
+            showConfirmButton: true,
+        });
+
+    }
+
+    if(confirmDel){
+        $.ajax({
+            "url": '/api/claim/delete-document',
+            "method": "DELETE",
+            "timeout": 0,
+            "headers": {
+                "Authorization": "Bearer "+$('#token').val()
+            },
+            "data":{
+                fileId: docid,
+            },
+        }).done(function (response) {
+            Swal.fire({
+                icon: 'info',
+                title: response.message,
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+
+            $('#listUpload').empty()
+
+            $.each(response.document, function (i, item) {
+                $('#listUpload').append(`
+                    <li class="mb-1">
+                      <a style="margin-right:10px " href="/${item.file_path}/${item.file_name}" target="_blank">${item.file_name}</a>
+                      <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
+                    </li>
+                `)
+            })
+
+        }).fail(function (error){
+            Swal.fire({
+                icon: 'error',
+                title: 'Data bermasalah',
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+        });
+    }
+}
+
+function saveEdit() {
+    if(loadingIndicator == false){
+        Swal.fire({
+            icon: "info",
+            text: "loading",
+            showConfirmButton: false,
+            allowOutsideClick: false,
+        });
+
+        if(dataClient.length == 0) {
+            Swal.fire({
+                icon: "error",
+                text: "Mohon pilih client terlebih dahulu!",
+                allowOutsideClick: false,
+            });
+
+            return search()
+        }
+
+        if(claimAmount.length == 0) {
+            Swal.fire({
+                icon: "error",
+                text: "Mohon isi data claim terlebih dahulu!",
+                allowOutsideClick: false,
+            });
+
+            return search()
+        }
+
+        const form = new FormData();
+
+        $.each(claimAmount, function (i, item) {
+            form.append("insr_id[]", item.insr_code);;
+            form.append("premiIns[]", item.premi);
+            form.append("estimationInsAmt[]", item.estAmt);
+            form.append("claimInsAmt[]", item.claimAmt);
+            form.append("deducInsAmt[]", item.deducAmt);
+            form.append("recoveryInsAmt[]", item.recovAmt);
+            form.append("netInsAmt[]", item.netAmt);
+        })
+
+        $('#fileInputupd').each(function () {
+            const files = $(this).prop('files');
+
+            if (files.length > 0) {
+                for (let j = 0; j < files.length; j++) {
+                    form.append('fileUp[]', files[j]);
+                }
+            }
+        });
+
+        form.append("claimId", $('#claimId').val());
+        form.append("dol", $('#dateOfLoss').val());
+        form.append("location", $('#locationOfLoss').val());
+        form.append("caused", $('#causeId').val());
+        form.append("lossAdj", $('#lossAdjId').val());
+        form.append("workshop", $('#workshopId').val());
+        form.append("curr_id", $('#currId').val());
+        form.append("cob_id", $('#cobId').val());
+        form.append("reportDate", $('#reportDate').val());
+        form.append("reportSource", $('#reportSource').val());
+        form.append("estimationAmt", $('#estAmt').val());
+        form.append("claimAmt", $('#claimAmt').val());
+        form.append("deducAmt", $('#deducAmt').val());
+        form.append("recoveryAmt", $('#recoveryAmt').val());
+        form.append("netAmt", $('#netClaimAmt').val());
+
+        $.ajax({
+            async: true,
+            crossDomain: true,
+            url: "/api/claim/update-claim",
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + $("#token").val(),
+            },
+            "processData": false,
+            "contentType": false,
+            "mimeType": "multipart/form-data",
+            "data": form
+        }).done(async function (response) {
+            var data = JSON.parse(response);
+            if(data.status == 200){
+                Swal.fire({
+                    icon: 'info',
+                    title: data.message,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+
+                setInterval(function () {
+                    return window.location.replace(`/claim/detail/${data.klaimId}`);
+                }, 3000);
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: data.message,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+            }
+
+        }).fail(async function(error){
+            Swal.fire({
+                icon: 'error',
+                title: error.responseJSON.message,
+                showConfirmButton: true,
+            });
+        });
     } else {
         return false
     }
