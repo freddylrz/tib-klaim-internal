@@ -71,7 +71,6 @@
                   <label for="insured_name">PIC Email <span style="color: red;">*</span></label>
                   <input type="text" class="form-control" id="pic_email" name="pic_email" placeholder="PIC Email" required="true">
                 </div>
-                 <hr>
               </div>
               
             </div>

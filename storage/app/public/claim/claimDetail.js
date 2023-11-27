@@ -99,11 +99,6 @@ function getDetail() {
                 { data: "insName" },
                 { data: "insShare" },
                 {
-                    data: "insEstAmt",
-                    orderable: false,
-                    className: 'dt-body-right'
-                },
-                {
                     data: "insClaimAmt",
                     orderable: false,
                     className: 'dt-body-right'
