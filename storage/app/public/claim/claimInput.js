@@ -536,6 +536,7 @@ function getCountAmount() {
                 Authorization: "Bearer " + $("#token").val(),
             },
             data: {
+                type: 1,
                 draft_no: draft_no,
                 estAmt: estAmt,
                 claimAmt: claimAmt,
