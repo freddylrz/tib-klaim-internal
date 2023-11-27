@@ -207,13 +207,9 @@ class InputClaimController extends Controller
             }
             else {
                 $listIns = DB::select("select user_db.tb_security.crt_name AS insName,
+               kins.id AS insId,
                CONCAT( FORMAT( kins.share, 2 ), ' %' ) AS insShare,
                kins.share AS share,
-               FORMAT( kins.est_amt, 2 ) AS insEstAmt,
-               FORMAT( kins.claim_amt, 2 ) AS insClaimAmt,
-               FORMAT( kins.deduct_amt, 2 ) AS insDeductAmt,
-               FORMAT( IFNULL( kins.recv_amt, 0 ), 2 ) AS insRecoveryAmt,
-               FORMAT( kins.net_claim, 2 ) AS insNetClaim,
                IFNULL( kins.paid_dd, '-' ) AS insPaidDD,
                IF ( x.created_at IS NULL OR kins.paid_dd IS NULL, 0, DATEDIFF( x.created_at,kins.paid_dd )) AS insAging
               FROM
