@@ -141,8 +141,8 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                <li class="nav-item {{{ Request::is('utility/cfl/list','utility/cfl/input','utility/lar/list','utility/lar/input','utility/ws/list','utility/ws/input') ? 'menu-open' : '' }}}">
+                                    <a href="#" class="nav-link {{{ Request::is('utility/cfl/list','utility/cfl/input','utility/lar/list','utility/lar/input','utility/ws/list','utility/ws/input') ? 'active' : '' }}}">
                                         <i class="nav-icon fas fa-database"></i>
                                         <p>
                                             Utility
@@ -150,7 +150,7 @@
                                         <i class="right fas fa-angle-left"></i>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        <li class="nav-item">
+                                        <li class="nav-item {{{ Request::is('utility/cfl/list','utility/cfl/input') ? 'menu-open' : '' }}}">
                                             <a href="#" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Cause Of Loss</p>
@@ -158,13 +158,13 @@
                                             </a>
                                             <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="/utility/cfl/list" class="nav-link">
+                                            <a href="/utility/cfl/list" class="nav-link {{{ Request::is('utility/cfl/list') ? 'active' : '' }}}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>list</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/utility/cfl/input" class="nav-link">
+                                            <a href="/utility/cfl/input" class="nav-link {{{ Request::is('utility/cfl/input') ? 'active' : '' }}}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Input</p>
                                             </a>
@@ -172,21 +172,21 @@
 
                                     </ul>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item {{{ Request::is('utility/lar/list','utility/lar/input') ? 'menu-open' : '' }}}">
                                             <a href="#" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Loss Adjuster</p>
                                                 <i class="right fas fa-angle-left"></i>
                                             </a>
-                                             <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="/utility/lar/list" class="nav-link">
+                                             <ul class="nav nav-treeview ">
+                                        <li class="nav-item ">
+                                            <a href="/utility/lar/list" class="nav-link {{{ Request::is('utility/lar/list') ? 'active' : '' }}}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>list</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/utility/lar/input" class="nav-link">
+                                            <a href="/utility/lar/input" class="nav-link {{{ Request::is('utility/lar/input') ? 'active' : '' }}}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Input</p>
                                             </a>
@@ -194,7 +194,7 @@
 
                                     </ul>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item {{{ Request::is('utility/ws/list','utility/ws/input') ? 'menu-open' : '' }}}">
                                             <a href="#" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Workshop</p>
@@ -203,13 +203,13 @@
 
                                         <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="/utility/ws/list" class="nav-link">
+                                            <a href="/utility/ws/list" class="nav-link {{{ Request::is('utility/ws/list') ? 'active' : '' }}}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>list</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/utility/ws/input" class="nav-link">
+                                            <a href="/utility/ws/input" class="nav-link {{{ Request::is('utility/ws/input') ? 'active' : '' }}}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>Input</p>
                                             </a>

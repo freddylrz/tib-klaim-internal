@@ -84,8 +84,10 @@ $(function() {
 		var thefiles = $('#fileInputupd').get(0).files.length;
 		$('#listfilesupd').html('');
 		for (var i = 0; i < thefiles; ++i) {
-			var name = $(this).get(0).files.item(i).name;
-			$('#listfilesupd').append(`<li>${name}</li>`);
+            var file = $(this).get(0).files.item(i);
+            var name = file.name;
+            var fileUrl = URL.createObjectURL(file); // Create URL for the file
+			$('#listfilesupd').append(`<li><a href="${fileUrl}" target="_blank">${name}</a></li>`);
 		}
 	});
 
