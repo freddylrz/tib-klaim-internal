@@ -472,12 +472,14 @@ class InputClaimController extends Controller
                 FROM
                  klaimapps_db.tb_uploads
                 WHERE
-                 klaimapps_db.tb_uploads.id = ' . $r->get('id'));
+                 klaimapps_db.tb_uploads.id = ' . $r->fileId);
 
             $delup = tb_uploads::findOrFail($upload[0]->id);
 
             if (!empty($delup->file_path . '/' . $delup->file_name)) {
-                unlink(public_path($delup->file_path . '/' . $delup->file_name));
+                if(!empty($delup->file_path) && file_exists($delup->file_path)){
+                    unlink(public_path($delup->file_path . '/' . $delup->file_name));
+                }
             }
 
             $delup->delete();
