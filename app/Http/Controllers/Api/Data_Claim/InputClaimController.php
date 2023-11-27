@@ -202,38 +202,60 @@ class InputClaimController extends Controller
     public function getClaimAmount(Request $r)
     {
         try {
-            $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)", ['3', $r->get("draft_no"), '', '']);
-            if ($listIns) {
-                $eAmnt = str_replace(",", "", $r->get('estAmt'));
-                $cAmnt = str_replace(",", "", $r->get('claimAmt'));
-                $dAmnt = str_replace(",", "", $r->get('deducAmt'));
-                $rAmnt = str_replace(",", "", $r->get('recoveryAmt'));
-                $sum = $cAmnt - $dAmnt - $rAmnt;
+            if($r->get('type') == 1){
+                $listIns = DB::select("CALL klaimapps_db.getPremiumInsrInfo(?,?,?,?)", ['3', $r->get("draft_no"), '', '']);
+            }
+            else {
+                $listIns = DB::select("select user_db.tb_security.crt_name AS insName,
+               kins.id AS insId,
+               CONCAT( FORMAT( kins.share, 2 ), ' %' ) AS insShare,
+               kins.share AS share,
+               IFNULL( kins.paid_dd, '-' ) AS insPaidDD,
+               IF ( x.created_at IS NULL OR kins.paid_dd IS NULL, 0, DATEDIFF( x.created_at,kins.paid_dd )) AS insAging
+              FROM
+               klaimapps_db.tb_klaim_ins AS kins
+               LEFT JOIN user_db.tb_security ON kins.insr_id = user_db.tb_security.insr_id
+               LEFT JOIN ( SELECT kl.created_at, kl.klaim_id FROM klaimapps_db.tb_klaim_log AS kl WHERE kl.klaim_id = 8368 AND kl.klaim_stat_id = 5 ) AS x ON kins.klaim_id = x.klaim_id
+              WHERE
+               kins.klaim_id = ".$r->get("draft_no")." ORDER BY kins.share DESC");
+            }
+            $eAmnt = str_replace(",", "", $r->get('estAmt'));
+            $cAmnt = str_replace(",", "", $r->get('claimAmt'));
+            $dAmnt = str_replace(",", "", $r->get('deducAmt'));
+            $rAmnt = str_replace(",", "", $r->get('recoveryAmt'));
+            $sum = $cAmnt - $dAmnt - $rAmnt;
+
+            if (!empty($listIns)) {
                 $sisaNet = $sum;
                 $sisaEst = $eAmnt;
                 $sisaClaim = $cAmnt;
                 $sisaDeduc = $dAmnt;
                 $sisaRec = $rAmnt;
                 for ($i = 0; $i < count($listIns); $i++) {
+                    if($r->get('type') == 1)
+                        $share = $listIns[$i]->share_pct / 100;
+                    else
+                        $share = $listIns[$i]->share / 100;
+
                     if ($i != count($listIns) - 1 || $i == 0) {
                         //net
-                        $netShare = $sum * ($listIns[$i]->share_pct / 100);
+                        $netShare = $sum * $share ;
                         $sisaNet = $sisaNet - $netShare;
 
                         //est
-                        $estShare = $eAmnt * ($listIns[$i]->share_pct / 100);
+                        $estShare = $eAmnt * $share;
                         $sisaEst = $sisaEst - $estShare;
 
                         //claim
-                        $claimShare = $cAmnt * ($listIns[$i]->share_pct / 100);
+                        $claimShare = $cAmnt * $share;
                         $sisaClaim = $sisaClaim - $claimShare;
 
                         //deduc
-                        $deducShare = $dAmnt * ($listIns[$i]->share_pct / 100);
+                        $deducShare = $dAmnt * $share;
                         $sisaDeduc = $sisaDeduc - $deducShare;
 
                         //recov
-                        $recShare = $rAmnt * ($listIns[$i]->share_pct / 100);
+                        $recShare = $rAmnt * $share;
                         $sisaRec = $sisaRec - $recShare;
 
                         $listIns[$i]->estAmt = number_format($estShare, 2);

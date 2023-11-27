@@ -400,7 +400,7 @@ function getPremiuminfo() {
 
 function getCountAmount() {
     if(loadingIndicator == false){
-        var draft_no = $('#draftNo').val() == '' ? 0 : $('#draftNo').val()
+        var draft_no = $('#claimId').val() == '' ? 0 : $('#claimId').val()
         var estAmt = $('#estAmt').val() == '' ? 0 : $('#estAmt').val()
         var claimAmt = $('#claimAmt').val() == '' ? 0 : $('#claimAmt').val()
         var deducAmt = $('#deducAmt').val() == '' ? 0 : $('#deducAmt').val()
@@ -414,6 +414,7 @@ function getCountAmount() {
                 Authorization: "Bearer " + $("#token").val(),
             },
             data: {
+                type: 2,
                 draft_no: draft_no,
                 estAmt: estAmt,
                 claimAmt: claimAmt,
@@ -432,10 +433,10 @@ function getCountAmount() {
             }
         }).done(async function (response) {
             await $.each(response.data, function (i, item) {
-                $(`#claimAmount${item.insr_id}`).html(item.claimAmt)
-                $(`#recoveryAmount${item.insr_id}`).html(item.recovAmt)
-                $(`#deductionAmount${item.insr_id}`).html(item.deducAmt)
-                $(`#netClaim${item.insr_id}`).html(item.netAmt)
+                $(`#claimAmount${item.insId}`).html(item.claimAmt)
+                $(`#recoveryAmount${item.insId}`).html(item.recovAmt)
+                $(`#deductionAmount${item.insId}`).html(item.deducAmt)
+                $(`#netClaim${item.insId}`).html(item.netAmt)
             });
             $('#netClaimAmt').val(response.netClaimAmt)
 

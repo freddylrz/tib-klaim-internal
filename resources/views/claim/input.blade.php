@@ -347,7 +347,7 @@
                                             <label for="insured_name">Net Claim Amount</label>
                                             <div class="input-group">
                                                 <div class="input-group-append">
-                                                    <span class="input-group-text border-0">
+                                                    <span class="input-group-text border-right-0">
                                                         <i class="fas fa-sync-alt fa-spin font-weight-bold text-black loadingIndicator"
                                                             style="display: none;font-size:18px"></i>
                                                     </span>
