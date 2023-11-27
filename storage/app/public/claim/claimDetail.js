@@ -79,7 +79,7 @@ function getDetail() {
         });
 
         response.dokument.forEach(function (item) {
-            $('#uploadedAttachment').html(`<li><a href="/${item.file_path}"
+            $('#uploadedAttachment').append(`<li><a href="/${item.file_path}"
             target="_blank">${item.file_name}</a></li>`)
         });
 

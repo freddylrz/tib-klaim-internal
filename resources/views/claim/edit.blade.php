@@ -231,8 +231,8 @@
                                                 <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
                                                         class="fa fa-upload mr-1"></i> Choose Document</a>
                                                 <small>Press CTRL to select multiple documents</small>
-                                                <ul id="listfilesupd"></ul>
                                             </div>
+                                            <ul id="listfilesupd"></ul>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -270,6 +270,10 @@
                                                     class="form-control money count-amount border-left-0" id="netClaimAmt"
                                                     name="netClaimAmt" placeholder="Net Amount" readonly>
                                             </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="insured_name" class="mb-1">uploaded document</label>
+                                            <ul id="listUpload"></ul>
                                         </div>
                                     </div>
                                 </div>
