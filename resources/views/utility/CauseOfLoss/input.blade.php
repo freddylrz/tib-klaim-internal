@@ -28,20 +28,17 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="exampleDropdown"> type of cover <span style="color: red;">*</span></label>
+                    <label for="exampleDropdown"> Type Of Cover <span style="color: red;">*</span></label>
                     <select class="form-control" name="cobId" id="cobid"required>
                        
                     </select>
                     <!-- <small class="text-muted">Please select an option from the dropdown.</small> -->
-                    <br>
-                   <br>
-                    <br>
+                  
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    
-                    <label for="exampleTextarea" type="text" > description <span style="color: red;">*</span></label>
+                    <label for="exampleTextarea" type="text" > Description <span style="color: red;">*</span></label>
                     <input class="form-control" type="text" id="deskripsi" name="description"></input>
                     <!-- <textarea class="form-control" name="description" id="deskripsi" rows="1" placeholder="Enter text"required></textarea> -->
                     
@@ -51,7 +48,7 @@
             </div>
             <div class="card-footer">
             <em style="text-align: left;">note: tanda<strong> (<span style="color: red;">*</span>) </strong> wajib diisi</em>
-              <button type="button" class="btn btn-primary float-right" onclick="saveAllData()" ><i class="fas fa-save"></i> Save</button>
+              <button type="button" class="btn btn-primary float-right" onclick="saveAllData()" ><i class="fas fa-edit"></i> Save</button>
             </div>
           </form>
         </div>
