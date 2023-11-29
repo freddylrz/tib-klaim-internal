@@ -191,7 +191,22 @@ function getDetail() {
     .done(async function (response) {
         dataClientInfo = response.clientInfo
         dataClient = response.clientData
-        dataIns = response.Ins
+        dataIns = response.Ins.map(function(ins) {
+              return {
+                "insName": ins.insName,
+                "insId": ins.insId,
+                "insShare": ins.insShare,
+                "share": ins.insShare,
+                "insPaidDD": ins.insPaidDD,
+                "insAging": ins.insAging,
+                "estAmt": ins.insEstAmt,
+                "claimAmt": ins.insClaimAmt,
+                "deducAmt": ins.insDeductAmt,
+                "recovAmt": ins.insRecoveryAmt,
+                "netAmt": ins.insNetClaim
+              };
+          })
+
         dataDecument = response.dokument
         dataLog = response.log
 
@@ -236,14 +251,18 @@ function getDetail() {
             $('#netClaimAmt').val(item.net_amt)
         });
 
-        response.dokument.forEach(function (item) {
-            $('#listUpload').append(`
-                <li class="mb-1">
-                    <a href="/${item.file_path}" target="_blank">${item.file_name}</a>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
-                </li>
-            `)
-        });
+        if (response.dokument && response.dokument.length > 0) {
+            response.dokument.forEach(function (item) {
+                $('#listUpload').append(`
+                    <li class="mb-1">
+                        <a href="/${item.file_path}" target="_blank">${item.file_name}</a>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
+                    </li>
+                `);
+            });
+        } else {
+            $('#listUpload').append('<li>No attachments uploaded</li>');
+        }
 
         await $("#tbclaimAmount").DataTable({
             processing: false,
@@ -450,7 +469,7 @@ function getCountAmount() {
             });
             $('#netClaimAmt').val(response.netClaimAmt)
 
-            claimAmount = response.data;
+            dataIns = response.data;
         }).fail(async function(response){
             Swal.fire({
                 icon: "error",
@@ -502,6 +521,8 @@ async function deleteDocument( docid ){
     }
 
     if(confirmDel){
+        $('#overlayClientData').fadeIn();
+
         $.ajax({
             "url": '/api/claim/delete-document',
             "method": "DELETE",
@@ -512,7 +533,7 @@ async function deleteDocument( docid ){
             "data":{
                 fileId: docid,
             },
-        }).done(function (response) {
+        }).done(async function (response) {
             Swal.fire({
                 icon: 'info',
                 title: response.message,
@@ -522,14 +543,21 @@ async function deleteDocument( docid ){
 
             $('#listUpload').empty()
 
-            $.each(response.document, function (i, item) {
-                $('#listUpload').append(`
-                    <li class="mb-1">
-                      <a style="margin-right:10px " href="/${item.file_path}/${item.file_name}" target="_blank">${item.file_name}</a>
-                      <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
-                    </li>
-                `)
-            })
+            if (response.document && response.document.length > 0) {
+                await $.each(response.document, function (i, item) {
+                    $('#listUpload').append(`
+                        <li class="mb-1">
+                          <a style="margin-right:10px " href="/${item.file_path}/${item.file_name}" target="_blank">${item.file_name}</a>
+                          <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
+                        </li>
+                    `);
+                });
+            } else {
+                $('#listUpload').append('<li>No attachment uploaded</li>');
+            }
+
+
+        $('#overlayClientData').fadeOut();
 
         }).fail(function (error){
             Swal.fire({
@@ -558,22 +586,22 @@ function saveEdit() {
                 allowOutsideClick: false,
             });
 
-            return search()
+            return false
         }
 
-        if(claimAmount.length == 0) {
+        if(dataIns.length == 0) {
             Swal.fire({
                 icon: "error",
-                text: "Mohon isi data claim terlebih dahulu!",
+                text: "Mohon isi claim amount terlebih dahulu!",
                 allowOutsideClick: false,
             });
 
-            return search()
+            return false
         }
 
         const form = new FormData();
 
-        $.each(claimAmount, function (i, item) {
+        $.each(dataIns, function (i, item) {
             form.append("insr_id[]", item.insr_code);;
             form.append("premiIns[]", item.premi);
             form.append("estimationInsAmt[]", item.estAmt);
