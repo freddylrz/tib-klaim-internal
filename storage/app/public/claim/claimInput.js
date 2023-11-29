@@ -77,7 +77,8 @@ $(function() {
     });
 
     $('.btnfilesupd').on('click', function(e) {
-		$('#fileInputupd').click();
+        e.preventDefault(); // Prevent default button behavior
+        $('#fileInputupd').trigger('click');
 	});
 
     $('#fileInputupd').on('change', function(e) {

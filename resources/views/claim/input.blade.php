@@ -307,19 +307,6 @@
                                                 style="width: 100%;" required>
                                             </select>
                                         </div>
-
-                                        <div id="uploadform">
-                                            <div class="form-group">
-                                                <label for="client">upload document</label><br>
-                                                <input type="file" id="fileInputupd" class="form-control files"
-                                                    name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
-                                                <div id="opt"></div>
-                                                <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
-                                                        class="fa fa-upload mr-1"></i> Choose Document</a>
-                                                <small>Press CTRL to select multiple documents</small>
-                                                <ul id="listfilesupd"></ul>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -355,6 +342,23 @@
                                                 <input type="text"
                                                     class="form-control money count-amount border-left-0" id="netClaimAmt"
                                                     name="netClaimAmt" placeholder="Net Amount" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div id="uploadform">
+                                            <div class="form-group">
+                                                <label for="client">upload document</label><br>
+                                                <input type="file" id="fileInputupd" class="form-control files"
+                                                    name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
+                                                <div id="opt"></div>
+                                                <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
+                                                        class="fa fa-upload mr-1"></i> Choose Document</a>
+                                                <small>Press CTRL to select multiple documents</small>
+                                                <ul id="listfilesupd"></ul>
                                             </div>
                                         </div>
                                     </div>
