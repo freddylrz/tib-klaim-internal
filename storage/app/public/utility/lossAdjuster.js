@@ -158,7 +158,7 @@ function getlarDetail() {
             Authorization: "Bearer " + $("#token").val(),
         },
         data: {
-            lossAdjId: $("#idlar").val(),
+            lossAdjId: $("#inlar").val(),
         },
     })
         .done(function (response) {

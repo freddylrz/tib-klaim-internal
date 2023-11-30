@@ -38,12 +38,12 @@
 
                 <div class="form-group">
                   <label>Post Code</label>
-                  <input type="text" class="form-control" id="post_code" name="post_code" >
+                  <input type="number" class="form-control" id="post_code" name="post_code" >
                 </div>
 
                 <div class="form-group">
                   <label>Phone</label>
-                  <input type="text" class="form-control" id="phone_no" name="phone_no" >
+                  <input type="tel" class="form-control" id="phone_no" name="phone_no" >
                 </div>
                 <div class="form-group">
                   <label>Fax Number</label>
@@ -53,12 +53,12 @@
             <div class="col-md-6">
                 <div class="form-group">
                   <label>Email</label>
-                  <input type="text" class="form-control" id="email" name="email" >
+                  <input type="email" class="form-control" id="email" name="email" >
                 </div>
 
                 <div class="form-group">
                   <label>NPWP</label>
-                  <input type="text" class="form-control" id="npwp" name="npwp" >
+                  <input type="number" class="form-control" id="npwp" name="npwp" >
                 </div>
                 
                 <div class="form-group">
@@ -68,22 +68,23 @@
 
                 <div class="form-group">
                   <label >PIC Phone</label>
-                  <input type="text" class="form-control" id="pic_no" name="pic_no" >
+                  <input type="tel" class="form-control" id="pic_no" name="pic_no" >
                 </div>
 
                 <div class="form-group ">
                   <label>PIC Email</label>
-                  <input type="text" class="form-control" id="pic_email" name="pic_email" >
+                  <input type="email" class="form-control" id="pic_email" name="pic_email" >
                 </div>
               </div>
               
             </div>
           </div>
           <input type="submit" id="SavelarUpdate" style="display: none;">
-        </form>
+        
         <div class="card-footer">
-          <button class="btn btn-primary float-right" onclick="SavelarUpdate()"><i class="fas fa-save"></i> Save</button>
+          <button class="btn btn-primary float-right" type="submit"><i class="fas fa-edit"></i> Save</button>
         </div>
+        </form>
       </div> 
      </div>
 
@@ -108,9 +109,14 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src ="{{ asset('storage/utility/lossAdjuster.js') }}"> </script>
-     <script>
-        $(function() {
-         getlarUpdate()
-        });
-    </script>
+    <script>
+     $(function() {
+    $('#Updatelar').on('submit', async function(e) {
+        e.preventDefault(); 
+        SavelarUpdate()
+    });
+
+    getlarUpdate(); 
+});
+</script>
 @endpush
