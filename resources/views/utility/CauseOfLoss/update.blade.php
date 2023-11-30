@@ -27,9 +27,9 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label>COB/Type Of Cover</label>
+                <label>Type Of Cover</label>
                 <div class="select2-purple">
-                  <select class="form-control" name="cobId" id="cobid"required>
+                  <select class="form-control select2bs4 filter" name="cobId" id="cobid"required>
                        
                     </select>
                   <input type="hidden" id="idcfl" name="causedId" value="{{ request()->idcfl }}">
@@ -38,17 +38,19 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label>TC description </label>
-                <textarea class="form-control" rows="6" style="width: 100%;" id="description" name="description" required></textarea>
+                <label>Description</label>
+                <input class="form-control" rows="6" style="width: 100%;" id="description" name="description" required></input>
               </div>
             </div>
           </div>
         </div>
-        <input type="text" value="1" id="clmId" style="display: none;">
         <input type="submit" id="saveBtn" style="display: none;">
               </form>
-      <div class="card-footer" style="text-align: right;">
-       	<button class="btn btn-primary" onclick="SaveUpdate()"><i class="fas fa-edit"></i> Save Update</button>
+      <div class="card-footer">
+      <a href="/utility/cfl/list">
+        <button class="btn btn-primary float-right " style="margin-left:5px"> Back </button>
+        </a>
+       	<button class="btn btn-primary float-right" onclick="SaveUpdate()"><i class="fas fa-edit"></i> Save Update</button>
       </div>
       
 		</div>
@@ -60,6 +62,8 @@
    @push('levelPluginsJsh')
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endpush
@@ -69,12 +73,16 @@
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src ="{{ asset('storage/utility/causedOfloss.js') }}"> </script>
      <script>
         $(function() {
+           $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
           getDataAsset()
           getUpdate()
         });
