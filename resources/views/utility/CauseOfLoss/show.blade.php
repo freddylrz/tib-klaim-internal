@@ -24,26 +24,26 @@
       <div class="card-body">
 
         <div class="row">
-                        <div class="col-md-6">
-                <div class="form-group">
-                  <label>COB/Type Of Cover</label>
-                  <!--  -->
-                 <p id="toccfl"></p>
-                  <!--  -->
-                </div>
+          <div class="col-md-6">
+           <div class="form-group">
+            <label>COB/Type Of Cover</label>
+             <p id="toccfl"></p>
             </div>
-            <div class="col-md-6">
+             </div>
+               <div class="col-md-6">
                 <div class="form-group">
-                    <label for="interest_insured">TC description </label>
+                    <label for="interest_insured">TC Description </label>
                     <p id="desccfl"></p>
             </div>
-            <input type="hidden" id="idcfl" value="{{ request()->idcfl }}">
           </div>
         </div>
       </div>
-
-       <a href="/utility/cfl/list">
+       
+     
       <div class="card-footer" style="text-align: right;">
+       <a href="/utility/cfl/update/{{ request()->idcfl }}">
+      <button class="btn btn-primary"> Update </button>
+        <a href="/utility/cfl/list">
         <button class="btn btn-primary"> Back </button>
         </a>
       </div>
@@ -51,9 +51,6 @@
   </div>
   <!-- /.box -->
 </div>
-
-
-
   @endsection
    @push('levelPluginsJsh')
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
@@ -73,7 +70,7 @@
     <script src ="{{ asset('storage/utility/causedOfloss.js') }}"> </script>
     <script>
         $(function() {
-          getDetail()
+          getDetail('{{ request()->idcfl }}')
         });
     </script>
 @endpush
