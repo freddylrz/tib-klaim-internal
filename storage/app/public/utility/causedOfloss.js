@@ -149,6 +149,7 @@ function saveAllData() {
                         allowOutsideClick: false,
                         timer: 1000,
                     });
+
                     setInterval(function () {
                         return window.location.replace(
                             `/utility/cfl/show/${data.causedId}`
@@ -173,7 +174,7 @@ function saveAllData() {
     }
 }
 
-function getDetail() {
+function getDetail(id) {
     Swal.fire({
         icon: "info",
         text: "loading",
@@ -189,7 +190,7 @@ function getDetail() {
             Authorization: "Bearer " + $("#token").val(),
         },
         data: {
-            causedId: $("#idcfl").val(),
+            causedId: id,
         },
     })
         .done(function (response) {
@@ -231,6 +232,7 @@ function getUpdate() {
         .done(function (response) {
             $.each(response.data, function (i, item) {
                 $("#cobid").val(item.cob_id);
+                $("#cobid").trigger("change");
                 $("#description").val(item.description);
             });
 
