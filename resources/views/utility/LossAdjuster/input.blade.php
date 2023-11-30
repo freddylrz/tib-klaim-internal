@@ -81,11 +81,12 @@
             </div>
           </div>
           <input type="submit" id="saveAlllar" style="display: none;">
-        </form>
+       
         <div class="card-footer">
          <em>note: tanda <strong>(<span style="color: red;">*</span>)</strong> wajib di isi</em>
-          <button class="btn btn-primary float-right"  onclick="saveAlllar()"><i class="fas fa-save"></i> Save</button>
+          <button class="btn btn-primary float-right"  type="submit"><i class="fas fa-edit"></i> Save</button>
         </div>
+         </form>
       </div> 
      </div>
 
@@ -106,4 +107,13 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
      <script src ="{{ asset('storage/utility/lossAdjuster.js') }}"> </script>
+     <script>
+     $(function() { 
+     $('#inlar').on('submit', async function(e) {
+        e.preventDefault()
+
+       saveAlllar()
+	});
+})
+  </script>
 @endpush

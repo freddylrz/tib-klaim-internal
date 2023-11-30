@@ -19,7 +19,7 @@
   </div><!-- /.container-fluid -->
 </div>
       <div class="card card-primary card-outline">
-        <form role="GET" method="GET" id="dlar" enctype="multipart/form-data">
+        <form role="GET" method="GET" id="idlar" enctype="multipart/form-data">
           <div class="card-body">
             <div class="row">
               <div class="col-md-6" style="border-right: 1px solid #ddd;">
@@ -78,7 +78,7 @@
               
             </div>
           </div>
-          <input type="hidden" id="idlar" value="{{ request()->idlar }}">
+          <input type="text" id="inlar" value="{{ request()->idlar }}" hidden>
         </form>
         <div class="card-footer">
            <div class="card-footer" style="text-align: right;">
