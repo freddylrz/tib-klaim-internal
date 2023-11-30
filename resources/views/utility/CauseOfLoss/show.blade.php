@@ -24,25 +24,26 @@
       <div class="card-body">
 
         <div class="row">
-                        <div class="col-md-6">
-                <div class="form-group">
-                  <label>COB/Type Of Cover</label>
-                  <!--  -->
-                  <input class="form-control" id="" type="text" placeholder="" readonly>
-                  <!--  -->
-                </div>
+          <div class="col-md-6">
+           <div class="form-group">
+            <label>COB/Type Of Cover</label>
+             <p id="toccfl"></p>
             </div>
-            <div class="col-md-6">
+             </div>
+               <div class="col-md-6">
                 <div class="form-group">
-                    <label for="interest_insured">TC description </label>
-                    <textarea class="form-control" rows="6" style="width: 100%;" id="description" name="description" readonly></textarea>
+                    <label for="interest_insured">TC Description </label>
+                    <p id="desccfl"></p>
             </div>
           </div>
         </div>
       </div>
-
-       <a href="/utility/cfl/list">
+       
+     
       <div class="card-footer" style="text-align: right;">
+       <a href="/utility/cfl/update/{{ request()->idcfl }}">
+      <button class="btn btn-primary"> Update </button>
+        <a href="/utility/cfl/list">
         <button class="btn btn-primary"> Back </button>
         </a>
       </div>
@@ -50,8 +51,26 @@
   </div>
   <!-- /.box -->
 </div>
-
-
-
-  
   @endsection
+   @push('levelPluginsJsh')
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+@endpush
+
+@push('levelPluginsJs')
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src ="{{ asset('storage/utility/causedOfloss.js') }}"> </script>
+    <script>
+        $(function() {
+          getDetail('{{ request()->idcfl }}')
+        });
+    </script>
+@endpush

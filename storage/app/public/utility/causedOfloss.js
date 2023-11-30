@@ -149,6 +149,154 @@ function saveAllData() {
                         allowOutsideClick: false,
                         timer: 1000,
                     });
+
+                    setInterval(function () {
+                        return window.location.replace(
+                            `/utility/cfl/show/${data.causedId}`
+                        );
+                    }, 3000);
+                } else {
+                    Swal.fire({
+                        icon: "warning",
+                        title: data.message,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                    });
+                }
+            })
+            .fail(async function (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: error.responseJSON.message,
+                    showConfirmButton: false,
+                });
+            });
+    }
+}
+
+function getDetail(id) {
+    Swal.fire({
+        icon: "info",
+        text: "loading",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
+
+    $.ajax({
+        url: `/api/utiliy/cause-of-loss/detail`,
+        method: "GET",
+        timeout: 0,
+        headers: {
+            Authorization: "Bearer " + $("#token").val(),
+        },
+        data: {
+            causedId: id,
+        },
+    })
+        .done(function (response) {
+            $.each(response.data, function (i, item) {
+                $("#toccfl").html(item.cob_desc);
+                $("#desccfl").html(item.description);
+            });
+
+            Swal.close();
+        })
+        .fail(function (response) {
+            Swal.fire({
+                icon: "error",
+                text: response.message,
+                allowOutsideClick: false,
+            });
+        });
+}
+
+function getUpdate() {
+    Swal.fire({
+        icon: "info",
+        text: "loading",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
+
+    $.ajax({
+        url: `/api/utiliy/cause-of-loss/detail`,
+        method: "GET",
+        timeout: 0,
+        headers: {
+            Authorization: "Bearer " + $("#token").val(),
+        },
+        data: {
+            causedId: $("#idcfl").val(),
+        },
+    })
+        .done(function (response) {
+            $.each(response.data, function (i, item) {
+                $("#cobid").val(item.cob_id);
+                $("#cobid").trigger("change");
+                $("#description").val(item.description);
+            });
+
+            Swal.close();
+        })
+        .fail(function (response) {
+            Swal.fire({
+                icon: "error",
+                text: response.message,
+                allowOutsideClick: false,
+            });
+        });
+}
+function SaveUpdate() {
+    Swal.fire({
+        icon: "info",
+        title: "loading",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
+    // console.log($("#cobid").val());
+    if ($("#cobid").val() == 0) {
+        Swal.fire({
+            icon: "warning",
+            text: "Harap pilih type of cover",
+            showConfirmButton: true,
+            allowOutsideClick: false,
+        });
+    } else if ($("#description").val() == "") {
+        Swal.fire({
+            icon: "warning",
+            text: "Harap isi description",
+            showConfirmButton: true,
+            allowOutsideClick: false,
+        });
+    } else {
+        const form = new FormData(document.getElementById("Updatecfl"));
+        $.ajax({
+            async: true,
+            crossDomain: true,
+            url: "/api/utiliy/cause-of-loss/update",
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + $("#token").val(),
+            },
+            processData: false,
+            contentType: false,
+            mimeType: "multipart/form-data",
+            data: form,
+        })
+            .done(async function (response) {
+                var data = JSON.parse(response);
+                if (data.status == 200) {
+                    Swal.fire({
+                        icon: "info",
+                        title: data.message,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                    });
+                    setInterval(function () {
+                        return window.location.replace(
+                            `/utility/cfl/show/` + $("#idcfl").val()
+                        );
+                    }, 3000);
                 } else {
                     Swal.fire({
                         icon: "warning",

@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Input Klaim</h1>
+                    <h1>Claim Input</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Klaim Data</a></li>
-                        <li class="breadcrumb-item active">List</li>
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">Claim Input</li>
                     </ol>
                 </div>
             </div>
@@ -307,19 +307,6 @@
                                                 style="width: 100%;" required>
                                             </select>
                                         </div>
-
-                                        <div id="uploadform">
-                                            <div class="form-group">
-                                                <label for="client">upload document</label><br>
-                                                <input type="file" id="fileInputupd" class="form-control files"
-                                                    name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
-                                                <div id="opt"></div>
-                                                <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
-                                                        class="fa fa-upload mr-1"></i> Choose Document</a>
-                                                <small>Press CTRL to select multiple documents</small>
-                                                <ul id="listfilesupd"></ul>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -347,7 +334,7 @@
                                             <label for="insured_name">Net Claim Amount</label>
                                             <div class="input-group">
                                                 <div class="input-group-append">
-                                                    <span class="input-group-text border-0">
+                                                    <span class="input-group-text border-right-0">
                                                         <i class="fas fa-sync-alt fa-spin font-weight-bold text-black loadingIndicator"
                                                             style="display: none;font-size:18px"></i>
                                                     </span>
@@ -355,6 +342,23 @@
                                                 <input type="text"
                                                     class="form-control money count-amount border-left-0" id="netClaimAmt"
                                                     name="netClaimAmt" placeholder="Net Amount" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div id="uploadform">
+                                            <div class="form-group">
+                                                <label for="client">upload document</label><br>
+                                                <input type="file" id="fileInputupd" class="form-control files"
+                                                    name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
+                                                <div id="opt"></div>
+                                                <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
+                                                        class="fa fa-upload mr-1"></i> Choose Document</a>
+                                                <small>Press CTRL to select multiple documents</small>
+                                                <ul id="listfilesupd"></ul>
                                             </div>
                                         </div>
                                     </div>
@@ -426,5 +430,5 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     {{-- custom js --}}
-    <script src="{{ asset('storage/claim/claim.js') }}"></script>
+    <script src="{{ asset('storage/claim/claimInput.js') }}"></script>
 @endpush

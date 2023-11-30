@@ -78,10 +78,17 @@ function getDetail() {
             $('#netAmt').html(item.net_amt)
         });
 
-        response.dokument.forEach(function (item) {
-            $('#uploadedAttachment').html(`<li><a href="/${item.file_path}"
-            target="_blank">${item.file_name}</a></li>`)
-        });
+        if (response.dokument && response.dokument.length > 0) {
+            response.dokument.forEach(function (item) {
+                $('#uploadedAttachment').append(`
+                    <li class="mb-1">
+                        <a href="/${item.file_path}" target="_blank">${item.file_name}</a>
+                    </li>
+                `);
+            });
+        } else {
+            $('#uploadedAttachment').append('<li>No attachments uploaded</li>');
+        }
 
         await $("#tbclaimAmount").DataTable({
             processing: false,
@@ -98,11 +105,6 @@ function getDetail() {
             columns: [
                 { data: "insName" },
                 { data: "insShare" },
-                {
-                    data: "insEstAmt",
-                    orderable: false,
-                    className: 'dt-body-right'
-                },
                 {
                     data: "insClaimAmt",
                     orderable: false,

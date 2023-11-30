@@ -31,7 +31,8 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
         });
         Route::get('/detail-claim', ['uses' => 'Api\Data_Claim\DataClaimController@detailClaim']);
         Route::get('/list-claim', ['uses' => 'Api\Data_Claim\DataClaimController@listClaim']);
-        Route::get('/update-claim', ['uses' => 'Api\Data_Claim\DataClaimController@updateClaim']);
+        Route::post('/update-claim', ['uses' => 'Api\Data_Claim\InputClaimController@updateClaim']);
+        Route::delete('/delete-document', ['uses' => 'Api\Data_Claim\InputClaimController@deleteUpload']);
 
     });
     Route::prefix('/utiliy')->group( function ()

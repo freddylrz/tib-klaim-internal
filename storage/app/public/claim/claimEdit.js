@@ -1,7 +1,10 @@
 var loadPremiumInfo = 0;
 var loadingIndicator = false;
-var claimAmount = [];
+var dataClientInfo = [];
 var dataClient = [];
+var dataIns = [];
+var dataDecument = [];
+var dataLog = [];
 
 $(function() {
     //Initialize Select2 Elements
@@ -28,35 +31,7 @@ $(function() {
 
     getDataAsset()
 
-    $('#tbsppa').on('click', 'tbody tr', function() {
-        $('.tanda').css('display', 'none');
-        $(this).closest('tr').find('.tanda').css('display', 'block');
-
-        $('#prodNo').val($(this).closest('tr').find('.tanda').data('prod'));
-        $('#draftNo').val($(this).closest('tr').find('.tanda').data('draft'));
-
-        $('#clientInfo').slideUp();
-        $('#overlayClientInfo').fadeIn();
-        $('#overlayPremiumInfo').fadeIn();
-        loadPremiumInfo = 0;
-        claimAmount = [];
-        dataClient= [];
-    });
-
-    $('.filter').on('change', function() {
-        if ($('#dataClient').is(':visible')) {
-            $('#dataClient').slideUp();
-            $('#overlayDataClient').fadeIn();
-            $('#prodNo').val('')
-            $('#draftNo').val('')
-            $('#clientInfo').slideUp();
-            $('#overlayClientInfo').fadeIn();
-            $('#overlayPremiumInfo').fadeIn();
-            loadPremiumInfo = 0;
-            claimAmount = [];
-            dataClient= [];
-        }
-    });
+    getDetail()
 
     // Event listener for tab click
     $('#clientInfo .nav-link').on('click', function(e) {
@@ -67,45 +42,32 @@ $(function() {
         }
     });
 
-    $('#btnDataCLaim').on('click', function(e) {
-        addDataClaim()
-	});
-
     // Event listener for input count amount
     $('.count-amount').on('keyup', function(e) {
         getCountAmount()
     });
 
     $('.btnfilesupd').on('click', function(e) {
-		$('#fileInputupd').click();
+        e.preventDefault(); // Prevent default button behavior
+        $('#fileInputupd').trigger('click');
 	});
 
     $('#fileInputupd').on('change', function(e) {
 		var thefiles = $('#fileInputupd').get(0).files.length;
-		$('#listfilesupd').html('');
 		for (var i = 0; i < thefiles; ++i) {
-			var name = $(this).get(0).files.item(i).name;
-			$('#listfilesupd').append(`<li>${name}</li>`);
+            var file = $(this).get(0).files.item(i);
+            var name = file.name;
+            var fileUrl = URL.createObjectURL(file); // Create URL for the file
+			$('#listfilesupd').append(`<li><a href="${fileUrl}" target="_blank">${name}</a></li>`);
 		}
 	});
 
-    $('#formSaveAll').on('submit', async function(e) {
+    $('#formEdit').on('submit', async function(e) {
         e.preventDefault()
 
-        saveAllData()
+        saveEdit()
 	});
 });
-
-// Function to remove active class from current tab and switch to the first tab
-function switchToFirstTab() {
-    // Remove the 'active' class from the currently active tab link and tab pane
-    $('#custom-tabs-one-tab > .nav-item > .nav-link.active').removeClass('active');
-    $('#custom-tabs-one-tabContent > .tab-pane.fade.show.active').removeClass('show active');
-
-    // Set the first tab link and tab pane to be active
-    $('#client-info-tab').addClass('active');
-    $('#client-info-tab-view').addClass('show active');
-}
 
 
 function getDataAsset() {
@@ -205,11 +167,11 @@ function getDataAsset() {
     });
 }
 
-function search() {
-    if($('#valueParameter').val() == '') {
+function getDetail() {
+    if($('#claimId').val() == '') {
         Swal.fire({
             icon: "error",
-            text: "Value tidak boleh kosong!",
+            text: "Claim Id Diperlukan!",
             allowOutsideClick: false,
         });
 
@@ -217,137 +179,156 @@ function search() {
     }
 
     $.ajax({
-        url: `/api/claim/input/dataTable`,
+        url: `/api/claim/detail-claim`,
         method: "GET",
         headers: {
             Authorization: "Bearer " + $("#token").val(),
         },
         data: {
-            type: $('#parameterId').val(),
-            search: $('#valueParameter').val()
+            claimId: $('#claimId').val(),
         }
     })
     .done(async function (response) {
-        await $("#tbsppa").DataTable({
-            processing: false,
-            pageLength: 10,
-            autoWidth: false,
-            order: [],
-            bDestroy: true,
-            searching: true,
-            scrollX: true,
-            sScrollXInner: "100%",
-            data: response.data,
-            columns: [
-                { data: "draft_no" },
-                { data: "policy_no" },
-                { data: "insured_name" },
-                { data: "type_cover" },
-                { data: "periode" },
-                {
-                    data: "prod_no",
-                    render: function(data, type, row) {
-                        return `
-                            <span class="badge bg-primary py-2 tanda" style="display: none;" data-draft="${row.draft_no}" data-prod="${data}"><i class="fas fa-check"></i></span>
-                        `;
-                    },
-                    orderable: false,
-                }
-            ],
-        });
+        dataClientInfo = response.clientInfo
+        dataClient = response.clientData
+        dataIns = response.Ins.map(function(ins) {
+              return {
+                "insName": ins.insName,
+                "insId": ins.insId,
+                "insShare": ins.insShare,
+                "share": ins.insShare,
+                "insPaidDD": ins.insPaidDD,
+                "insAging": ins.insAging,
+                "estAmt": ins.insEstAmt,
+                "claimAmt": ins.insClaimAmt,
+                "deducAmt": ins.insDeductAmt,
+                "recovAmt": ins.insRecoveryAmt,
+                "netAmt": ins.insNetClaim
+              };
+          })
 
-        $('#overlayDataClient').fadeOut();
-    })
+        dataDecument = response.dokument
+        dataLog = response.log
 
-    $('#clientInfo').slideUp();
-    $('#dataClaim').slideUp();
-    $('#dataAmount').slideUp();
-    $('#prodNo').val('');
-    $('#draftNo').val('');
-    $('#dataClient').slideDown();
-    $('#clientInfoFooter').slideDown();
-    $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
-    loadPremiumInfo = 0;
-    claimAmount = [];
-    dataClient= [];
-}
-
-// Fungsi button "Load"
-function getClientinfo() {
-    if($('#prodNo').val() == '' || $('#draftNo').val() == '') {
-        Swal.fire({
-            icon: "error",
-            text: "Mohon pilih client terlebih dahulu!",
-            allowOutsideClick: false,
-        });
-
-        return false
-    }
-
-    switchToFirstTab()
-
-    $.ajax({
-        url: `/api/claim/input/data-client`,
-        method: "GET",
-        headers: {
-            Authorization: "Bearer " + $("#token").val(),
-        },
-        data: {
-            prod_no: $('#prodNo').val(),
-            draft_no: $('#draftNo').val(),
-        }
-    })
-    .done(function (response) {
-        response.data.forEach(function (item) {
+        response.clientInfo.forEach(function (item) {
             $('#draftNo').val(item.DRAFT_NO)
             $('#prodNo').val(item.PROD_NO)
-            $('#insdId').val(item.insd_id)
-            $('#nameWrt').val(item.name_wrt)
-            $('#typeOFCover').val(item.type_of_cover)
-
-            $('#cobId').val(item.cob_id)
-            $('#cobId').trigger('change');
-
-            if (item.cob_id !== null) {
-                $('#cobId').prop('disabled', true);
-            } else {
-                $('#cobId').prop('disabled', false);
-            }
-
-            $('#currId').val(item.curr_id)
-            $('#currId').trigger('change');
-
-            $('#polisNo').val(item.pol_no)
-            $('#interestInsured').val(item.interest_insured)
-            $('#startDd').val(item.start_dd)
-            $('#endDd').val(item.end_dd)
-            $('#tsi').val(`${item.curr_code} ${item.tsi}`)
-
             $('#txtnameWrt').html(item.name_wrt)
             $('#txttypeOFCover').html(item.type_of_cover)
             $('#txtpolisNo').html(item.pol_no)
             $('#txtinterestInsured').html(item.interest_insured)
             $('#txtperiod').html(item.periode)
             $('#txttsi').html(`${item.curr_code} ${item.tsi}`)
-
             $('#clientName').html(`${item.name_wrt} (CLIENT)`)
         });
 
-        $('#currId').on('change', function () {
-            $(this).val();
+        response.clientData.forEach(function (item) {
+            $('#headClaimNo').html(item.claim_no)
+            $('#claimNo').val(item.claim_no)
+            $('#dateOfLoss').val(item.dol)
+            $('#locationOfLoss').val(item.location)
+            $('#reportDate').val(item.report_date)
+            $('#reportSource').val(item.report_source)
+            $('#cobId').val(item.cob_id)
+            $('#cobId').trigger('change');
+            if (item.cob_id !== null) {
+                $('#cobId').prop('disabled', true);
+            } else {
+                $('#cobId').prop('disabled', false);
+            }
+            $('#causeId').val(item.causedId)
+            $('#causeId').trigger('change');
+            $('#lossAdjId').val(item.lossAdjusterId)
+            $('#lossAdjId').trigger('change');
+            $('#workshopId').val(item.workshopId)
+            $('#workshopId').trigger('change');
+            $('#currId').val(item.currId)
+            $('#currId').trigger('change');
+            $('#estAmt').val(item.est_amt)
+            $('#claimAmt').val(item.claim_amt)
+            $('#deducAmt').val(item.deduct_amt)
+            $('#recoveryAmt').val(item.recv_amt)
+            $('#netClaimAmt').val(item.net_amt)
         });
 
-        $('#cobId').on('change', function () {
-            $(this).val();
-        });
+        if (response.dokument && response.dokument.length > 0) {
+            response.dokument.forEach(function (item) {
+                $('#listUpload').append(`
+                    <li class="mb-1">
+                        <a href="/${item.file_path}" target="_blank">${item.file_name}</a>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
+                    </li>
+                `);
+            });
+        } else {
+            $('#listUpload').append('<li>No attachments uploaded</li>');
+        }
 
-        dataClient = response.data
+        await $("#tbclaimAmount").DataTable({
+            processing: false,
+            pageLength: 10,
+            autoWidth: false,
+            order: [[1, 'desc']],
+            bDestroy: true,
+            scrollX: true,
+            paging: false, // Disable pagination
+            searching: false, // Disable search
+            info: false, // Disable table information display
+            sScrollXInner: "100%",
+            data: response.Ins,
+            columns: [
+                { data: "insName" },
+                { data: "insShare" },
+                {
+                    data: "insClaimAmt",
+                    render: function(data, type, row) {
+                        return `<span id="claimAmount${row.insId}">${data}</span>`;
+                    },
+                    orderable: false,
+                    className: 'dt-body-right'
+                },
+                {
+                    data: "insDeductAmt",
+                    render: function(data, type, row) {
+                        return `<span id="deductionAmount${row.insId}">${data}</span>`;
+                    },
+                    orderable: false,
+                    className: 'dt-body-right'
+                },
+                {
+                    data: "insRecoveryAmt",
+                    render: function(data, type, row) {
+                        return `<span id="recoveryAmount${row.insId}">${data}</span>`;
+                    },
+                    orderable: false,
+                    className: 'dt-body-right'
+                },
+                {
+                    data: "insNetClaim",
+                    render: function(data, type, row) {
+                        return `<span id="netClaim${row.insId}">${data}</span>`;
+                    },
+                    orderable: false,
+                    className: 'dt-body-right'
+                },
+            ],
+        });
 
         $('#overlayClientInfo').fadeOut();
+        $('#overlayClientData').fadeOut();
+        $('#overlayDataAmount').fadeOut();
+        $('#overlayLogStatus').fadeOut();
+    })
+    .fail(async function(response){
+        await Swal.fire({
+            icon: "error",
+            text: "Claim Id tidak ditemukan!",
+            allowOutsideClick: false,
+        });
+
+        return window.location.replace(`/claim/list`);
     })
 
-    $('#dataClient').slideUp();
-    $('#clientInfo').slideDown()
     loadPremiumInfo = 0;
 }
 
@@ -446,81 +427,9 @@ function getPremiuminfo() {
     }
 }
 
-function addDataClaim() {
-    $('#clientInfoFooter').slideUp();
-    $('#dataClient').slideUp();
-    $('#dataClaim').slideDown();
-    $('#dataAmount').slideDown();
-
-    $.ajax({
-        url: `/api/claim/input/share-insurance`,
-        method: "GET",
-        headers: {
-            Authorization: "Bearer " + $("#token").val(),
-        },
-        data: {
-            draft_no: $('#draftNo').val()
-        }
-    })
-    .done(async function (response) {
-        await $("#tbclaimAmount").DataTable({
-            processing: false,
-            pageLength: 10,
-            autoWidth: false,
-            order: [[1, 'desc']],
-            bDestroy: true,
-            scrollX: true,
-            paging: false, // Disable pagination
-            searching: false, // Disable search
-            info: false, // Disable table information display
-            sScrollXInner: "100%",
-            data: response.data,
-            columns: [
-                { data: "crt_name" },
-                { data: "share_pct" },
-                {
-                    data: "claimAmt",
-                    render: function(data, type, row) {
-                        return `<span id="claimAmount${row.insr_id}">${data}</span>`;
-                    },
-                    orderable: false,
-                    className: 'dt-body-right'
-                },
-                {
-                    data: "deducAmt",
-                    render: function(data, type, row) {
-                        return `<span id="deductionAmount${row.insr_id}">${data}</span>`;
-                    },
-                    orderable: false,
-                    className: 'dt-body-right'
-                },
-                {
-                    data: "recovAmt",
-                    render: function(data, type, row) {
-                        return `<span id="recoveryAmount${row.insr_id}">${data}</span>`;
-                    },
-                    orderable: false,
-                    className: 'dt-body-right'
-                },
-                {
-                    data: "netAmt",
-                    render: function(data, type, row) {
-                        return `<span id="netClaim${row.insr_id}">${data}</span>`;
-                    },
-                    orderable: false,
-                    className: 'dt-body-right'
-                }
-            ],
-        });
-
-        $('#overlayDataAmount').fadeOut();
-        $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
-    })
-}
-
 function getCountAmount() {
     if(loadingIndicator == false){
-        var draft_no = $('#draftNo').val() == '' ? 0 : $('#draftNo').val()
+        var draft_no = $('#claimId').val() == '' ? 0 : $('#claimId').val()
         var estAmt = $('#estAmt').val() == '' ? 0 : $('#estAmt').val()
         var claimAmt = $('#claimAmt').val() == '' ? 0 : $('#claimAmt').val()
         var deducAmt = $('#deducAmt').val() == '' ? 0 : $('#deducAmt').val()
@@ -534,6 +443,7 @@ function getCountAmount() {
                 Authorization: "Bearer " + $("#token").val(),
             },
             data: {
+                type: 2,
                 draft_no: draft_no,
                 estAmt: estAmt,
                 claimAmt: claimAmt,
@@ -552,14 +462,14 @@ function getCountAmount() {
             }
         }).done(async function (response) {
             await $.each(response.data, function (i, item) {
-                $(`#claimAmount${item.insr_id}`).html(item.claimAmt)
-                $(`#recoveryAmount${item.insr_id}`).html(item.recovAmt)
-                $(`#deductionAmount${item.insr_id}`).html(item.deducAmt)
-                $(`#netClaim${item.insr_id}`).html(item.netAmt)
+                $(`#claimAmount${item.insId}`).html(item.claimAmt)
+                $(`#recoveryAmount${item.insId}`).html(item.recovAmt)
+                $(`#deductionAmount${item.insId}`).html(item.deducAmt)
+                $(`#netClaim${item.insId}`).html(item.netAmt)
             });
             $('#netClaimAmt').val(response.netClaimAmt)
 
-            claimAmount = response.data;
+            dataIns = response.data;
         }).fail(async function(response){
             Swal.fire({
                 icon: "error",
@@ -576,7 +486,91 @@ function getCountAmount() {
     }
 }
 
-function saveAllData() {
+async function deleteDocument( docid ){
+
+    var confirmDel = true
+
+    if(docid !== undefined) {
+        await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin ingin menghapus file?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                return confirmDel = true
+            } else if (result.isDenied) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File tidak dihapus',
+                    showConfirmButton: true,
+                });
+                return confirmDel = false;
+            }
+        })
+    } else {
+        return Swal.fire({
+            icon: 'error',
+            title: 'Document tidak ditemukan!',
+            showConfirmButton: true,
+        });
+
+    }
+
+    if(confirmDel){
+        $('#overlayClientData').fadeIn();
+
+        $.ajax({
+            "url": '/api/claim/delete-document',
+            "method": "DELETE",
+            "timeout": 0,
+            "headers": {
+                "Authorization": "Bearer "+$('#token').val()
+            },
+            "data":{
+                fileId: docid,
+            },
+        }).done(async function (response) {
+            Swal.fire({
+                icon: 'info',
+                title: response.message,
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+
+            $('#listUpload').empty()
+
+            if (response.document && response.document.length > 0) {
+                await $.each(response.document, function (i, item) {
+                    $('#listUpload').append(`
+                        <li class="mb-1">
+                          <a style="margin-right:10px " href="/${item.file_path}/${item.file_name}" target="_blank">${item.file_name}</a>
+                          <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
+                        </li>
+                    `);
+                });
+            } else {
+                $('#listUpload').append('<li>No attachment uploaded</li>');
+            }
+
+
+        $('#overlayClientData').fadeOut();
+
+        }).fail(function (error){
+            Swal.fire({
+                icon: 'error',
+                title: 'Data bermasalah',
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+        });
+    }
+}
+
+function saveEdit() {
     if(loadingIndicator == false){
         Swal.fire({
             icon: "info",
@@ -592,39 +586,23 @@ function saveAllData() {
                 allowOutsideClick: false,
             });
 
-            return search()
+            return false
         }
 
-        if(claimAmount.length == 0) {
+        if(dataIns.length == 0) {
             Swal.fire({
                 icon: "error",
-                text: "Mohon isi data claim terlebih dahulu!",
+                text: "Mohon isi claim amount terlebih dahulu!",
                 allowOutsideClick: false,
             });
 
-            return search()
+            return false
         }
 
         const form = new FormData();
 
-        $.each(dataClient, function (i, item) {
-            form.append("sppaId", item.DRAFT_NO);
-            form.append("prod_no", item.PROD_NO);
-            form.append("name_wrt", item.name_wrt);
-            form.append("cob_code", item.cob_code);
-            form.append("tsi", item.tsi);
-            form.append("pol_no", item.pol_no);
-            form.append("start_dd", item.start_dd);
-            form.append("end_dd", item.end_dd);
-            form.append("insdId", item.insd_id);
-            form.append("interest", item.interest_insured);
-            form.append("cob_id", item.cob_id);
-            form.append("premi", item.premi);
-        })
-
-        $.each(claimAmount, function (i, item) {
+        $.each(dataIns, function (i, item) {
             form.append("insr_id[]", item.insr_code);;
-            form.append("share[]", item.share_pct);
             form.append("premiIns[]", item.premi);
             form.append("estimationInsAmt[]", item.estAmt);
             form.append("claimInsAmt[]", item.claimAmt);
@@ -643,6 +621,7 @@ function saveAllData() {
             }
         });
 
+        form.append("claimId", $('#claimId').val());
         form.append("dol", $('#dateOfLoss').val());
         form.append("location", $('#locationOfLoss').val());
         form.append("caused", $('#causeId').val());
@@ -661,7 +640,7 @@ function saveAllData() {
         $.ajax({
             async: true,
             crossDomain: true,
-            url: "/api/claim/input/insert",
+            url: "/api/claim/update-claim",
             method: "POST",
             headers: {
                 Authorization: "Bearer " + $("#token").val(),
