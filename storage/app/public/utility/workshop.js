@@ -65,81 +65,57 @@ function saveWsAll() {
         showConfirmButton: false,
         allowOutsideClick: false,
     });
-
-    var name = $("#name").val();
-    var address = $("#address").val();
-    var postCode = $("#post_code").val();
-    // var faxNo = $("#fax_no").val();
-    var phoneNo = $("#phone_no").val();
-    var email = $("#email").val();
-    var npwp = $("#npwp").val();
-    var pic = $("#pic").val();
-    var picNo = $("#pic_no").val();
-
-    if (
-        name === "" ||
-        address === "" ||
-        postCode === "" ||
-        // faxNo === "" ||
-        phoneNo === "" ||
-        email === "" ||
-        npwp === "" ||
-        pic === "" ||
-        picNo === ""
-    ) {
-        Swal.fire({
-            icon: "warning",
-            title: "Harap isi semua kolom yang wajib diisi",
-            timer: 2000,
-            showConfirmButton: false,
-            allowOutsideClick: false,
-        });
-    } else {
-        const form = new FormData(document.getElementById("idws"));
-        $.ajax({
-            async: true,
-            crossDomain: true,
-            url: "/api/utiliy/workshop/insert",
-            method: "POST",
-            headers: {
-                Authorization: "Bearer " + $("#token").val(),
-            },
-            processData: false,
-            contentType: false,
-            mimeType: "multipart/form-data",
-            data: form,
-        })
-            .done(function (response) {
-                var data = JSON.parse(response);
-                if (data.status == 200) {
-                    Swal.fire({
-                        icon: "info",
-                        title: data.message,
-                        showConfirmButton: false,
-                        allowOutsideClick: false,
-                    });
-                    setTimeout(function () {
-                        window.location.replace(
-                            `/utility/ws/show/${data.workshopId}`
-                        );
-                    }, 1000);
-                } else {
-                    Swal.fire({
-                        icon: "error", // Use an error icon for consistency
-                        title: data.message,
-                        showConfirmButton: false,
-                        allowOutsideClick: false,
-                    });
-                }
-            })
-            .fail(function (error) {
+    Swal.fire({
+        icon: "warning",
+        title: "Harap isi semua kolom yang wajib diisi",
+        timer: 2000,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
+    const form = new FormData(document.getElementById("idws"));
+    $.ajax({
+        async: true,
+        crossDomain: true,
+        url: "/api/utiliy/workshop/insert",
+        method: "POST",
+        headers: {
+            Authorization: "Bearer " + $("#token").val(),
+        },
+        processData: false,
+        contentType: false,
+        mimeType: "multipart/form-data",
+        data: form,
+    })
+        .done(function (response) {
+            var data = JSON.parse(response);
+            if (data.status == 200) {
                 Swal.fire({
-                    icon: "error",
-                    title: error.responseJSON.message,
+                    icon: "info",
+                    title: data.message,
                     showConfirmButton: false,
+                    allowOutsideClick: false,
                 });
+                setTimeout(function () {
+                    window.location.replace(
+                        `/utility/ws/show/${data.workshopId}`
+                    );
+                }, 1000);
+            } else {
+                Swal.fire({
+                    icon: "error", // Use an error icon for consistency
+                    title: data.message,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+            }
+        })
+        .fail(function (error) {
+            Swal.fire({
+                icon: "error",
+                title: error.responseJSON.message,
+                showConfirmButton: false,
             });
-    }
+        });
 }
 
 function getwsDetail() {
