@@ -27,7 +27,7 @@
 
                 <div class="form-group">
                   <label for="insured_name" >Name <span style="color: red;">*</span></label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="name" required="true"
+                  <input type="text" class="form-control" id="name" name="name" placeholder="name" required="true">
                 </div>
 
                 <div class="form-group">
