@@ -102,6 +102,12 @@ class DataClaimController extends Controller
                     WHERE
                         webapps_db.tb_cob.cob_code <> " "');
 
+            array_unshift($cob, array(
+                "id" => 0,
+                "cob_code" => 'All COB',
+                "cob_desc" => 'All COB'
+            ));
+
             return response()->json([
                 'status' => 200,
                 'listStatus' => $filter,
@@ -120,7 +126,7 @@ class DataClaimController extends Controller
     {
 
         try {
-            $listIns = DB::select("CALL klaimapps_db.dataTable_claim(?)", [$r->type]);
+            $listIns = DB::select("CALL klaimapps_db.dataTable_claim(?,?)", [$r->typeStatus,$r->typeCOB]);
 
             return response()->json([
                 'status' => 200,
