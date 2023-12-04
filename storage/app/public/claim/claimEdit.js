@@ -562,10 +562,12 @@ async function deleteDocument( docid ){
         }).fail(function (error){
             Swal.fire({
                 icon: 'error',
-                title: 'Data bermasalah',
+                title: error.responseJSON.message,
                 showConfirmButton: true,
                 allowOutsideClick: false,
             });
+
+            $('#overlayClientData').fadeOut();
         });
     }
 }
