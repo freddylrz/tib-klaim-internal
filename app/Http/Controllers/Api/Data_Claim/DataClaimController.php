@@ -92,9 +92,20 @@ class DataClaimController extends Controller
                 ),
             );
 
+            $cob = DB::select(
+                'SELECT
+                        webapps_db.tb_cob.id,
+                        webapps_db.tb_cob.cob_code,
+                        CONCAT(webapps_db.tb_cob.cob_code," | ",webapps_db.tb_cob.cob_name) as cob_desc
+                    FROM
+                        webapps_db.tb_cob
+                    WHERE
+                        webapps_db.tb_cob.cob_code <> " "');
+
             return response()->json([
                 'status' => 200,
-                'list' => $filter,
+                'listStatus' => $filter,
+                'listCOB' => $cob,
             ], 200);
         } catch (Throwable $exception) {
             Log::error($exception);
