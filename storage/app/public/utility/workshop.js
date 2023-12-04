@@ -65,13 +65,6 @@ function saveWsAll() {
         showConfirmButton: false,
         allowOutsideClick: false,
     });
-    Swal.fire({
-        icon: "warning",
-        title: "Harap isi semua kolom yang wajib diisi",
-        timer: 2000,
-        showConfirmButton: false,
-        allowOutsideClick: false,
-    });
     const form = new FormData(document.getElementById("idws"));
     $.ajax({
         async: true,
