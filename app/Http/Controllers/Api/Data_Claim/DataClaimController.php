@@ -3,10 +3,6 @@
 namespace App\Http\Controllers\Api\Data_Claim;
 
 use App\Http\Helper\HelperController;
-use App\Models\tb_klaim;
-use App\Models\tb_klaim_log;
-use App\Models\tb_klaim_ins;
-use App\Models\tb_uploads;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -57,12 +53,67 @@ class DataClaimController extends Controller
         }
     }
 
-    public function listClaim()
+
+    public function assetDatatable(Request $r)
     {
         try {
+            $filter = array(
+                array(
+                    "type" => 1,
+                    "filterDesc" => 'All Status'
+                ),
+                array(
+                    "type" => 2,
+                    "filterDesc" => 'Laporan Awal Klaim'
+                ),
+                array(
+                    "type" => 3,
+                    "filterDesc" => 'On Process'
+                ),
+                array(
+                    "type" => 4,
+                    "filterDesc" => 'Settled'
+                ),
+                array(
+                    "type" => 5,
+                    "filterDesc" => 'Proses Klaim Dibayar'
+                ),
+                array(
+                    "type" => 6,
+                    "filterDesc" => 'Proses Final'
+                ),
+                array(
+                    "type" => 7,
+                    "filterDesc" => 'Final'
+                ),
+                array(
+                    "type" => 8,
+                    "filterDesc" => 'Ditolak'
+                ),
+            );
 
             return response()->json([
                 'status' => 200,
+                'list' => $filter,
+            ], 200);
+        } catch (Throwable $exception) {
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+    public function listClaim(Request $r)
+    {
+
+        try {
+            $listIns = DB::select("CALL klaimapps_db.dataTable_claim(?)", [$r->type]);
+
+            return response()->json([
+                'status' => 200,
+                'list' => $listIns,
             ], 200);
         } catch (Throwable $exception) {
             Log::error($exception);
