@@ -41,7 +41,7 @@
                 </div>
 
                  <div class="form-group">
-                  <label for="insured_name">Fax Number <span style="color: red;">*</span></label>
+                  <label for="insured_name">Fax Number</label>
                   <input type="text" class="form-control" id="fax_no" name="fax_no" placeholder="Fax Number">
                 </div>
 
