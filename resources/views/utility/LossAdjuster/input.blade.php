@@ -27,17 +27,17 @@
 
                 <div class="form-group">
                   <label for="insured_name" >Name <span style="color: red;">*</span></label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="name" required>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="name" required="true"
                 </div>
 
                 <div class="form-group">
                     <label for="interest_insured">Address <span style="color: red;">*</span></label>
-                    <textarea class="form-control" id="address" name="address" placeholder="Address" rows="3" required></textarea>
+                    <textarea class="form-control" id="address" name="address" placeholder="Address" rows="3" required="true"></textarea>
                 </div>
 
                 <div class="form-group">
                   <label for="insured_name">Post Code <span style="color: red;">*</span></label>
-                  <input type="number" class="form-control" id="post_code" name="post_code" placeholder="Post Code" required>
+                  <input type="number" class="form-control" id="post_code" name="post_code" placeholder="Post Code" required="true">
                 </div>
 
                  <div class="form-group">
@@ -47,34 +47,34 @@
 
                 <div class="form-group">
                   <label for="insured_name">Phone <span style="color: red;">*</span></label>
-                  <input type="tel" class="form-control" id="phone_no" name="phone_no" placeholder="Phone" required>
+                  <input type="tel" class="form-control" id="phone_no" name="phone_no" placeholder="Phone" required="true">
                 </div>
               </div>
             <div class="col-md-6">
                 <div class="form-group">
                   <label for="insured_name">Email <span style="color: red;">*</span></label>
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="Email" required="true">
                 </div>
 
                 <div class="form-group">
                   <label for="insured_name">NPWP <span style="color: red;">*</span></label>
-                  <input type="number" class="form-control" id="npwp" name="npwp" placeholder="NPWP" required">
+                  <input type="number" class="form-control" id="npwp" name="npwp" placeholder="NPWP" required="true">
                 </div>
                 <!-- <hr> -->
               
                 <div class="form-group">
                   <label for="insured_name">PIC <span style="color: red;">*</span></label>
-                  <input type="text" class="form-control" id="pic" name="pic" placeholder="PIC" required>
+                  <input type="text" class="form-control" id="pic" name="pic" placeholder="PIC" required="true">
                 </div>
 
                 <div class="form-group">
                   <label for="insured_name">PIC Phone <span style="color: red;">*</span></label>
-                  <input type="tel" class="form-control" id="pic_no" name="pic_no" placeholder="PIC Phone" required>
+                  <input type="tel" class="form-control" id="pic_no" name="pic_no" placeholder="PIC Phone" required="true">
                 </div>
 
                 <div class="form-group ">
                   <label for="insured_name">PIC Email <span style="color: red;">*</span></label>
-                  <input type="email" class="form-control" id="pic_email" name="pic_email" placeholder="PIC Email" required>
+                  <input type="email" class="form-control" id="pic_email" name="pic_email" placeholder="PIC Email" required="true">
                 </div>
               </div>
               
