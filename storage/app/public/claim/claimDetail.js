@@ -6,6 +6,23 @@ var dataDecument = [];
 var dataLog = [];
 
 $(function() {
+    // money mask
+    $('.money').inputmask('currency', {
+        prefix: '',
+        allowMinus: true,
+        groupSeparator: ',',
+        radixPoint: '.',
+        autoGroup: true,
+        digits: 0, // Set to 0 to avoid showing decimal digits
+        rightAlign: true,
+        numericInput: true // Enable numeric input only
+    });
+
+    //Date picker
+    $('.datetimepicker-input').datetimepicker({
+        format: "DD-MM-YYYY",
+    });
+
     getDetail()
 
     // Event listener for tab click
@@ -167,7 +184,7 @@ function getDetail() {
         $('#overlayDataAmount').fadeOut(3000);
         $('#overlayLogStatus').fadeOut(4000);
     })
-    .fail(async function(response){
+    .fail(async function(){
         await Swal.fire({
             icon: "error",
             text: "Claim Id tidak ditemukan!",

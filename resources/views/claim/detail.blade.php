@@ -289,24 +289,117 @@
                     </div>
                 </div>
             </div>
+            <style>
+                /* Add this CSS to your stylesheet or within a style tag in the head of your HTML document */
+                @keyframes shake {
+                    0% {
+                        transform: translateX(0);
+                    }
+
+                    20% {
+                        transform: translateX(-5px) rotate(-5deg);
+                    }
+
+                    40% {
+                        transform: translateX(5px) rotate(5deg);
+                    }
+
+                    60% {
+                        transform: translateX(-5px) rotate(-5deg);
+                    }
+
+                    80% {
+                        transform: translateX(5px) rotate(5deg);
+                    }
+
+                    100% {
+                        transform: translateX(0) rotate(0);
+                    }
+                }
+
+                @keyframes spin {
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+
+                @keyframes spin-reverse {
+                    100% {
+                        transform: rotate(-360deg);
+                    }
+                }
+
+                .btn i {
+                    transition: transform 0.3s ease;
+                    /* Adding transition effect */
+                }
+
+                .shake:hover i {
+                    animation: shake 0.5s ease;
+                    /* Apply shake animation on hover */
+                }
+
+                .spin:hover i {
+                    animation: spin 0.8s linear;
+                    /* Apply spin animation on hover */
+                }
+
+                .spin-reverse:hover i {
+                    animation: spin-reverse 0.8s linear;
+                    /* Apply spin-reverse animation on hover */
+                }
+            </style>
 
             <div class="card card-primary card-outline">
-                <div class="card-footer col-md-12" style="text-align: right;">
-
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lod">
-                        Propose Adjustment
-                    </button>
-                    <a href="/claim/update/{{ request()->claimId }}" class="btn btn-primary"><i
-                            class="fas fa-edit mr-1"></i> Edit Data</a>
-
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-onpro">
-                        On Process
+                <div class="card-footer text-right" id="cardForButton">
+                    <button type="button" id="btnProposeAdjustment" class="btn bg-purple shake" data-toggle="modal"
+                        data-target="#modal-lod">
+                        <i class="fas fa-sliders-h mr-1"></i> Propose Adjustment
                     </button>
 
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-onpro">
-                        Rollback Status
+                    <a href="/claim/update/{{ request()->claimId }}" id="btnEdit" class="btn btn-info shake">
+                        <i class="fas fa-edit mr-1"></i> Edit Data
+                    </a>
+
+                    <button type="button" id="btnOnProcess" class="btn btn-primary spin" data-toggle="modal"
+                        data-target="#modal-onpro">
+                        <i class="fas fa-cog mr-1"></i> On Process
                     </button>
 
+                    <button type="button" id="btnRollbackStatus" class="btn btn-danger spin-reverse"
+                        data-toggle="modal" data-target="#modal-onpro">
+                        <i class="fas fa-undo-alt mr-1"></i> Rollback Status
+                    </button>
+
+                    <button type="button" id="btnSettled" class="btn bg-teal shake" data-toggle="modal"
+                        data-target="#modal-settled">
+                        <i class="fas fa-money-check-alt mr-1"></i> Settled
+                    </button>
+
+                    <button type="button" id="btnUpdatePembayaran" class="btn bg-olive shake" data-toggle="modal"
+                        data-target="#modal-paid">
+                        <i class="fas fa-edit mr-1"></i> Update Pembayaran Klaim
+                    </button>
+
+                    <button type="button" id="btnProcessFinal" class="btn btn-success shake" data-toggle="modal"
+                        data-target="#modal-paidAll">
+                        <i class="fas fa-vote-yea mr-1"></i> Process Final
+                    </button>
+
+                    <button type="button" id="btnAddRecovery" class="btn bg-maroon shake" data-toggle="modal"
+                        data-target="#modal-recv">
+                        <i class="fas fa-medkit mr-1"></i> Add Recovery
+                    </button>
+
+                    <button type="button" id="btnFinal" class="btn bg-success shake" data-toggle="modal"
+                        data-target="#modal-final">
+                        <i class="fas fa-vote-yea mr-1"></i> Final
+                    </button>
+
+                    <button type="button" id="btnKlaimDitolak" class="btn bg-danger shake" data-toggle="modal"
+                        data-target="#modal-tolak">
+                        <i class="fas fa-window-close mr-1"></i> Klaim Ditolak
+                    </button>
                 </div>
             </div>
         </div>
@@ -318,7 +411,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title">Edit Status</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -350,10 +443,10 @@
         <div class="modal fade" id="modal-onpro">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary">
                         <h4 class="modal-title">On Process</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -403,10 +496,10 @@
         <div class="modal fade" id="modal-lod">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-purple">
                         <h4 class="modal-title">Propose Adjustment</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -449,25 +542,24 @@
         <div class="modal fade" id="modal-paid">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-olive">
                         <h4 class="modal-title">Pembayaran Asuransi</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group clearfix">
-                            <label for="deduction">Insurance</label><br>
-                            <div class="icheck-primary d-inline">
-                                <input type="checkbox" name="cbIns" class="cekbok" id="cbIns16476"
-                                    data-crtName="LIPPO GENERAL INSURANCE TBK, PT" value="16476">
-                                <label for="cbIns">LIPPO GENERAL INSURANCE TBK, PT</label><br>
+                            <label for="deduction">Insurance</label>
+                            <div id="listInsurance">
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="descIns">Paid Date</label>
-                            <input type="text" class="form-control datepicker" id="dateIns" name="dateIns"
-                                placeholder="Paid Date" required="true">
+                            <input type="text" class="form-control datetimepicker-input" id="dateIns"
+                                data-toggle="datetimepicker" data-target="#dateIns" name="dateIns"
+                                placeholder="Paid Dates" required>
                         </div>
                         <div class="form-group">
                             <div id="uploadform">
@@ -479,9 +571,9 @@
                                         <input type="file" id="fileInputupd" class="form-control"
                                             name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
                                         <div id="opt"></div>
-                                        <input type="hidden" id="dataid" name="dataid" value="8423">
-                                        <input type="hidden" id="cob" name="cob" value="CGL">
-                                        <input type="hidden" id="stat" name="stat" value="6">
+                                        <input type="hidden" id="dataid" name="dataid">
+                                        <input type="hidden" id="cob" name="cob">
+                                        <input type="hidden" id="stat" name="stat">
                                         <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
                                                 class="fa fa-upload"></i> Pilih File</a>
                                         <small>Tekan CTRL untuk memilih beberapa file</small>
@@ -504,10 +596,10 @@
         <div class="modal fade" id="modal-paidAll">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-success">
                         <h4 class="modal-title">Proses Final</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -527,10 +619,10 @@
         <div class="modal fade" id="modal-settled">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-teal">
                         <h4 class="modal-title">Settled</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -573,10 +665,10 @@
         <div class="modal fade" id="modal-final">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-success">
                         <h4 class="modal-title">Final</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -597,10 +689,10 @@
         <div class="modal fade" id="modal-tolak">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-danger">
                         <h4 class="modal-title">Klaim Ditolak</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -621,16 +713,16 @@
         <div class="modal fade" id="modal-recv">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-pink">
                         <h4 class="modal-title">Add Recovery Amount</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <p>Recovery Amount</p>
-                            <input class="form-control uang" id="in_recv" type="text"
+                            <input class="form-control money" id="in_recv" type="text"
                                 placeholder="Recovery Amount">
                             <input type="hidden" id="current-stat" name="current-stat" value="2">
                         </div>
@@ -654,18 +746,18 @@
                     <div class="modal-header">
                         <h4 class="modal-title">Update Claim Amount</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <p>Claim Amount</p>
-                            <input class="form-control uang" id="in_upClaim" type="text" placeholder="Claim Amount">
+                            <input class="form-control money" id="in_upClaim" type="text" placeholder="Claim Amount">
                             <input type="hidden" id="current-stat" name="current-stat" value="2">
                         </div>
                         <div class="form-group">
                             <p>Deductible Amount</p>
-                            <input class="form-control uang" id="in_upDeduct" type="text"
+                            <input class="form-control money" id="in_upDeduct" type="text"
                                 placeholder="Deductible Amount">
                             <input type="hidden" id="current-stat" name="current-stat" value="2">
                         </div>
@@ -687,6 +779,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
 @endpush
 
 @push('levelPluginsJs')
@@ -696,6 +789,9 @@
     <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/inputmask/jquery.inputmask.min.js') }}"></script>
+    <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     {{-- custom js --}}
     <script src="{{ asset('storage/claim/claimDetail.js') }}"></script>
