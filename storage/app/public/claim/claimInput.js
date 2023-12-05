@@ -77,7 +77,8 @@ $(function() {
     });
 
     $('.btnfilesupd').on('click', function(e) {
-		$('#fileInputupd').click();
+        e.preventDefault(); // Prevent default button behavior
+        $('#fileInputupd').trigger('click');
 	});
 
     $('#fileInputupd').on('change', function(e) {
@@ -536,6 +537,7 @@ function getCountAmount() {
                 Authorization: "Bearer " + $("#token").val(),
             },
             data: {
+                type: 1,
                 draft_no: draft_no,
                 estAmt: estAmt,
                 claimAmt: claimAmt,

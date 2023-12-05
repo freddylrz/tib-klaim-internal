@@ -1,57 +1,120 @@
 @extends('layouts.app')
 @section('content')
-<div class="content-header">
+<div class="content">
+  <div class="container-fluid">
+    
+  <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0"><b>Loss Adjuster Management</b> Detail</h1>
+        <h1 class="m-0"><b>Loss Adjuster Management</b> Input</h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="/">Home</a></li>
-          <li class="breadcrumb-item active">Loss Adjuster Management Detail</li>
+          <li class="breadcrumb-item active">Loss Adjuster Management Input</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
 </div>
-<!-- /.content-header -->
+      <div class="card card-primary card-outline">
+        <form role="GET" method="GET" id="idlar" enctype="multipart/form-data">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6" style="border-right: 1px solid #ddd;">
 
-<!-- Main content -->
-<div class="content">
-  <div class="container-fluid">
-    <div class="card card-primary card-outline">
-      <div class="card-body">
-
-        <div class="row">
-                        <div class="col-md-6">
                 <div class="form-group">
-                  <label>COB/Type Of Cover</label>
-                  <!--  -->
-                  <input class="form-control" id="" type="text" placeholder="" readonly>
-                  <!--  -->
+                  <label>Name</label>
+                  <p id="name"></p>
                 </div>
-            </div>
-            <div class="col-md-6">
+
                 <div class="form-group">
-                    <label for="interest_insured">TC description </label>
-                    <textarea class="form-control" rows="6" style="width: 100%;" id="description" name="description" readonly></textarea>
+                    <label>Address</label>
+                    <p id="address"></p>
+                </div>
+
+                <div class="form-group">
+                  <label>Post Code</label>
+                  <p id="postcode"></p>
+                </div>
+
+                <div class="form-group">
+                  <label>Phone</label>
+                  <p id="phone_no"></p>
+                </div>
+              </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                  <label>Fax Number</label>
+                  <p id="fax_no"></p>
+                </div>
+                <div class="form-group">
+                  <label>Email</label>
+                  <p id="email"></p>
+                </div>
+
+                <div class="form-group">
+                  <label>NPWP</label>
+                  <p id="npwp"></p>
+                </div>
+                <!-- <hr> -->
+              
+                <div class="form-group">
+                  <label>PIC</label>
+                  <p id="pic"></p>
+                </div>
+
+                <div class="form-group">
+                  <label>PIC Phone</label>
+                  <p id="pic_no"></p>
+                </div>
+
+                <div class="form-group ">
+                  <label>PIC Email</label>
+                  <p id="pic_email"></p>
+                </div>
+              </div>
+              
             </div>
           </div>
-        </div>
-      </div>
-
-       <a href="/utility/lar/list">
-      <div class="card-footer" style="text-align: right;">
+          <input type="text" id="inlar" value="{{ request()->idlar }}" hidden>
+        </form>
+        <div class="card-footer">
+           <div class="card-footer" style="text-align: right;">
+       <a href="/utility/lar/update/{{ request()->idlar }}">
+      <button class="btn btn-primary"> Update </button>
+        <a href="/utility/lar/list">
         <button class="btn btn-primary"> Back </button>
         </a>
       </div>
-    </div>
-  </div>
-  <!-- /.box -->
+        </div>
+      </div> 
+     </div>
 </div>
 
-
-
-  
   @endsection
+
+  @push('levelPluginsJsh')
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+@endpush
+
+@push('levelPluginsJs')
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src ="{{ asset('storage/utility/lossAdjuster.js') }}"> </script>
+    <script>
+        $(function() {
+          getlarDetail()
+        });
+    </script>
+    @endpush
+    

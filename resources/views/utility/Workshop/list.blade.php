@@ -24,8 +24,7 @@
                 <div class="card-body">
                   <table
                     id="tableWs"
-                    class="table table-bordered table-striped"
-                  >
+                      class="table table-bordered table-striped">
                     <thead>
                       <tr class="table-primary">
                         <th>No.</th>
@@ -67,7 +66,7 @@
      <script src ="{{ asset('storage/utility/workshop.js') }}"> </script>
     <script>
         $(function() {
-          Wsdatatabel()
+         tableWs()
         });
     </script>
 @endpush
