@@ -30,12 +30,23 @@ class DataClaimController extends Controller
                     $clientInfo[0]->end_dd = date("d-m-Y", strtotime($clientInfo[0]->end_dd));
                 }
             }
-            if (!empty($upd)) {
-                $upd[0]->date_uploaded = date("d-m-Y", strtotime($upd[0]->date_uploaded));
+
+            if (!empty($upd)) 
+            {   
+                foreach ($upd as $u) 
+                {
+                    $u->date_uploaded = date("d-m-Y", strtotime($u->date_uploaded));
+                }
             }
-            if (!empty($log)) {
-                $log[0]->created_at = date("d-m-Y H:i:s", strtotime($log[0]->created_at));
+
+            if (!empty($log)) 
+            {   
+                foreach($log as $l)
+                {
+                    $l->created_at = date("d-m-Y H:i:s", strtotime($l->created_at));
+                }
             }
+
             return response()->json([
                 'status' => 200,
                 'clientInfo' => $clientInfo,
@@ -155,6 +166,152 @@ class DataClaimController extends Controller
 
             return response()->json([
                 'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+
+    public function validation(Request $r)
+    {
+        try 
+        {   
+            if ($r->statusId == 6 && empty($r->$ins)) 
+            {
+                return response()->json([
+                    'status'  => 500,
+                    'message' => 'Harap pilih asuransi!',
+                ], 500);
+            }
+
+            $logId = DB::table('klaimapps_db.tb_klaim_log')->insertGetId([
+                'klaim_id'      => $r->klaimId,
+                'klaim_stat_id' => $r->statusId,
+                'description'   => $r->description,
+                'user_id'       => Auth::user()->id,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+
+            DB::table('klaimapps_db.tb_klaim')->where('id', $r->klaimId)->update([
+                'klaim_log_id' => $logId,
+                'user_update'  => Auth::user()->id,
+                'updated_at'   => now(),
+            ]);
+
+            $cob_code = (!empty($r->cobId)) ? DB::table('webapps_db.tb_cob')->where('id', $r->cobId)->value('cob_code') : 0;
+
+            if ($r->statusId == 6) 
+            {
+                for ($i=0; $i < count($r->ins); $i++) 
+                { 
+                    DB::table('klaimapps_db.tb_klaim_ins')->where('id', $r->ins[$i])->update([
+                        'paid_dd' => date('Y-m-d', strtotime($r->paid_date))
+                    ]);
+                }
+            }
+
+            if (!empty($r->file(['fileUpd']))) 
+            {
+                for ($i = 0; $i < count($r->file(['fileUpd'])); $i++) 
+                {
+                    $fileup = $r->file(['fileUpd'])[$i];
+
+                    $extension = $fileup->getClientOriginalName(); // getting image extension
+                    $fileName  = $extension;
+                    $fileName  = str_replace("#", " ", $fileName);
+                    $destinationPath = 'upload/' . $cob_code . '/' . $r->klaimId;
+                    $fileup->move($destinationPath, $fileName);
+
+                    DB::table('klaimapps_db.tb_uploads')->insert([
+                        'klaim_id'      => $r->klaimId,
+                        'file_name'     => $fileName,
+                        'file_path'     => $destinationPath,
+                        'date_uploaded' => now(),
+                        'klaim_cob'     => $cob_code,
+                        'status'        => $r->statusId,
+                        'created_at'    => now(),
+                        'updated_at'    => now(),
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => 200,
+            ], 200);
+        } 
+        catch (Throwable $exception) 
+        {
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal menyimpan data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+
+    public function rollback(Request $r)
+    {
+        try
+        {
+            $lastId = DB::select('SELECT
+                kl.id, 
+                kl.klaim_id, 
+                kl.klaim_stat_id
+            FROM
+                klaimapps_db.tb_klaim_log AS kl
+            WHERE
+                kl.klaim_id = '.$r->klaimId.'
+            ORDER BY
+                kl.created_at DESC
+            LIMIT 1');
+
+            if (empty($lastId)) 
+            {
+                return response()->json([
+                    'status'  => 500,
+                    'message' => 'Gagal memuat data! Silahkan coba lagi.',
+                ], 500);
+            }
+
+            if ($lastId[0]->klaim_stat_id == 1) 
+            {
+                return response()->json([
+                    'status'  => 500,
+                    'message' => 'Status terakhir tidak boleh laporan awal klaim!.',
+                ], 500);
+            }
+
+            DB::table('klaimapps_db.tb_klaim_log')->where('id', $lastId[0]->id)->delete();
+
+            $rollbackId = $lastId = DB::select('SELECT
+                kl.id, 
+                kl.klaim_id, 
+                kl.klaim_stat_id
+            FROM
+                klaimapps_db.tb_klaim_log AS kl
+            WHERE
+                kl.klaim_id = '.$r->klaimId.'
+            ORDER BY
+                kl.created_at DESC
+            LIMIT 1');
+
+            DB::table('klaimapps_db.tb_klaim')->where('id', $r->klaimId)->update([
+                'klaim_log_id' => $rollbackId[0]->id,
+                'user_update'  => Auth::user()->id,
+                'updated_at'   => now(),
+            ]);
+
+            return response()->json([
+                'status' => 200,
+            ], 200);
+        }
+        catch (Throwable $exception) 
+        {
+            Log::error($exception);
+
+            return response()->json([
+                'status'  => 500,
                 'message' => 'Gagal memuat data! Silahkan coba lagi.',
             ], 500);
         }
