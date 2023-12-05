@@ -34,6 +34,9 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
         Route::get('/asset-datatable', ['uses' => 'Api\Data_Claim\DataClaimController@assetDatatable']);
         Route::post('/update-claim', ['uses' => 'Api\Data_Claim\InputClaimController@updateClaim']);
         Route::delete('/delete-document', ['uses' => 'Api\Data_Claim\InputClaimController@deleteUpload']);
+        // validation
+        Route::post('/validation', ['uses' => 'Api\Data_Claim\DataClaimController@validation']);
+        Route::post('/rollback', ['uses' => 'Api\Data_Claim\DataClaimController@rollback']);
 
     });
     Route::prefix('/utiliy')->group( function ()
