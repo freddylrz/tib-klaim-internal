@@ -21,6 +21,7 @@ class DataClaimController extends Controller
             $log = DB::select("CALL klaimapps_db.detail_claim(?,?)", [$r->get("claimId"), 4]);
             if (!empty($client)) {
                 $client[0]->dol = date("d-m-Y", strtotime($client[0]->dol));
+                $client[0]->report_date = date("d-m-Y", strtotime($client[0]->report_date));
 
                 $clientInfo = DB::select("CALL klaimapps_db.getClientInfo(?,?)", [$client[0]->prod_no, $client[0]->draft_no]);
                 if ($clientInfo) {
