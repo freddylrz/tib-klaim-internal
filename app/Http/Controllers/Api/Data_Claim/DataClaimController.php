@@ -92,9 +92,26 @@ class DataClaimController extends Controller
                 ),
             );
 
+            $cob = DB::select(
+                'SELECT
+                        webapps_db.tb_cob.id,
+                        webapps_db.tb_cob.cob_code,
+                        CONCAT(webapps_db.tb_cob.cob_code," | ",webapps_db.tb_cob.cob_name) as cob_desc
+                    FROM
+                        webapps_db.tb_cob
+                    WHERE
+                        webapps_db.tb_cob.cob_code <> " "');
+
+            array_unshift($cob, array(
+                "id" => 0,
+                "cob_code" => 'All COB',
+                "cob_desc" => 'All COB'
+            ));
+
             return response()->json([
                 'status' => 200,
-                'list' => $filter,
+                'listStatus' => $filter,
+                'listCOB' => $cob,
             ], 200);
         } catch (Throwable $exception) {
             Log::error($exception);
@@ -109,7 +126,7 @@ class DataClaimController extends Controller
     {
 
         try {
-            $listIns = DB::select("CALL klaimapps_db.dataTable_claim(?)", [$r->type]);
+            $listIns = DB::select("CALL klaimapps_db.dataTable_claim(?,?)", [$r->typeStatus,$r->typeCOB]);
 
             return response()->json([
                 'status' => 200,
