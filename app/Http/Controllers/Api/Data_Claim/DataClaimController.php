@@ -21,6 +21,7 @@ class DataClaimController extends Controller
             $log = DB::select("CALL klaimapps_db.detail_claim(?,?)", [$r->get("claimId"), 4]);
             if (!empty($client)) {
                 $client[0]->dol = date("d-m-Y", strtotime($client[0]->dol));
+                $client[0]->report_date = date("d-m-Y", strtotime($client[0]->report_date));
 
                 $clientInfo = DB::select("CALL klaimapps_db.getClientInfo(?,?)", [$client[0]->prod_no, $client[0]->draft_no]);
                 if ($clientInfo) {
@@ -92,9 +93,26 @@ class DataClaimController extends Controller
                 ),
             );
 
+            $cob = DB::select(
+                'SELECT
+                        webapps_db.tb_cob.id,
+                        webapps_db.tb_cob.cob_code,
+                        CONCAT(webapps_db.tb_cob.cob_code," | ",webapps_db.tb_cob.cob_name) as cob_desc
+                    FROM
+                        webapps_db.tb_cob
+                    WHERE
+                        webapps_db.tb_cob.cob_code <> " "');
+
+            array_unshift($cob, array(
+                "id" => 0,
+                "cob_code" => 'All COB',
+                "cob_desc" => 'All COB'
+            ));
+
             return response()->json([
                 'status' => 200,
-                'list' => $filter,
+                'listStatus' => $filter,
+                'listCOB' => $cob,
             ], 200);
         } catch (Throwable $exception) {
             Log::error($exception);
@@ -109,7 +127,7 @@ class DataClaimController extends Controller
     {
 
         try {
-            $listIns = DB::select("CALL klaimapps_db.dataTable_claim(?)", [$r->type]);
+            $listIns = DB::select("CALL klaimapps_db.dataTable_claim(?,?)", [$r->typeStatus,$r->typeCOB]);
 
             return response()->json([
                 'status' => 200,
