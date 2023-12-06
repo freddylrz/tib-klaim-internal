@@ -1,4 +1,5 @@
 var loadingIndicator = false;
+let timer;
 
 $(function() {
     //Initialize Select2 Elements
@@ -9,9 +10,72 @@ $(function() {
     getDataAsset()
 
     $('#btnLoad').on('click', function(e) {
-
-        load()
+        clearTimeout(timer);
+        timer = setTimeout(fetchData, 500); // Debounce time (500ms)
 	});
+
+    $("#tbClaim").DataTable({
+        processing: false,
+        pageLength: 10,
+        autoWidth: false,
+        order: [],
+        bDestroy: true,
+        searching: true,
+        scrollX: true,
+        sScrollXInner: "100%",
+        columns: [
+            { data: "claim_no" },
+            { data: "created_at" },
+            { data: "name_wrt" },
+            { data: "dol" },
+            { data: "cob_code" },
+            { data: "username" },
+            {
+                data: "statDesc",
+                render: function(data, type, row) {
+                    let classForAnchor = '';
+
+                    // Assign different classes based on row.statId
+                    switch (row.statId) {
+                        case 1:
+                            classForAnchor = 'bg-lightblue';
+                            break;
+                        case 2:
+                            classForAnchor = 'bg-primary';
+                            break;
+                        case 3:
+                            classForAnchor = 'bg-info';
+                            break;
+                        case 4:
+                            classForAnchor = 'bg-purple';
+                            break;
+                        case 5:
+                            classForAnchor = 'bg-teal';
+                            break;
+                        case 6:
+                            classForAnchor = 'bg-olive';
+                            break;
+                        case 7:
+                            classForAnchor = 'bg-success';
+                            break;
+                        case 8:
+                            classForAnchor = 'bg-success';
+                            break;
+                        case 9:
+                            classForAnchor = 'bg-danger';
+                            break;
+                        default:
+                            classForAnchor = 'bg-gray-dark'; // Default class
+                            break;
+                    }
+
+                    return `
+                        <a href="/claim/detail/${row.id}" class="btn btn-block ${classForAnchor}">${data}</a>
+                    `;
+                }
+            }
+        ],
+    });
 })
 
 function getDataAsset() {
@@ -45,7 +109,7 @@ function getDataAsset() {
 
         Swal.close();
 
-        return load()
+        return fetchData()
     }).fail(function (response){
         Swal.fire({
             icon: "error",
@@ -55,7 +119,7 @@ function getDataAsset() {
     });
 }
 
-function load() {
+function fetchData() {
     if(loadingIndicator == false){
         if($('#valueParameter').val() == '') {
             Swal.fire({
@@ -91,37 +155,17 @@ function load() {
             }
         })
         .done(async function (response) {
-            await $("#tbClaim").DataTable({
-                processing: false,
-                pageLength: 10,
-                autoWidth: false,
-                order: [],
-                bDestroy: true,
-                searching: true,
-                scrollX: true,
-                sScrollXInner: "100%",
-                data: response.list,
-                columns: [
-                    { data: "claim_no" },
-                    { data: "created_at" },
-                    { data: "name_wrt" },
-                    { data: "dol" },
-                    { data: "cob_code" },
-                    { data: "username" },
-                    {
-                        data: "statDesc",
-                        render: function(data, type, row) {
-                            return `
-                                <a href="/claim/detail/${row.id}" class="btn btn-primary btn-block">${data}</a>
-                            `;
-                        }
-                    }
-                ],
-            });
+            updateDataTable(response.list);
         })
 
         $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
     } else {
         return false
     }
+}
+
+// Function to update DataTable with new data
+function updateDataTable(data) {
+    // Clear existing table data
+    $('#tbClaim').DataTable().clear().rows.add(data).draw();
 }
