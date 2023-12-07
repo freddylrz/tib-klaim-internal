@@ -18,7 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['cors','auth:api']], function ($router)
-{
+{   
+    Route::get('/dashboard', ['uses' => 'Api\DashboardController@index']);
+
     Route::prefix('/claim')->group(function () {
         Route::prefix('/input')->group(function () {
             Route::get('/asset', ['uses' => 'Api\Data_Claim\InputClaimController@inputAsset']);
