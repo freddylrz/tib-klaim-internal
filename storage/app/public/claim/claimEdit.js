@@ -331,124 +331,160 @@ function getDetail() {
 
     loadPremiumInfo = 0;
 }
-
-function getPremiuminfo() {
-    // Check if loadPremiumInfo is 0 before fetching premium info
+async function getPremiuminfo() {
     if (loadPremiumInfo === 0) {
-        $.ajax({
-            url: `/api/claim/input/premium-info`,
-            method: "GET",
-            headers: {
-                Authorization: "Bearer " + $("#token").val(),
-            },
-            data: {
-                prod_no: $('#prodNo').val(),
-                draft_no: $('#draftNo').val()
-            }
-        })
-        .done(async function (response) {
-            $('#divPremiumInfo').html('');
+        try {
+            const response = await fetchPremiumInfo();
 
-            await $("#tbclientPremiumInfo").DataTable({
-                processing: false,
-                pageLength: 10,
-                autoWidth: false,
-                order: [],
-                bDestroy: true,
-                scrollX: true,
-                paging: false, // Disable pagination
-                searching: false, // Disable search
-                ordering: false, // Disable sorting
-                info: false, // Disable table information display
-                sScrollXInner: "100%",
-                data: response.data.client,
-                columns: [
-                    { data: "no_nota", className: "text-center" },
-                    { data: "no_bukti", className: "text-center" },
-                    { data: "tanggal", className: "text-center" },
-                    { data: "jumlah", className: "text-center" },
-                    { data: "pelunasan", className: "text-center" },
-                    { data: "saldo", className: "text-center" },
-                ],
-            });
-
-            await $.each(response.data.ins, async function (i, item) {
-                await $('#divPremiumInfo').append(`
-                    <div class="table-responsive p-0">
-                        <table id="tbinsPremiumInfo${i}" class="table table-hover text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th colspan="6">${item.insr_name}</th>
-                                </tr>
-                                <tr class="bg-primary">
-                                    <th>No. Nota</th>
-                                    <th>No. Bukti</th>
-                                    <th>Tanggal</th>
-                                    <th>Jumlah</th>
-                                    <th>Pelunasan</th>
-                                    <th>Saldo</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                `);
-
-                $(`#tbinsPremiumInfo${i}`).DataTable({
-                    processing: false,
-                    pageLength: 10,
-                    autoWidth: false,
-                    order: [],
-                    bDestroy: true,
-                    scrollX: true,
-                    paging: false, // Disable pagination
-                    searching: false, // Disable search
-                    ordering: false, // Disable sorting
-                    info: false, // Disable table information display
-                    sScrollXInner: "100%",
-                    data: item.premium,
-                    columns: [
-                        { data: "no_nota", className: "text-center" },
-                        { data: "no_bukti", className: "text-center" },
-                        { data: "tanggal", className: "text-center" },
-                        { data: "jumlah", className: "text-center" },
-                        { data: "pelunasan", className: "text-center" },
-                        { data: "saldo", className: "text-center" },
-                    ],
-                });
-            });
+            displayClientPremiumInfo(response.data.client);
+            displayInsPremiumInfo(response.data.ins);
 
             loadPremiumInfo = 1;
-            $('#overlayPremiumInfo').fadeOut();
-        });
-
-        $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+            hideOverlay();
+        } catch (error) {
+            console.error('Error fetching premium info:', error);
+        }
     } else {
         console.log('Premium info has already been loaded.');
     }
 }
 
-function getCountAmount() {
-    if(loadingIndicator == false){
-        var draft_no = $('#claimId').val() == '' ? 0 : $('#claimId').val()
-        var estAmt = $('#estAmt').val() == '' ? 0 : $('#estAmt').val()
-        var claimAmt = $('#claimAmt').val() == '' ? 0 : $('#claimAmt').val()
-        var deducAmt = $('#deducAmt').val() == '' ? 0 : $('#deducAmt').val()
-        var recoveryAmt = $('#recoveryAmt').val() == '' ? 0 : $('#recoveryAmt').val()
-
-        $.ajax({
-            url: `/api/claim/input/claim-amount`,
-            method: "GET",
-            dataType: "JSON",
+async function fetchPremiumInfo() {
+    try {
+        const response = await $.ajax({
+            url: `/api/claim/input/premium-info`,
+            method: 'GET',
             headers: {
-                Authorization: "Bearer " + $("#token").val(),
+                Authorization: 'Bearer ' + $('#token').val(),
+            },
+            data: {
+                prod_no: $('#prodNo').val(),
+                draft_no: $('#draftNo').val(),
+            },
+        });
+        return response;
+    } catch (error) {
+        throw new Error('Error fetching premium info');
+    }
+}
+
+function displayClientPremiumInfo(clientData) {
+    $('#divPremiumInfo').html('');
+    const clientTable = $("#tbclientPremiumInfo").DataTable({
+        processing: false,
+        pageLength: 10,
+        autoWidth: false,
+        order: [],
+        bDestroy: true,
+        scrollX: true,
+        paging: false,
+        searching: false,
+        ordering: false,
+        info: false,
+        sScrollXInner: "100%",
+        data: clientData,
+        columns: [
+            { data: "no_nota", className: "text-center" },
+            { data: "no_bukti", className: "text-center" },
+            { data: "tanggal", className: "text-center" },
+            { data: "jumlah", className: "text-center" },
+            { data: "pelunasan", className: "text-center" },
+            { data: "saldo", className: "text-center" },
+        ],
+    });
+    $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+}
+
+function displayInsPremiumInfo(insData) {
+    insData.forEach((item, i) => {
+        $('#divPremiumInfo').append(`
+            <div class="table-responsive p-0">
+                <table id="tbinsPremiumInfo${i}" class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th colspan="6">${item.insr_name}</th>
+                        </tr>
+                        <tr class="bg-primary">
+                            <th>No. Nota</th>
+                            <th>No. Bukti</th>
+                            <th>Tanggal</th>
+                            <th>Jumlah</th>
+                            <th>Pelunasan</th>
+                            <th>Saldo</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        `);
+
+        $(`#tbinsPremiumInfo${i}`).DataTable({
+            processing: false,
+            pageLength: 10,
+            autoWidth: false,
+            order: [],
+            bDestroy: true,
+            scrollX: true,
+            paging: false,
+            searching: false,
+            ordering: false,
+            info: false,
+            sScrollXInner: "100%",
+            data: item.premium,
+            columns: [
+                { data: "no_nota", className: "text-center" },
+                { data: "no_bukti", className: "text-center" },
+                { data: "tanggal", className: "text-center" },
+                { data: "jumlah", className: "text-center" },
+                { data: "pelunasan", className: "text-center" },
+                { data: "saldo", className: "text-center" },
+            ],
+        });
+    });
+}
+
+function hideOverlay() {
+    $('#overlayPremiumInfo').fadeOut();
+}
+
+async function getCountAmount() {
+    if (!loadingIndicator) {
+        const draft_no = $('#claimId').val() || 0;
+        const estAmt = $('#estAmt').val() || 0;
+        const claimAmt = $('#claimAmt').val() || 0;
+        const deducAmt = $('#deducAmt').val() || 0;
+        const recoveryAmt = $('#recoveryAmt').val() || 0;
+
+        try {
+            const response = await fetchClaimAmount(draft_no, estAmt, claimAmt, deducAmt, recoveryAmt);
+
+            updateClaimAmountUI(response.data);
+            $('#netClaimAmt').val(response.netClaimAmt);
+
+            dataIns = response.data;
+        } catch (error) {
+            handleFailedResponse(error);
+        }
+    } else {
+        return false;
+    }
+}
+
+async function fetchClaimAmount(draft_no, estAmt, claimAmt, deducAmt, recoveryAmt) {
+    try {
+        const response = await $.ajax({
+            url: `/api/claim/input/claim-amount`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: 'Bearer ' + $("#token").val(),
             },
             data: {
                 type: 2,
-                draft_no: draft_no,
-                estAmt: estAmt,
-                claimAmt: claimAmt,
-                deducAmt: deducAmt,
-                recoveryAmt: recoveryAmt
+                draft_no,
+                estAmt,
+                claimAmt,
+                deducAmt,
+                recoveryAmt,
             },
             beforeSend: function () {
                 $('.loadingIndicator').show();
@@ -459,228 +495,276 @@ function getCountAmount() {
                 $('.loadingIndicator').hide();
                 loadingIndicator = false;
                 $('#btnSaveAll').attr('disabled', false);
-            }
-        }).done(async function (response) {
-            await $.each(response.data, function (i, item) {
-                $(`#claimAmount${item.insId}`).html(item.claimAmt)
-                $(`#recoveryAmount${item.insId}`).html(item.recovAmt)
-                $(`#deductionAmount${item.insId}`).html(item.deducAmt)
-                $(`#netClaim${item.insId}`).html(item.netAmt)
-            });
-            $('#netClaimAmt').val(response.netClaimAmt)
-
-            dataIns = response.data;
-        }).fail(async function(response){
-            Swal.fire({
-                icon: "error",
-                text: response.responseJSON.message,
-                allowOutsideClick: false,
-            });
-            // make loading false
-            return loadingIndicator = false;
-        })
-
-        $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
-    } else {
-        return false
+            },
+        });
+        return response;
+    } catch (error) {
+        throw new Error(error.responseJSON.message);
     }
 }
 
-async function deleteDocument( docid ){
+function updateClaimAmountUI(data) {
+    data.forEach(function (item) {
+        $(`#claimAmount${item.insId}`).html(item.claimAmt);
+        $(`#recoveryAmount${item.insId}`).html(item.recovAmt);
+        $(`#deductionAmount${item.insId}`).html(item.deducAmt);
+        $(`#netClaim${item.insId}`).html(item.netAmt);
+    });
+}
 
-    var confirmDel = true
+function handleFailedResponse(error) {
+    Swal.fire({
+        icon: 'error',
+        text: error.message,
+        allowOutsideClick: false,
+    });
+    loadingIndicator = false;
+}
 
-    if(docid !== undefined) {
-        await Swal.fire({
-            icon: 'warning',
-            title: 'Apakah anda yakin ingin menghapus file?',
-            allowOutsideClick: false,
-            showDenyButton: true,
-            confirmButtonText: 'Ya, Lanjutkan',
-            denyButtonText: `Tidak`,
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                return confirmDel = true
-            } else if (result.isDenied) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'File tidak dihapus',
-                    showConfirmButton: true,
-                });
-                return confirmDel = false;
-            }
-        })
-    } else {
-        return Swal.fire({
+async function deleteDocument(docid) {
+    if (docid === undefined) {
+        Swal.fire({
             icon: 'error',
             title: 'Document tidak ditemukan!',
             showConfirmButton: true,
         });
-
+        return;
     }
 
-    if(confirmDel){
+    const confirmation = await showDeleteConfirmation();
+    if (!confirmation) return;
+
+    try {
         $('#overlayClientData').fadeIn();
-
-        $.ajax({
-            "url": '/api/claim/delete-document',
-            "method": "DELETE",
-            "timeout": 0,
-            "headers": {
-                "Authorization": "Bearer "+$('#token').val()
-            },
-            "data":{
-                fileId: docid,
-            },
-        }).done(async function (response) {
-            Swal.fire({
-                icon: 'info',
-                title: response.message,
-                showConfirmButton: true,
-                allowOutsideClick: false,
-            });
-
-            $('#listUpload').empty()
-
-            if (response.document && response.document.length > 0) {
-                await $.each(response.document, function (i, item) {
-                    $('#listUpload').append(`
-                        <li class="mb-1">
-                          <a style="margin-right:10px " href="/${item.file_path}/${item.file_name}" target="_blank">${item.file_name}</a>
-                          <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
-                        </li>
-                    `);
-                });
-            } else {
-                $('#listUpload').append('<li>No attachment uploaded</li>');
-            }
-
-
+        const response = await deleteDocumentRequest(docid);
+        handleDeleteResponse(response);
+    } catch (error) {
+        handleError(error);
+    } finally {
         $('#overlayClientData').fadeOut();
-
-        }).fail(function (error){
-            Swal.fire({
-                icon: 'error',
-                title: error.responseJSON.message,
-                showConfirmButton: true,
-                allowOutsideClick: false,
-            });
-
-            $('#overlayClientData').fadeOut();
-        });
     }
 }
 
-function saveEdit() {
-    if(loadingIndicator == false){
-        Swal.fire({
-            icon: "info",
-            text: "loading",
-            showConfirmButton: false,
-            allowOutsideClick: false,
-        });
+async function showDeleteConfirmation() {
+    const result = await Swal.fire({
+        icon: 'warning',
+        title: 'Apakah anda yakin ingin menghapus file?',
+        allowOutsideClick: false,
+        showDenyButton: true,
+        confirmButtonText: 'Ya, Lanjutkan',
+        denyButtonText: `Tidak`,
+    });
+    return result.isConfirmed;
+}
 
-        if(dataClient.length == 0) {
-            Swal.fire({
-                icon: "error",
-                text: "Mohon pilih client terlebih dahulu!",
-                allowOutsideClick: false,
-            });
+function deleteDocumentRequest(docid) {
+    return $.ajax({
+        url: '/api/claim/delete-document',
+        method: 'DELETE',
+        timeout: 0,
+        headers: {
+            Authorization: 'Bearer ' + $('#token').val(),
+        },
+        data: {
+            fileId: docid,
+        },
+    });
+}
 
-            return false
-        }
+function handleDeleteResponse(response) {
+    Swal.fire({
+        icon: 'info',
+        title: response.message,
+        showConfirmButton: true,
+        allowOutsideClick: false,
+    });
 
-        if(dataIns.length == 0) {
-            Swal.fire({
-                icon: "error",
-                text: "Mohon isi claim amount terlebih dahulu!",
-                allowOutsideClick: false,
-            });
+    $('#listUpload').empty();
 
-            return false
-        }
-
-        const form = new FormData();
-
-        $.each(dataIns, function (i, item) {
-            form.append("insr_id[]", item.insr_code);;
-            form.append("premiIns[]", item.premi);
-            form.append("estimationInsAmt[]", item.estAmt);
-            form.append("claimInsAmt[]", item.claimAmt);
-            form.append("deducInsAmt[]", item.deducAmt);
-            form.append("recoveryInsAmt[]", item.recovAmt);
-            form.append("netInsAmt[]", item.netAmt);
-        })
-
-        $('#fileInputupd').each(function () {
-            const files = $(this).prop('files');
-
-            if (files.length > 0) {
-                for (let j = 0; j < files.length; j++) {
-                    form.append('fileUp[]', files[j]);
-                }
-            }
-        });
-
-        form.append("claimId", $('#claimId').val());
-        form.append("dol", $('#dateOfLoss').val());
-        form.append("location", $('#locationOfLoss').val());
-        form.append("caused", $('#causeId').val());
-        form.append("lossAdj", $('#lossAdjId').val());
-        form.append("workshop", $('#workshopId').val());
-        form.append("curr_id", $('#currId').val());
-        form.append("cob_id", $('#cobId').val());
-        form.append("reportDate", $('#reportDate').val());
-        form.append("reportSource", $('#reportSource').val());
-        form.append("estimationAmt", $('#estAmt').val());
-        form.append("claimAmt", $('#claimAmt').val());
-        form.append("deducAmt", $('#deducAmt').val());
-        form.append("recoveryAmt", $('#recoveryAmt').val());
-        form.append("netAmt", $('#netClaimAmt').val());
-
-        $.ajax({
-            async: true,
-            crossDomain: true,
-            url: "/api/claim/update-claim",
-            method: "POST",
-            headers: {
-                Authorization: "Bearer " + $("#token").val(),
-            },
-            "processData": false,
-            "contentType": false,
-            "mimeType": "multipart/form-data",
-            "data": form
-        }).done(async function (response) {
-            var data = JSON.parse(response);
-            if(data.status == 200){
-                Swal.fire({
-                    icon: 'info',
-                    title: data.message,
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                });
-
-                setInterval(function () {
-                    return window.location.replace(`/claim/detail/${data.klaimId}`);
-                }, 3000);
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: data.message,
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                });
-            }
-
-        }).fail(async function(error){
-            Swal.fire({
-                icon: 'error',
-                title: error.responseJSON.message,
-                showConfirmButton: true,
-            });
+    if (response.document && response.document.length > 0) {
+        response.document.forEach((item) => {
+            $('#listUpload').append(`
+                <li class="mb-1">
+                  <a style="margin-right:10px" href="/${item.file_path}/${item.file_name}" target="_blank">${item.file_name}</a>
+                  <button type="button" class="btn btn-sm btn-danger" onclick="deleteDocument(${item.id})"><i class="fa fa-trash"></i></button>
+                </li>
+            `);
         });
     } else {
-        return false
+        $('#listUpload').append('<li>No attachment uploaded</li>');
     }
+}
+
+function handleError(error) {
+    Swal.fire({
+        icon: 'error',
+        title: error.responseJSON.message,
+        showConfirmButton: true,
+        allowOutsideClick: false,
+    });
+}
+
+async function saveEdit() {
+    if (loadingIndicator) {
+        return false;
+    }
+
+    try {
+        showLoadingIndicator();
+        if (!validateClientAndClaimAmount()) {
+            return false;
+        }
+
+        const form = createFormData();
+
+        await sendAjaxRequest(form);
+
+    } catch (error) {
+        handleError(error);
+    } finally {
+        hideLoadingIndicator();
+    }
+}
+
+function showLoadingIndicator() {
+    Swal.fire({
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+}
+
+function validateClientAndClaimAmount() {
+    if (dataClient.length === 0) {
+        showErrorAlert('Mohon pilih client terlebih dahulu!');
+        return false;
+    }
+
+    if (dataIns.length === 0) {
+        showErrorAlert('Mohon isi claim amount terlebih dahulu!');
+        return false;
+    }
+
+    return true;
+}
+
+function createFormData() {
+    const form = new FormData();
+
+    dataIns.forEach((item) => {
+        form.append('insr_id[]', item.insr_code);
+        form.append('premiIns[]', item.premi);
+        form.append('estimationInsAmt[]', item.estAmt);
+        form.append('claimInsAmt[]', item.claimAmt);
+        form.append('deducInsAmt[]', item.deducAmt);
+        form.append('recoveryInsAmt[]', item.recovAmt);
+        form.append('netInsAmt[]', item.netAmt);
+    });
+
+    $('#fileInputupd').each(function () {
+        const files = $(this).prop('files');
+
+        if (files.length > 0) {
+            for (let j = 0; j < files.length; j++) {
+                form.append('fileUp[]', files[j]);
+            }
+        }
+    });
+
+    form.append("claimId", $('#claimId').val());
+    form.append("dol", $('#dateOfLoss').val());
+    form.append("location", $('#locationOfLoss').val());
+    form.append("caused", $('#causeId').val());
+    form.append("lossAdj", $('#lossAdjId').val());
+    form.append("workshop", $('#workshopId').val());
+    form.append("curr_id", $('#currId').val());
+    form.append("cob_id", $('#cobId').val());
+    form.append("reportDate", $('#reportDate').val());
+    form.append("reportSource", $('#reportSource').val());
+    form.append("estimationAmt", $('#estAmt').val());
+    form.append("claimAmt", $('#claimAmt').val());
+    form.append("deducAmt", $('#deducAmt').val());
+    form.append("recoveryAmt", $('#recoveryAmt').val());
+    form.append("netAmt", $('#netClaimAmt').val());
+
+    return form;
+}
+
+async function sendAjaxRequest(form) {
+    const response = await $.ajax({
+        async: true,
+        crossDomain: true,
+        url: '/api/claim/update-claim',
+        method: 'POST',
+        headers: {
+            Authorization: 'Bearer ' + $('#token').val(),
+        },
+        processData: false,
+        contentType: false,
+        mimeType: 'multipart/form-data',
+        data: form,
+        beforeSend: function () {
+            loadingIndicator = true;
+            $('#btnSaveAll').attr('disabled', true);
+            $('#btnSaveAll').html('<i class="fas fa-spinner fa-spin"></i> Loading');
+        },
+        complete: function () {
+            loadingIndicator = false;
+            $('#btnSaveAll').attr('disabled', false);
+            $('#btnSaveAll').html('<i class="fas fa-save"></i> Save Edit');
+        }
+    });
+
+    handleAjaxResponse(response);
+}
+
+function handleAjaxResponse(response) {
+    const data = JSON.parse(response);
+    if (data.status === 200) {
+        showSuccessAlertAndRedirect(data.message, data.klaimId);
+    } else {
+        showWarningAlert(data.message);
+    }
+}
+
+function handleError(error) {
+    Swal.fire({
+        icon: 'error',
+        title: error.responseJSON.message,
+        showConfirmButton: true,
+    });
+}
+
+function hideLoadingIndicator() {
+    Swal.close();
+}
+
+function showErrorAlert(message) {
+    Swal.fire({
+        icon: 'error',
+        text: message,
+        allowOutsideClick: false,
+    });
+}
+
+function showSuccessAlertAndRedirect(message, klaimId) {
+    Swal.fire({
+        icon: 'info',
+        title: message,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
+
+    return window.location.replace(`/claim/detail/${klaimId}`);
+}
+
+function showWarningAlert(message) {
+    Swal.fire({
+        icon: 'warning',
+        title: message,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
 }
