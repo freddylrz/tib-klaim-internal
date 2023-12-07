@@ -70,4 +70,10 @@ Route::group(['middleware' => ['cors','auth:api']], function ($router)
             Route::post('/update', ['uses' => 'Api\Utility\WorkshopController@update']);
         });
     });
+
+    Route::prefix('/export')->group( function ()
+    {
+        Route::get('/asset', ['uses' => 'Api\ExportController@index']);
+        Route::get('/download', ['uses' => 'Api\ExportController@download']);
+    });
 });
