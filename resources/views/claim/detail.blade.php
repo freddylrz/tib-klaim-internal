@@ -289,24 +289,119 @@
                     </div>
                 </div>
             </div>
+            <style>
+                /* Add this CSS to your stylesheet or within a style tag in the head of your HTML document */
+                @keyframes shake {
+                    0% {
+                        transform: translateX(0);
+                    }
+
+                    20% {
+                        transform: translateX(-5px) rotate(-5deg);
+                    }
+
+                    40% {
+                        transform: translateX(5px) rotate(5deg);
+                    }
+
+                    60% {
+                        transform: translateX(-5px) rotate(-5deg);
+                    }
+
+                    80% {
+                        transform: translateX(5px) rotate(5deg);
+                    }
+
+                    100% {
+                        transform: translateX(0) rotate(0);
+                    }
+                }
+
+                @keyframes spin {
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+
+                @keyframes spin-reverse {
+                    100% {
+                        transform: rotate(-360deg);
+                    }
+                }
+
+                .btn i {
+                    transition: transform 0.3s ease;
+                    /* Adding transition effect */
+                }
+
+                .shake:hover i {
+                    animation: shake 0.5s ease;
+                    /* Apply shake animation on hover */
+                }
+
+                .spin:hover i {
+                    animation: spin 0.8s linear;
+                    /* Apply spin animation on hover */
+                }
+
+                .spin-reverse:hover i {
+                    animation: spin-reverse 0.8s linear;
+                    /* Apply spin-reverse animation on hover */
+                }
+            </style>
 
             <div class="card card-primary card-outline">
-                <div class="card-footer col-md-12" style="text-align: right;">
+                <div class="card-footer text-right" id="cardForButton">
 
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lod">
-                        Propose Adjustment
-                    </button>
-                    <a href="/claim/update/{{ request()->claimId }}" class="btn btn-primary"><i
-                            class="fas fa-edit mr-1"></i> Edit Data</a>
-
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-onpro">
-                        On Process
+                    <button type="button" id="btnRollbackStatus" class="btn btn-danger my-1 spin-reverse"
+                        style="display: none">
+                        <i class="fas fa-undo-alt mr-1"></i> Rollback Status
                     </button>
 
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-onpro">
-                        Rollback Status
+                    <a href="/claim/update/{{ request()->claimId }}" id="btnEdit" class="btn btn-info my-1 shake"
+                        style="display: none">
+                        <i class="fas fa-edit mr-1"></i> Edit Data
+                    </a>
+
+                    <button type="button" id="btnOnProcess" class="btn btn-primary my-1 spin" data-toggle="modal"
+                        data-target="#modal-onpro" style="display: none">
+                        <i class="fas fa-cog mr-1"></i> On Process
                     </button>
 
+                    <button type="button" id="btnProposeAdjustment" class="btn bg-purple my-1 shake"
+                        data-toggle="modal" data-target="#modal-lod" style="display: none">
+                        <i class="fas fa-sliders-h mr-1"></i> Propose Adjustment
+                    </button>
+
+                    <button type="button" id="btnSettled" class="btn bg-teal my-1 shake" data-toggle="modal"
+                        data-target="#modal-settled" style="display: none">
+                        <i class="fas fa-money-check-alt mr-1"></i> Settled
+                    </button>
+
+                    <button type="button" id="btnUpdatePembayaran" class="btn bg-olive my-1 shake" data-toggle="modal"
+                        data-target="#modal-paid" style="display: none">
+                        <i class="fas fa-edit mr-1"></i> Update Pembayaran Klaim
+                    </button>
+
+                    <button type="button" id="btnProcessFinal" class="btn btn-success my-1 shake" data-toggle="modal"
+                        data-target="#modal-paidAll" style="display: none">
+                        <i class="fas fa-vote-yea mr-1"></i> Process Final
+                    </button>
+
+                    <button type="button" id="btnAddRecovery" class="btn bg-maroon my-1 shake" data-toggle="modal"
+                        data-target="#modal-recv" style="display: none">
+                        <i class="fas fa-medkit mr-1"></i> Add Recovery
+                    </button>
+
+                    <button type="button" id="btnFinal" class="btn bg-success my-1 shake" data-toggle="modal"
+                        data-target="#modal-final" style="display: none">
+                        <i class="fas fa-vote-yea mr-1"></i> Final
+                    </button>
+
+                    <button type="button" id="btnKlaimDitolak" class="btn bg-danger my-1 shake" data-toggle="modal"
+                        data-target="#modal-tolak" style="display: none">
+                        <i class="fas fa-window-close mr-1"></i> Klaim Ditolak
+                    </button>
                 </div>
             </div>
         </div>
@@ -318,7 +413,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title">Edit Status</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -350,52 +445,47 @@
         <div class="modal fade" id="modal-onpro">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary">
                         <h4 class="modal-title">On Process</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="ddOnPro">Pilih</label>
-                            <select class="form-control select2" id="ddOnPro" name="ddOnPro" style="width: 100%;">
-                                <option selected disabled>-</option>
-                                <option value="2">Kelengkapan Dokumen</option>
-                                <option value="3">Proses Klaim Asuransi</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="descOnPro">Description</label>
-                            <textarea class="form-control" rows="3" style="width: 100%;" id="descOnPro" name="descOnPro" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <div id="uploadform">
-                                <form role="form" method="post" id="formupd" enctype="multipart/form-data">
-                                    <input type="hidden" name="_token"
-                                        value="yatXjyMg2tbO2qrUlxtmAmeVpA0VP65drKzFn5EY">
+                    <form role="form" method="post" id="formOnProcess" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="ddOnPro">Pilih</label>
+                                <select class="form-control select2" id="ddOnPro" name="ddOnPro" style="width: 100%;"
+                                    required>
+                                    <option selected disabled value="">-</option>
+                                    <option value="2">Kelengkapan Dokumen</option>
+                                    <option value="3">Proses Klaim Asuransi</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="descOnPro">Description</label>
+                                <textarea class="form-control" rows="3" style="width: 100%;" id="descOnPro" name="descOnPro" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div id="uploadform">
                                     <div class="form-group">
                                         <label for="client">Upload File</label><br>
                                         <input type="file" id="fileInputupd" class="form-control"
                                             name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
-                                        <div id="opt"></div>
-                                        <input type="hidden" id="dataid" name="dataid" value="8423">
-                                        <input type="hidden" id="cob" name="cob" value="CGL">
-                                        <input type="hidden" id="stat" name="stat" value="2">
                                         <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
                                                 class="fa fa-upload"></i> Pilih File</a>
                                         <small>Tekan CTRL untuk memilih beberapa file</small>
-                                        <ul id="listfilesupd"></ul>
+                                        <ul class="listfilesupd"></ul>
                                     </div>
-                                    <input type="submit" id="uploadupdbtn" style="display: none;">
-                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="proses(1);">Save changes</button>
-                    </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -403,45 +493,39 @@
         <div class="modal fade" id="modal-lod">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-purple">
                         <h4 class="modal-title">Propose Adjustment</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="deduction">Description</label>
-                            <textarea class="form-control" rows="3" style="width: 100%;" id="descLod" name="descLod" required></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <div id="uploadform">
-                                <form role="form" method="post" id="formupd" enctype="multipart/form-data">
-                                    <input type="hidden" name="_token"
-                                        value="yatXjyMg2tbO2qrUlxtmAmeVpA0VP65drKzFn5EY">
+                    <form role="form" method="post" id="formProposeAdjustment" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="deduction">Description</label>
+                                <textarea class="form-control" rows="3" style="width: 100%;" id="descPorposeAdjustment"
+                                    name="descPorposeAdjustment" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div id="uploadform">
                                     <div class="form-group">
                                         <label for="client">Upload File</label><br>
-                                        <input type="file" id="fileInputupd" class="form-control"
+                                        <input type="file" id="filePurposeAdjustment" class="form-control"
                                             name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
-                                        <div id="opt"></div>
-                                        <input type="hidden" id="dataid" name="dataid" value="8423">
-                                        <input type="hidden" id="cob" name="cob" value="CGL">
-                                        <input type="hidden" id="stat" name="stat" value="4">
                                         <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
                                                 class="fa fa-upload"></i> Pilih File</a>
                                         <small>Tekan CTRL untuk memilih beberapa file</small>
-                                        <ul id="listfilesupd"></ul>
+                                        <ul class="listfilesupd"></ul>
                                     </div>
-                                    <input type="submit" id="uploadupdbtn" style="display: none;">
-                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="proses(4);">Save changes</button>
-                    </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -449,54 +533,47 @@
         <div class="modal fade" id="modal-paid">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-olive">
                         <h4 class="modal-title">Pembayaran Asuransi</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group clearfix">
-                            <label for="deduction">Insurance</label><br>
-                            <div class="icheck-primary d-inline">
-                                <input type="checkbox" name="cbIns" class="cekbok" id="cbIns16476"
-                                    data-crtName="LIPPO GENERAL INSURANCE TBK, PT" value="16476">
-                                <label for="cbIns">LIPPO GENERAL INSURANCE TBK, PT</label><br>
+                    <form role="form" method="post" id="formPembayaranAsuransi" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <div class="form-group clearfix">
+                                <label for="deduction">Insurance</label>
+                                <div id="listInsurance">
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="descIns">Paid Date</label>
-                            <input type="text" class="form-control datepicker" id="dateIns" name="dateIns"
-                                placeholder="Paid Date" required="true">
-                        </div>
-                        <div class="form-group">
-                            <div id="uploadform">
-                                <form role="form" method="post" id="formupd" enctype="multipart/form-data">
-                                    <input type="hidden" name="_token"
-                                        value="yatXjyMg2tbO2qrUlxtmAmeVpA0VP65drKzFn5EY">
+                            <div class="form-group">
+                                <label for="descIns">Paid Date</label>
+                                <input type="text" class="form-control datetimepicker-input" id="dateIns"
+                                    data-toggle="datetimepicker" data-target="#dateIns" name="dateIns"
+                                    placeholder="Paid Dates" required>
+                            </div>
+                            <div class="form-group">
+                                <div id="uploadform">
                                     <div class="form-group">
                                         <label for="client">Upload File</label><br>
                                         <input type="file" id="fileInputupd" class="form-control"
                                             name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
-                                        <div id="opt"></div>
-                                        <input type="hidden" id="dataid" name="dataid" value="8423">
-                                        <input type="hidden" id="cob" name="cob" value="CGL">
-                                        <input type="hidden" id="stat" name="stat" value="6">
                                         <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
                                                 class="fa fa-upload"></i> Pilih File</a>
                                         <small>Tekan CTRL untuk memilih beberapa file</small>
-                                        <ul id="listfilesupd"></ul>
+                                        <ul class="listfilesupd"></ul>
                                     </div>
-                                    <input type="submit" id="uploadupdbtn" style="display: none;">
-                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="proses(6);">Save changes</button>
-                    </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -504,22 +581,26 @@
         <div class="modal fade" id="modal-paidAll">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-success">
                         <h4 class="modal-title">Proses Final</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="descPaidAll">Description</label>
-                            <textarea class="form-control" rows="3" style="width: 100%;" id="descPaidAll" name="descPaidAll" required></textarea>
+                    <form role="form" method="post" id="formProsesFinal" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="descPaidAll">Description</label>
+                                <textarea class="form-control" rows="3" style="width: 100%;" id="descProsesFinal" name="descPaidAll"
+                                    required></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="proses(7);">Save changes</button>
-                    </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -527,44 +608,38 @@
         <div class="modal fade" id="modal-settled">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-teal">
                         <h4 class="modal-title">Settled</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <p>Description</p>
-                            <textarea class="form-control" rows="3" style="width: 100%;" id="descSet" name="descSet" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <div id="uploadform">
-                                <form role="form" method="post" id="formupd" enctype="multipart/form-data">
-                                    <input type="hidden" name="_token"
-                                        value="yatXjyMg2tbO2qrUlxtmAmeVpA0VP65drKzFn5EY">
+                    <form role="form" method="post" id="formSettled" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <p>Description</p>
+                                <textarea class="form-control" rows="3" style="width: 100%;" id="descSet" name="descSet" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div id="uploadform">
                                     <div class="form-group">
                                         <label for="client">Upload File</label><br>
                                         <input type="file" id="fileInputupd" class="form-control"
                                             name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
-                                        <div id="opt"></div>
-                                        <input type="hidden" id="dataid" name="dataid" value="8423">
-                                        <input type="hidden" id="cob" name="cob" value="CGL">
-                                        <input type="hidden" id="stat" name="stat" value="5">
                                         <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
                                                 class="fa fa-upload"></i> Pilih File</a>
                                         <small>Tekan CTRL untuk memilih beberapa file</small>
-                                        <ul id="listfilesupd"></ul>
+                                        <ul class="listfilesupd"></ul>
                                     </div>
-                                    <input type="submit" id="uploadupdbtn" style="display: none;">
-                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="proses(5);">Save changes</button>
-                    </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -573,22 +648,25 @@
         <div class="modal fade" id="modal-final">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-success">
                         <h4 class="modal-title">Final</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <p>Description</p>
-                            <textarea class="form-control" rows="3" style="width: 100%;" id="descFinal" name="descFinal" required></textarea>
+                    <form role="form" method="post" id="formFinal" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <p>Description</p>
+                                <textarea class="form-control" rows="3" style="width: 100%;" id="descFinal" name="descFinal" required></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="proses(8);">Save changes</button>
-                    </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -597,22 +675,25 @@
         <div class="modal fade" id="modal-tolak">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-danger">
                         <h4 class="modal-title">Klaim Ditolak</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <p>Description</p>
-                            <textarea class="form-control" rows="3" style="width: 100%;" id="descTolak" name="descTolak" required></textarea>
+                    <form role="form" method="post" id="formTolak" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <p>Description</p>
+                                <textarea class="form-control" rows="3" style="width: 100%;" id="descTolak" name="descTolak" required></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="proses(9);">Save changes</button>
-                    </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -621,16 +702,16 @@
         <div class="modal fade" id="modal-recv">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-pink">
                         <h4 class="modal-title">Add Recovery Amount</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <p>Recovery Amount</p>
-                            <input class="form-control uang" id="in_recv" type="text"
+                            <input class="form-control money" id="in_recv" type="text"
                                 placeholder="Recovery Amount">
                             <input type="hidden" id="current-stat" name="current-stat" value="2">
                         </div>
@@ -654,18 +735,18 @@
                     <div class="modal-header">
                         <h4 class="modal-title">Update Claim Amount</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" class="fas fa-times text-white font-weight-bolder"></span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <p>Claim Amount</p>
-                            <input class="form-control uang" id="in_upClaim" type="text" placeholder="Claim Amount">
+                            <input class="form-control money" id="in_upClaim" type="text" placeholder="Claim Amount">
                             <input type="hidden" id="current-stat" name="current-stat" value="2">
                         </div>
                         <div class="form-group">
                             <p>Deductible Amount</p>
-                            <input class="form-control uang" id="in_upDeduct" type="text"
+                            <input class="form-control money" id="in_upDeduct" type="text"
                                 placeholder="Deductible Amount">
                             <input type="hidden" id="current-stat" name="current-stat" value="2">
                         </div>
@@ -687,6 +768,8 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 @endpush
 
 @push('levelPluginsJs')
@@ -696,6 +779,9 @@
     <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/inputmask/jquery.inputmask.min.js') }}"></script>
+    <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     {{-- custom js --}}
     <script src="{{ asset('storage/claim/claimDetail.js') }}"></script>
