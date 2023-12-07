@@ -677,16 +677,15 @@ function saveAllData() {
         }).done(async function (response) {
             var data = JSON.parse(response);
             if(data.status == 200){
-                Swal.fire({
-                    icon: 'info',
+                await Swal.fire({
+                    icon: 'success',
                     title: data.message,
+                    timer: 3000,
                     showConfirmButton: false,
                     allowOutsideClick: false,
                 });
 
-                setInterval(function () {
-                    return window.location.replace(`/claim/detail/${data.klaimId}`);
-                }, 3000);
+                return window.location.replace(`/claim/detail/${data.klaimId}`);
             } else {
                 Swal.fire({
                     icon: 'warning',

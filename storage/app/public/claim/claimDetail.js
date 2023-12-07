@@ -4,8 +4,42 @@ var dataClient = [];
 var dataIns = [];
 var dataDecument = [];
 var dataLog = [];
+var inputStatusId = 0;
+var cobId = 0;
+var desc = '-';
+var paidDate = 0;
+
+const showButtons = {
+    '#btnOnProcess': [1, 2, 3],
+    '#btnProposeAdjustment': [1, 2, 3],
+    '#btnEdit': [1, 2, 3],
+    '#btnSettled': [4],
+    '#btnProcessFinal': [5],
+    '#btnUpdatePembayaran': [5],
+    '#btnTolak': [1, 2, 3, 4],
+    '#btnRollbackStatus': [1, 2, 3, 4, 5, 6, 7],
+    '#btnAddRecovery': [5, 6, 7],
+    '#btnFinal': [7]
+};
 
 $(function() {
+    // money mask
+    $('.money').inputmask('currency', {
+        prefix: '',
+        allowMinus: true,
+        groupSeparator: ',',
+        radixPoint: '.',
+        autoGroup: true,
+        digits: 0, // Set to 0 to avoid showing decimal digits
+        rightAlign: true,
+        numericInput: true // Enable numeric input only
+    });
+
+    //Date picker
+    $('.datetimepicker-input').datetimepicker({
+        format: "DD-MM-YYYY",
+    });
+
     getDetail()
 
     // Event listener for tab click
@@ -16,6 +50,181 @@ $(function() {
             getPremiuminfo();
         }
     });
+
+    $('.btnfilesupd').on('click', function() {
+        $('#fileInputupd').trigger('click');
+	});
+
+    $('#fileInputupd').on('change', function(e) {
+		var thefiles = $('#fileInputupd').get(0).files.length;
+		$('.listfilesupd').html('');
+		for (var i = 0; i < thefiles; ++i) {
+            var file = $(this).get(0).files.item(i);
+            var name = file.name;
+            var fileUrl = URL.createObjectURL(file); // Create URL for the file
+			$('.listfilesupd').append(`<li><a href="${fileUrl}" target="_blank">${name}</a></li>`);
+		}
+	});
+
+    $('#btnRollbackStatus').on('click', async function() {
+        try {
+            const confirmationResult = await Swal.fire({
+                icon: 'warning',
+                title: 'Apakah anda yakin?',
+                allowOutsideClick: false,
+                showDenyButton: true,
+                confirmButtonText: 'Ya, Lanjutkan',
+                denyButtonText: `Tidak`,
+            });
+
+            if (confirmationResult.isConfirmed) {
+                const response = await $.ajax({
+                    url: `/api/claim/rollback`,
+                    method: 'POST',
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: 'Bearer ' + $("#token").val(),
+                    },
+                    data: {
+                        klaimId: $('#claimId').val(),
+                    },
+                    beforeSend: function () {
+                        Swal.fire({
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            },
+                        });
+                    },
+                });
+
+                await Swal.fire({
+                    icon: 'success',
+                    timer: 3000,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+
+                return window.location.reload();
+            } else if (confirmationResult.isDenied) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Perubahan tidak disimpan',
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                text: error.responseJSON ? error.responseJSON.message : 'Terjadi kesalahan',
+                allowOutsideClick: false,
+            });
+        }
+    });
+
+    $('#formOnProcess').on('submit', function(e){
+        e.preventDefault()
+
+        const files = $('#fileInputupd').prop('files');
+
+        if (!files || files.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please select file(s)',
+                showConfirmButton: true,
+            });
+            return false; // Stop further execution
+        }
+        inputStatusId = $("#ddOnPro").val()
+        desc = $("#descOnPro").val()
+
+        validation()
+    })
+
+    $('#formProposeAdjustment').on('submit', function(e){
+        e.preventDefault()
+
+        const files = $('#fileInputupd').prop('files');
+
+        if (!files || files.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please select file(s)',
+                showConfirmButton: true,
+            });
+            return false; // Stop further execution
+        }
+        inputStatusId = 4
+        desc = $("#descPorposeAdjustment").val()
+
+        validation()
+    })
+
+    $('#formSettled').on('submit', function(e){
+        e.preventDefault()
+
+        const files = $('#fileInputupd').prop('files');
+
+        if (!files || files.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please select file(s)',
+                showConfirmButton: true,
+            });
+            return false; // Stop further execution
+        }
+        inputStatusId = 5
+        desc = $("#descSet").val()
+
+        validation()
+    })
+
+    $('#formPembayaranAsuransi').on('submit', async function(e){
+        e.preventDefault()
+
+        const files = $('#fileInputupd').prop('files');
+
+        if (!files || files.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please select file(s)',
+                showConfirmButton: true,
+            });
+            return false; // Stop further execution
+        }
+        inputStatusId = 6
+        paidDate = $("#dateIns").val()
+
+        validation()
+    })
+
+    $('#formProsesFinal').on('submit', async function(e){
+        e.preventDefault()
+
+        inputStatusId = 7
+        desc = $("#descProsesFinal").val()
+
+        validation()
+    })
+
+    $('#formFinal').on('submit', async function(e){
+        e.preventDefault()
+
+        inputStatusId = 8
+        desc = $("#descProsesFinal").val()
+
+        validation()
+    })
+    $('#formTolak').on('submit', async function(e){
+        e.preventDefault()
+
+        inputStatusId = 8
+        desc = $("#descTolak").val()
+
+        validation()
+    })
 });
 
 
@@ -76,6 +285,21 @@ function getDetail() {
             $('#deductAmt').html(item.deduct_amt)
             $('#recvAmt').html(item.recv_amt)
             $('#netAmt').html(item.net_amt)
+
+            for (const [button, statuses] of Object.entries(showButtons)) {
+                if (statuses.includes(item.statId)) {
+                    $(button).show();
+                } else {
+                    $(button).hide();
+                }
+            }
+
+            // Handling btnRollbackStatus separately
+            if (![1, 8, 9].includes(item.statId)) {
+                $('#btnRollbackStatus').show();
+            } else {
+                $('#btnRollbackStatus').hide();
+            }
         });
 
         if (response.dokument && response.dokument.length > 0) {
@@ -89,6 +313,18 @@ function getDetail() {
         } else {
             $('#uploadedAttachment').append('<li>No attachments uploaded</li>');
         }
+
+        response.Ins.forEach(item => {
+            const insuranceElement = `
+                <div class="icheck-primary">
+                    <input type="checkbox" id="insCheckbox${item.insId}">
+                    <label for="insCheckbox${item.insId}">
+                        ${item.insName}
+                    </label>
+                </div>
+            `;
+            $('#listInsurance').append(insuranceElement);
+        });
 
         await $("#tbclaimAmount").DataTable({
             processing: false,
@@ -167,7 +403,7 @@ function getDetail() {
         $('#overlayDataAmount').fadeOut(3000);
         $('#overlayLogStatus').fadeOut(4000);
     })
-    .fail(async function(response){
+    .fail(async function(){
         await Swal.fire({
             icon: "error",
             text: "Claim Id tidak ditemukan!",
@@ -272,5 +508,80 @@ function getPremiuminfo() {
         $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
     } else {
         console.log('Premium info has already been loaded.');
+    }
+}
+
+function validation() {
+    if (inputStatusId !== 0) {
+        const form = new FormData();
+        form.append("klaimId", $('#claimId').val());
+        form.append("statusId", inputStatusId);
+        form.append("description", desc);
+
+        dataClient.forEach(function (item) {
+            form.append("cobId", item.cob_id);
+        });
+
+        $('#fileInputupd').each(function () {
+            const files = $(this).prop('files');
+
+            if (files.length > 0) {
+                for (let j = 0; j < files.length; j++) {
+                    form.append('fileUpd[]', files[j]);
+                }
+            }
+        });
+
+        if (inputStatusId === 6) {
+            dataIns.forEach(item => {
+                const checkbox = $(`#insCheckbox${item.insId}`);
+                const isChecked = checkbox.is(':checked');
+
+                if (isChecked) {
+                    form.append("ins[]", item.insId);
+                }
+            });
+            form.append("paid_date", paidDate);
+        }
+
+        $.ajax({
+            async: true,
+            crossDomain: true,
+            url: "/api/claim/validation",
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + $("#token").val(),
+            },
+            processData: false,
+            contentType: false,
+            mimeType: "multipart/form-data",
+            data: form,
+            beforeSend: function () {
+                Swal.fire({
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+            },
+        }).done(function (response) {
+            Swal.fire({
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false,
+                allowOutsideClick: false,
+            }).then(() => {
+                return window.location.reload();
+            });
+        }).fail(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: error.responseJSON ? error.responseJSON.message : 'Terjadi kesalahan',
+                showConfirmButton: true,
+            });
+        });
+    } else {
+        return false;
     }
 }
