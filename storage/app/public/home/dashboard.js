@@ -1,5 +1,7 @@
 
 $(function () {
+    getDataDashbaord()
+
     var areaChartData =
     {
       labels  :
@@ -128,3 +130,216 @@ $(function () {
       options: lossChartOptions
     })
 });
+
+
+function getDataDashbaord() {
+    $.ajax({
+        "url": `/api/dashboard`,
+        "method": "GET",
+        "timeout": 0,
+        "headers": {
+            "Authorization": "Bearer " + $('#token').val()
+        },
+    }).done(async function (response) {
+        await response.data1.forEach(function (item) {
+            $('#total').html(item.total)
+            $('#tot_laporan_awal').html(item.tot_laporan_awal)
+            $('#tot_onprocess').html(item.tot_onprocess)
+            $('#tot_settled').html(item.tot_settled)
+            $('#tot_bayar').html(item.tot_bayar)
+            $('#tot_final').html(item.tot_final)
+            $('#tot_tolak').html(item.tot_tolak)
+        })
+
+        await $("#tbKlaimBerjalan").DataTable({
+            processing: false,
+            pageLength: 10,
+            autoWidth: false,
+            bDestroy: true,
+            scrollX: true,
+            paging: false, // Disable pagination
+            searching: false, // Disable search
+            ordering: false, // Disable sorting
+            info: false, // Disable table information display
+            sScrollXInner: "100%",
+            data: response.data2,
+            columns: [
+                { data: "statusDesc"},
+                {
+                    data: "value1",
+                    render: function(data, type, row) {
+                        let statusClass = getStatusClass(row.statusDesc);
+                        return `
+                            <span class="btn-sm btn-block text-center font-weight-bold ${statusClass}">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "value2",
+                    render: function(data, type, row) {
+                        let statusClass = getStatusClass(row.statusDesc);
+                        return `
+                            <span class="btn-sm btn-block text-center font-weight-bold ${statusClass}">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "value3",
+                    render: function(data, type, row) {
+                        let statusClass = getStatusClass(row.statusDesc);
+                        return `
+                            <span class="btn-sm btn-block text-center font-weight-bold ${statusClass}">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "value4",
+                    render: function(data, type, row) {
+                        let statusClass = getStatusClass(row.statusDesc);
+                        return `
+                            <span class="btn-sm btn-block text-center font-weight-bold ${statusClass}">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "value5",
+                    render: function(data, type, row) {
+                        let statusClass = getStatusClass(row.statusDesc);
+                        return `
+                            <span class="btn-sm btn-block text-center font-weight-bold ${statusClass}">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+            ],
+        });
+
+        await $("#tbStatusKlaim").DataTable({
+            processing: false,
+            pageLength: 10,
+            autoWidth: false,
+            bDestroy: true,
+            scrollX: true,
+            paging: false, // Disable pagination
+            searching: false, // Disable search
+            ordering: false, // Disable sorting
+            info: false, // Disable table information display
+            sScrollXInner: "100%",
+            data: response.data3,
+            columns: [
+                { data: "cobDesc"},
+                {
+                    data: "tot_laporan_awal",
+                    render: function(data, type, row) {
+                        return `
+                            <span class="btn-sm btn-block bg-lightblue text-center font-weight-bold">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "tot_onprocess",
+                    render: function(data, type, row) {
+                        return `
+                            <span class="btn-sm btn-block bg-primary text-center font-weight-bold">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "tot_settled",
+                    render: function(data, type, row) {
+                        return `
+                            <span class="btn-sm btn-block bg-teal text-center font-weight-bold">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "tot_bayar",
+                    render: function(data, type, row) {
+                        return `
+                            <span class="btn-sm btn-block bg-olive text-center font-weight-bold">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "tot_final",
+                    render: function(data, type, row) {
+                        return `
+                            <span class="btn-sm btn-block bg-success text-center font-weight-bold">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "tot_tolak",
+                    render: function(data, type, row) {
+                        return `
+                            <span class="btn-sm btn-block bg-danger text-center font-weight-bold">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+                {
+                    data: "total",
+                    render: function(data, type, row) {
+                        return `
+                            <span class="btn-sm btn-block bg-purple text-center font-weight-bold">${data}</span>
+                        `;
+                    },
+                    className: 'dt-head-center',
+                },
+            ],
+        });
+        $('.overlay').fadeOut();
+
+        Swal.close();
+    }).fail(function (response){
+        Swal.fire({
+            icon: "error",
+            text: response.message,
+            allowOutsideClick: false,
+        });
+    });
+}
+
+function getStatusClass(statusDesc) {
+    let statusClass = '';
+
+    // Set the class based on the statusDesc value
+    switch(statusDesc) {
+        case 'Laporan Awal':
+            statusClass = 'bg-lightblue';
+            break;
+        case 'On Process':
+            statusClass = 'bg-primary';
+            break;
+        case 'Settled':
+            statusClass = 'bg-teal';
+            break;
+        case 'Proses Bayar':
+            statusClass = 'bg-olive';
+            break;
+        case 'Final':
+            statusClass = 'bg-success';
+            break;
+        case 'Ditolak':
+            statusClass = 'bg-danger';
+            break;
+        case 'TOTAL':
+            statusClass = 'bg-purple';
+            break;
+        default:
+            // Set a default class if needed
+            statusClass = 'bg-grey';
+            break;
+    }
+
+    return statusClass;
+}
