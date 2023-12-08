@@ -204,7 +204,7 @@ class DataClaimController extends Controller
             {
                 for ($i=0; $i < count($r->ins); $i++) 
                 { 
-                    DB::table('klaimapps_db.tb_klaim_ins')->where('id', $r->ins[$i])->update([
+                    DB::table('klaimapps_db.tb_klaim_ins')->where('insr_id', $r->ins[$i])->where('klaim_id', $r->klaimId)->update([
                         'paid_dd' => date('Y-m-d', strtotime($r->paid_date))
                     ]);
                 }
