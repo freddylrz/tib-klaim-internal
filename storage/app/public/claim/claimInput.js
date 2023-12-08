@@ -29,40 +29,45 @@ $(function() {
     getDataAsset()
 
     $('#tbsppa').on('click', 'tbody tr', function() {
-        $('.tanda').css('display', 'none');
-        $(this).closest('tr').find('.tanda').css('display', 'block');
+        const $clickedRow = $(this);
+        const $tanda = $clickedRow.closest('tr').find('.tanda');
 
-        $('#prodNo').val($(this).closest('tr').find('.tanda').data('prod'));
-        $('#draftNo').val($(this).closest('tr').find('.tanda').data('draft'));
+        $('.tanda').css('display', 'none');
+        $tanda.css('display', 'block');
+
+        $('#prodNo').val($tanda.data('prod'));
+        $('#draftNo').val($tanda.data('draft'));
 
         $('#clientInfo').slideUp();
-        $('#overlayClientInfo').fadeIn();
-        $('#overlayPremiumInfo').fadeIn();
+        $('#overlayClientInfo, #overlayPremiumInfo').fadeIn();
+
         loadPremiumInfo = 0;
         claimAmount = [];
-        dataClient= [];
+        dataClient = [];
     });
 
     $('.filter').on('change', function() {
-        if ($('#dataClient').is(':visible')) {
-            $('#dataClient').slideUp();
-            $('#overlayDataClient').fadeIn();
-            $('#prodNo').val('')
-            $('#draftNo').val('')
-            $('#clientInfo').slideUp();
-            $('#overlayClientInfo').fadeIn();
-            $('#overlayPremiumInfo').fadeIn();
+        const dataClientVisible = $('#dataClient').is(':visible');
+
+        if (dataClientVisible) {
+            $('#dataClient, #clientInfo').slideUp();
+            $('#overlayDataClient, #overlayClientInfo, #overlayPremiumInfo').fadeIn();
+            $('#prodNo, #draftNo').val('');
             loadPremiumInfo = 0;
             claimAmount = [];
-            dataClient= [];
+            dataClient = [];
         }
     });
+
+    $('#btnLoadCLient').on('click', function(e) {
+        getClientInfo()
+	});
 
     // Event listener for tab click
     $('#clientInfo .nav-link').on('click', function(e) {
         // Check if the clicked tab is the Premium Info tab
         if ($(this).attr('id') === 'premium-info-tab') {
-            // Call getPremiuminfo() function when the Premium Info tab is clicked
+            // Call getPremiumInfo() function when the Premium Info tab is clicked
             getPremiuminfo();
         }
     });
@@ -262,32 +267,32 @@ function search() {
         $('#overlayDataClient').fadeOut();
     })
 
-    $('#clientInfo').slideUp();
-    $('#dataClaim').slideUp();
-    $('#dataAmount').slideUp();
-    $('#prodNo').val('');
-    $('#draftNo').val('');
-    $('#dataClient').slideDown();
-    $('#clientInfoFooter').slideDown();
+    $('#clientInfo, #dataClaim, #dataAmount').slideUp();
+    $('#prodNo, #draftNo').val('');
+    $('#dataClient, #clientInfoFooter').slideDown();
+
     $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+
     loadPremiumInfo = 0;
     claimAmount = [];
-    dataClient= [];
+    dataClient = [];
 }
 
 // Fungsi button "Load"
-function getClientinfo() {
-    if($('#prodNo').val() == '' || $('#draftNo').val() == '') {
+function getClientInfo() {
+    const prodNoValue = $('#prodNo').val();
+    const draftNoValue = $('#draftNo').val();
+
+    if (prodNoValue === '' || draftNoValue === '') {
         Swal.fire({
             icon: "error",
             text: "Mohon pilih client terlebih dahulu!",
             allowOutsideClick: false,
         });
-
-        return false
+        return false;
     }
 
-    switchToFirstTab()
+    switchToFirstTab();
 
     $.ajax({
         url: `/api/claim/input/data-client`,
@@ -296,68 +301,64 @@ function getClientinfo() {
             Authorization: "Bearer " + $("#token").val(),
         },
         data: {
-            prod_no: $('#prodNo').val(),
-            draft_no: $('#draftNo').val(),
+            prod_no: prodNoValue,
+            draft_no: draftNoValue,
+        },
+        beforeSend: function () {
+            loadingIndicator = true;
+            $('#btnLoadCLient').attr('disabled', true);
+            $('#btnLoadCLient').html('<i class="fas fa-spinner fa-spin"></i> Loading');
+        },
+        complete: function () {
+            loadingIndicator = false;
+            $('#btnLoadCLient').attr('disabled', false);
+            $('#btnLoadCLient').html('<i class="fas fa-check mr-1"></i> Load');
         }
     })
     .done(function (response) {
-        response.data.forEach(function (item) {
-            $('#draftNo').val(item.DRAFT_NO)
-            $('#prodNo').val(item.PROD_NO)
-            $('#insdId').val(item.insd_id)
-            $('#nameWrt').val(item.name_wrt)
-            $('#typeOFCover').val(item.type_of_cover)
+        if (response.data.length > 0) {
+            const item = response.data[0]; // Assuming only one item is received
 
-            $('#cobId').val(item.cob_id)
-            $('#cobId').trigger('change');
+            $('#draftNo').val(item.DRAFT_NO);
+            $('#prodNo').val(item.PROD_NO);
+            $('#insdId').val(item.insd_id);
+            $('#nameWrt').val(item.name_wrt);
+            $('#typeOFCover').val(item.type_of_cover);
+            $('#cobId').val(item.cob_id).trigger('change');
+            $('#cobId').prop('disabled', item.cob_id !== null);
+            $('#currId').val(item.curr_id).trigger('change');
+            $('#polisNo').val(item.pol_no);
+            $('#interestInsured').val(item.interest_insured);
+            $('#startDd').val(item.start_dd);
+            $('#endDd').val(item.end_dd);
+            $('#tsi').val(`${item.curr_code} ${item.tsi}`);
+            $('#txtnameWrt').html(item.name_wrt);
+            $('#txttypeOFCover').html(item.type_of_cover);
+            $('#txtpolisNo').html(item.pol_no);
+            $('#txtinterestInsured').html(item.interest_insured);
+            $('#txtperiod').html(item.periode);
+            $('#txttsi').html(`${item.curr_code} ${item.tsi}`);
+            $('#clientName').html(`${item.name_wrt} (CLIENT)`);
+        }
 
-            if (item.cob_id !== null) {
-                $('#cobId').prop('disabled', true);
-            } else {
-                $('#cobId').prop('disabled', false);
-            }
-
-            $('#currId').val(item.curr_id)
-            $('#currId').trigger('change');
-
-            $('#polisNo').val(item.pol_no)
-            $('#interestInsured').val(item.interest_insured)
-            $('#startDd').val(item.start_dd)
-            $('#endDd').val(item.end_dd)
-            $('#tsi').val(`${item.curr_code} ${item.tsi}`)
-
-            $('#txtnameWrt').html(item.name_wrt)
-            $('#txttypeOFCover').html(item.type_of_cover)
-            $('#txtpolisNo').html(item.pol_no)
-            $('#txtinterestInsured').html(item.interest_insured)
-            $('#txtperiod').html(item.periode)
-            $('#txttsi').html(`${item.curr_code} ${item.tsi}`)
-
-            $('#clientName').html(`${item.name_wrt} (CLIENT)`)
-        });
-
-        $('#currId').on('change', function () {
+        $('#currId, #cobId').on('change', function () {
             $(this).val();
         });
 
-        $('#cobId').on('change', function () {
-            $(this).val();
-        });
-
-        dataClient = response.data
+        dataClient = response.data;
 
         $('#overlayClientInfo').fadeOut();
     })
-
-    $('#dataClient').slideUp();
-    $('#clientInfo').slideDown()
-    loadPremiumInfo = 0;
+    .always(function () {
+        $('#dataClient').slideUp();
+        $('#clientInfo').slideDown();
+        loadPremiumInfo = 0;
+    });
 }
 
-function getPremiuminfo() {
-    // Check if loadPremiumInfo is 0 before fetching premium info
-    if (loadPremiumInfo === 0) {
-        $.ajax({
+async function fetchPremiumInfo() {
+    try {
+        const response = await $.ajax({
             url: `/api/claim/input/premium-info`,
             method: "GET",
             headers: {
@@ -367,93 +368,111 @@ function getPremiuminfo() {
                 prod_no: $('#prodNo').val(),
                 draft_no: $('#draftNo').val()
             }
-        })
-        .done(async function (response) {
-            $('#divPremiumInfo').html('');
-
-            await $("#tbclientPremiumInfo").DataTable({
-                processing: false,
-                pageLength: 10,
-                autoWidth: false,
-                order: [],
-                bDestroy: true,
-                scrollX: true,
-                paging: false, // Disable pagination
-                searching: false, // Disable search
-                ordering: false, // Disable sorting
-                info: false, // Disable table information display
-                sScrollXInner: "100%",
-                data: response.data.client,
-                columns: [
-                    { data: "no_nota", className: "text-center" },
-                    { data: "no_bukti", className: "text-center" },
-                    { data: "tanggal", className: "text-center" },
-                    { data: "jumlah", className: "text-center" },
-                    { data: "pelunasan", className: "text-center" },
-                    { data: "saldo", className: "text-center" },
-                ],
-            });
-
-            await $.each(response.data.ins, async function (i, item) {
-                await $('#divPremiumInfo').append(`
-                    <div class="table-responsive p-0">
-                        <table id="tbinsPremiumInfo${i}" class="table table-hover text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th colspan="6">${item.insr_name}</th>
-                                </tr>
-                                <tr class="bg-primary">
-                                    <th>No. Nota</th>
-                                    <th>No. Bukti</th>
-                                    <th>Tanggal</th>
-                                    <th>Jumlah</th>
-                                    <th>Pelunasan</th>
-                                    <th>Saldo</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                `);
-
-                $(`#tbinsPremiumInfo${i}`).DataTable({
-                    processing: false,
-                    pageLength: 10,
-                    autoWidth: false,
-                    order: [],
-                    bDestroy: true,
-                    scrollX: true,
-                    paging: false, // Disable pagination
-                    searching: false, // Disable search
-                    ordering: false, // Disable sorting
-                    info: false, // Disable table information display
-                    sScrollXInner: "100%",
-                    data: item.premium,
-                    columns: [
-                        { data: "no_nota", className: "text-center" },
-                        { data: "no_bukti", className: "text-center" },
-                        { data: "tanggal", className: "text-center" },
-                        { data: "jumlah", className: "text-center" },
-                        { data: "pelunasan", className: "text-center" },
-                        { data: "saldo", className: "text-center" },
-                    ],
-                });
-            });
-
-            loadPremiumInfo = 1;
-            $('#overlayPremiumInfo').fadeOut();
         });
 
-        $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching premium info:", error);
+        throw error;
+    }
+}
+
+async function displayPremiumInfo(clientData, insData) {
+    $('#divPremiumInfo').html('');
+
+    const clientTable = $("#tbclientPremiumInfo").DataTable({
+        processing: false,
+        pageLength: 10,
+        autoWidth: false,
+        order: [],
+        bDestroy: true,
+        scrollX: true,
+        paging: false,
+        searching: false,
+        ordering: false,
+        info: false,
+        sScrollXInner: "100%",
+        data: clientData,
+        columns: [
+            { data: "no_nota", className: "text-center" },
+            { data: "no_bukti", className: "text-center" },
+            { data: "tanggal", className: "text-center" },
+            { data: "jumlah", className: "text-center" },
+            { data: "pelunasan", className: "text-center" },
+            { data: "saldo", className: "text-center" },
+        ],
+    });
+
+    insData.forEach((item, i) => {
+        $('#divPremiumInfo').append(`
+            <div class="table-responsive p-0">
+                <table id="tbinsPremiumInfo${i}" class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th colspan="6">${item.insr_name}</th>
+                        </tr>
+                        <tr class="bg-primary">
+                            <th>No. Nota</th>
+                            <th>No. Bukti</th>
+                            <th>Tanggal</th>
+                            <th>Jumlah</th>
+                            <th>Pelunasan</th>
+                            <th>Saldo</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        `);
+
+        $(`#tbinsPremiumInfo${i}`).DataTable({
+            processing: false,
+            pageLength: 10,
+            autoWidth: false,
+            order: [],
+            bDestroy: true,
+            scrollX: true,
+            paging: false,
+            searching: false,
+            ordering: false,
+            info: false,
+            sScrollXInner: "100%",
+            data: item.premium,
+            columns: [
+                { data: "no_nota", className: "text-center" },
+                { data: "no_bukti", className: "text-center" },
+                { data: "tanggal", className: "text-center" },
+                { data: "jumlah", className: "text-center" },
+                { data: "pelunasan", className: "text-center" },
+                { data: "saldo", className: "text-center" },
+            ],
+        });
+    });
+
+    $('#overlayPremiumInfo').fadeOut();
+    return clientTable;
+}
+
+async function getPremiuminfo() {
+    if (loadPremiumInfo === 0) {
+        try {
+            $('#overlayPremiumInfo').fadeIn();
+            const { client, ins } = await fetchPremiumInfo();
+
+            const clientTable = await displayPremiumInfo(client, ins);
+            loadPremiumInfo = 1;
+
+            clientTable.columns.adjust().draw();
+        } catch (error) {
+            // Handle errors if needed
+        }
     } else {
         console.log('Premium info has already been loaded.');
     }
 }
 
 function addDataClaim() {
-    $('#clientInfoFooter').slideUp();
-    $('#dataClient').slideUp();
-    $('#dataClaim').slideDown();
-    $('#dataAmount').slideDown();
+    $('#clientInfoFooter, #dataClient').slideUp();
+    $('#dataClaim, #dataAmount').slideDown();
 
     $.ajax({
         url: `/api/claim/input/share-insurance`,
@@ -466,118 +485,115 @@ function addDataClaim() {
         }
     })
     .done(async function (response) {
-        await $("#tbclaimAmount").DataTable({
+        const dataTableConfig = {
             processing: false,
             pageLength: 10,
             autoWidth: false,
             order: [[1, 'desc']],
             bDestroy: true,
             scrollX: true,
-            paging: false, // Disable pagination
-            searching: false, // Disable search
-            info: false, // Disable table information display
+            paging: false,
+            searching: false,
+            info: false,
             sScrollXInner: "100%",
             data: response.data,
             columns: [
                 { data: "crt_name" },
                 { data: "share_pct" },
-                {
-                    data: "claimAmt",
-                    render: function(data, type, row) {
-                        return `<span id="claimAmount${row.insr_id}">${data}</span>`;
-                    },
-                    orderable: false,
-                    className: 'dt-body-right'
-                },
-                {
-                    data: "deducAmt",
-                    render: function(data, type, row) {
-                        return `<span id="deductionAmount${row.insr_id}">${data}</span>`;
-                    },
-                    orderable: false,
-                    className: 'dt-body-right'
-                },
-                {
-                    data: "recovAmt",
-                    render: function(data, type, row) {
-                        return `<span id="recoveryAmount${row.insr_id}">${data}</span>`;
-                    },
-                    orderable: false,
-                    className: 'dt-body-right'
-                },
-                {
-                    data: "netAmt",
-                    render: function(data, type, row) {
-                        return `<span id="netClaim${row.insr_id}">${data}</span>`;
-                    },
-                    orderable: false,
-                    className: 'dt-body-right'
-                }
+                { data: "claimAmt", render: renderAmount('claimAmount') },
+                { data: "deducAmt", render: renderAmount('deductionAmount') },
+                { data: "recovAmt", render: renderAmount('recoveryAmount') },
+                { data: "netAmt", render: renderAmount('netClaim') }
             ],
-        });
+        };
+
+        await renderDataTable('#tbclaimAmount', dataTableConfig);
 
         $('#overlayDataAmount').fadeOut();
         $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
     })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+        console.error('Error fetching share-insurance data:', errorThrown);
+        // Optionally handle the error (e.g., show an error message)
+    });
 }
 
-function getCountAmount() {
-    if(loadingIndicator == false){
-        var draft_no = $('#draftNo').val() == '' ? 0 : $('#draftNo').val()
-        var estAmt = $('#estAmt').val() == '' ? 0 : $('#estAmt').val()
-        var claimAmt = $('#claimAmt').val() == '' ? 0 : $('#claimAmt').val()
-        var deducAmt = $('#deducAmt').val() == '' ? 0 : $('#deducAmt').val()
-        var recoveryAmt = $('#recoveryAmt').val() == '' ? 0 : $('#recoveryAmt').val()
+// Function to render amount fields in DataTable
+function renderAmount(elementIdPrefix) {
+    return function(data, type, row) {
+        return `<span id="${elementIdPrefix}${row.insr_id}">${data}</span>`;
+    };
+}
 
-        $.ajax({
-            url: `/api/claim/input/claim-amount`,
-            method: "GET",
-            dataType: "JSON",
-            headers: {
-                Authorization: "Bearer " + $("#token").val(),
-            },
-            data: {
-                type: 1,
-                draft_no: draft_no,
-                estAmt: estAmt,
-                claimAmt: claimAmt,
-                deducAmt: deducAmt,
-                recoveryAmt: recoveryAmt
-            },
-            beforeSend: function () {
-                $('.loadingIndicator').show();
-                loadingIndicator = true;
-                $('#btnSaveAll').attr('disabled', true);
-            },
-            complete: function () {
-                $('.loadingIndicator').hide();
-                loadingIndicator = false;
-                $('#btnSaveAll').attr('disabled', false);
-            }
-        }).done(async function (response) {
-            await $.each(response.data, function (i, item) {
-                $(`#claimAmount${item.insr_id}`).html(item.claimAmt)
-                $(`#recoveryAmount${item.insr_id}`).html(item.recovAmt)
-                $(`#deductionAmount${item.insr_id}`).html(item.deducAmt)
-                $(`#netClaim${item.insr_id}`).html(item.netAmt)
+// Function to render DataTable
+async function renderDataTable(tableId, dataTableConfig) {
+    await $(tableId).DataTable(dataTableConfig);
+}
+
+async function getCountAmount() {
+    if (!loadingIndicator) {
+        const draft_no = $('#draftNo').val() || 0;
+        const estAmt = $('#estAmt').val() || 0;
+        const claimAmt = $('#claimAmt').val() || 0;
+        const deducAmt = $('#deducAmt').val() || 0;
+        const recoveryAmt = $('#recoveryAmt').val() || 0;
+
+        try {
+            const response = await $.ajax({
+                url: `/api/claim/input/claim-amount`,
+                method: "GET",
+                dataType: "JSON",
+                headers: {
+                    Authorization: "Bearer " + $("#token").val(),
+                },
+                data: {
+                    type: 1,
+                    draft_no,
+                    estAmt,
+                    claimAmt,
+                    deducAmt,
+                    recoveryAmt
+                },
+                beforeSend: function () {
+                    $('.loadingIndicator').show();
+                    loadingIndicator = true;
+                    $('#btnSaveAll').attr('disabled', true);
+                },
+                complete: function () {
+                    $('.loadingIndicator').hide();
+                    loadingIndicator = false;
+                    $('#btnSaveAll').attr('disabled', false);
+                }
             });
-            $('#netClaimAmt').val(response.netClaimAmt)
 
+            await updateClaimAmounts(response.data);
+            $('#netClaimAmt').val(response.netClaimAmt);
             claimAmount = response.data;
-        }).fail(async function(response){
+
+        } catch (error) {
             Swal.fire({
                 icon: "error",
-                text: response.responseJSON.message,
+                text: error.responseJSON?.message || "An error occurred.",
                 allowOutsideClick: false,
             });
-            // make loading false
-            return loadingIndicator = false;
-        })
+            loadingIndicator = false;
+            return false;
+        }
 
         $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+
     } else {
-        return false
+        return false;
     }
+}
+
+async function updateClaimAmounts(data) {
+    await Promise.all(data.map(async (item) => {
+        $(`#claimAmount${item.insr_id}`).html(item.claimAmt);
+        $(`#recoveryAmount${item.insr_id}`).html(item.recovAmt);
+        $(`#deductionAmount${item.insr_id}`).html(item.deducAmt);
+        $(`#netClaim${item.insr_id}`).html(item.netAmt);
+    }));
 }
 
 function saveAllData() {
