@@ -14,7 +14,7 @@ const showButtons = {
     '#btnProposeAdjustment': [1, 2, 3],
     '#btnEdit': [1, 2, 3],
     '#btnSettled': [4],
-    '#btnProcessFinal': [5],
+    '#btnProcessFinal': [5, 6],
     '#btnUpdatePembayaran': [5],
     '#btnTolak': [1, 2, 3, 4],
     '#btnRollbackStatus': [1, 2, 3, 4, 5, 6, 7],
@@ -140,51 +140,88 @@ $(function() {
         inputStatusId = $("#ddOnPro").val()
         desc = $("#descOnPro").val()
 
-        validation()
+        submitClaimValidation()
     })
 
-    $('#formProposeAdjustment').on('submit', function(e){
+    $('#formProposeAdjustment').on('submit', async function(e){
         e.preventDefault()
 
-        const files = $('#fileInputupd').prop('files');
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        if (!files || files.length === 0) {
+        if (confirmationResult.isConfirmed) {
+            const files = $('#fileInputupd').prop('files');
+
+            if (!files || files.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Please select file(s)',
+                    showConfirmButton: true,
+                });
+                return false; // Stop further execution
+            }
+            inputStatusId = 4
+            desc = $("#descPorposeAdjustment").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
             Swal.fire({
                 icon: 'error',
-                title: 'Please select file(s)',
+                title: 'Perubahan tidak disimpan',
                 showConfirmButton: true,
+                allowOutsideClick: false,
             });
-            return false; // Stop further execution
         }
-        inputStatusId = 4
-        desc = $("#descPorposeAdjustment").val()
-
-        validation()
     })
 
-    $('#formSettled').on('submit', function(e){
+    $('#formSettled').on('submit', async function(e){
         e.preventDefault()
 
-        const files = $('#fileInputupd').prop('files');
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        if (!files || files.length === 0) {
+        if (confirmationResult.isConfirmed) {
+            const files = $('#fileInputupd').prop('files');
+
+            if (!files || files.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Please select file(s)',
+                    showConfirmButton: true,
+                });
+                return false; // Stop further execution
+            }
+            inputStatusId = 5
+            desc = $("#descSet").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
             Swal.fire({
                 icon: 'error',
-                title: 'Please select file(s)',
+                title: 'Perubahan tidak disimpan',
                 showConfirmButton: true,
+                allowOutsideClick: false,
             });
-            return false; // Stop further execution
         }
-        inputStatusId = 5
-        desc = $("#descSet").val()
-
-        validation()
     })
 
     $('#formPembayaranAsuransi').on('submit', async function(e){
-        e.preventDefault()
+        e.preventDefault();
 
         const files = $('#fileInputupd').prop('files');
+        const insuranceCheckboxes = $('#listInsurance input[type="checkbox"]'); // Select all insurance checkboxes
 
         if (!files || files.length === 0) {
             Swal.fire({
@@ -194,39 +231,106 @@ $(function() {
             });
             return false; // Stop further execution
         }
-        inputStatusId = 6
-        paidDate = $("#dateIns").val()
 
-        validation()
-    })
+        // Check if no insurance checkbox is checked
+        if (!insuranceCheckboxes.is(':checked')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please select at least one insurance',
+                showConfirmButton: true,
+            });
+            return false; // Stop further execution
+        }
+
+        inputStatusId = 6;
+        paidDate = $("#dateIns").val();
+
+        submitClaimValidation();
+    });
 
     $('#formProsesFinal').on('submit', async function(e){
-        e.preventDefault()
+        e.preventDefault();
 
-        inputStatusId = 7
-        desc = $("#descProsesFinal").val()
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        validation()
+        if (confirmationResult.isConfirmed) {
+            e.preventDefault()
+
+            inputStatusId = 7
+            desc = $("#descProsesFinal").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Perubahan tidak disimpan',
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+        }
     })
 
     $('#formFinal').on('submit', async function(e){
         e.preventDefault()
 
-        inputStatusId = 8
-        desc = $("#descProsesFinal").val()
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        validation()
+        if (confirmationResult.isConfirmed) {
+            inputStatusId = 8
+            desc = $("#descProsesFinal").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Perubahan tidak disimpan',
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+        }
     })
+
     $('#formTolak').on('submit', async function(e){
         e.preventDefault()
 
-        inputStatusId = 8
-        desc = $("#descTolak").val()
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        validation()
+        if (confirmationResult.isConfirmed) {
+            inputStatusId = 8
+            desc = $("#descTolak").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Perubahan tidak disimpan',
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+        }
     })
 });
-
 
 function getDetail() {
     if($('#claimId').val() == '') {
@@ -416,10 +520,9 @@ function getDetail() {
     loadPremiumInfo = 0;
 }
 
-function getPremiuminfo() {
-    // Check if loadPremiumInfo is 0 before fetching premium info
-    if (loadPremiumInfo === 0) {
-        $.ajax({
+async function fetchPremiumInfo() {
+    try {
+        const response = await $.ajax({
             url: `/api/claim/input/premium-info`,
             method: "GET",
             headers: {
@@ -429,122 +532,161 @@ function getPremiuminfo() {
                 prod_no: $('#prodNo').val(),
                 draft_no: $('#draftNo').val()
             }
-        })
-        .done(async function (response) {
-            $('#divPremiumInfo').html('');
-
-            await $("#tbclientPremiumInfo").DataTable({
-                processing: false,
-                pageLength: 10,
-                autoWidth: false,
-                order: [],
-                bDestroy: true,
-                scrollX: true,
-                paging: false, // Disable pagination
-                searching: false, // Disable search
-                ordering: false, // Disable sorting
-                info: false, // Disable table information display
-                sScrollXInner: "100%",
-                data: response.data.client,
-                columns: [
-                    { data: "no_nota", className: "text-center" },
-                    { data: "no_bukti", className: "text-center" },
-                    { data: "tanggal", className: "text-center" },
-                    { data: "jumlah", className: "text-center" },
-                    { data: "pelunasan", className: "text-center" },
-                    { data: "saldo", className: "text-center" },
-                ],
-            });
-
-            await $.each(response.data.ins, async function (i, item) {
-                await $('#divPremiumInfo').append(`
-                    <div class="table-responsive p-0">
-                        <table id="tbinsPremiumInfo${i}" class="table table-hover text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th colspan="6">${item.insr_name}</th>
-                                </tr>
-                                <tr class="bg-primary">
-                                    <th>No. Nota</th>
-                                    <th>No. Bukti</th>
-                                    <th>Tanggal</th>
-                                    <th>Jumlah</th>
-                                    <th>Pelunasan</th>
-                                    <th>Saldo</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                `);
-
-                $(`#tbinsPremiumInfo${i}`).DataTable({
-                    processing: false,
-                    pageLength: 10,
-                    autoWidth: false,
-                    order: [],
-                    bDestroy: true,
-                    scrollX: true,
-                    paging: false, // Disable pagination
-                    searching: false, // Disable search
-                    ordering: false, // Disable sorting
-                    info: false, // Disable table information display
-                    sScrollXInner: "100%",
-                    data: item.premium,
-                    columns: [
-                        { data: "no_nota", className: "text-center" },
-                        { data: "no_bukti", className: "text-center" },
-                        { data: "tanggal", className: "text-center" },
-                        { data: "jumlah", className: "text-center" },
-                        { data: "pelunasan", className: "text-center" },
-                        { data: "saldo", className: "text-center" },
-                    ],
-                });
-            });
-
-            loadPremiumInfo = 1;
-            $('#overlayPremiumInfo').fadeOut();
         });
 
-        $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching premium info:", error);
+        throw error;
+    }
+}
+
+async function displayPremiumInfo(clientData, insData) {
+    $('#divPremiumInfo').html('');
+
+    const clientTable = $("#tbclientPremiumInfo").DataTable({
+        processing: false,
+        pageLength: 10,
+        autoWidth: false,
+        order: [],
+        bDestroy: true,
+        scrollX: true,
+        paging: false,
+        searching: false,
+        ordering: false,
+        info: false,
+        sScrollXInner: "100%",
+        data: clientData,
+        columns: [
+            { data: "no_nota", className: "text-center" },
+            { data: "no_bukti", className: "text-center" },
+            { data: "tanggal", className: "text-center" },
+            { data: "jumlah", className: "text-center" },
+            { data: "pelunasan", className: "text-center" },
+            { data: "saldo", className: "text-center" },
+        ],
+    });
+
+    insData.forEach((item, i) => {
+        $('#divPremiumInfo').append(`
+            <div class="table-responsive p-0">
+                <table id="tbinsPremiumInfo${i}" class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th colspan="6">${item.insr_name}</th>
+                        </tr>
+                        <tr class="bg-primary">
+                            <th>No. Nota</th>
+                            <th>No. Bukti</th>
+                            <th>Tanggal</th>
+                            <th>Jumlah</th>
+                            <th>Pelunasan</th>
+                            <th>Saldo</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        `);
+
+        $(`#tbinsPremiumInfo${i}`).DataTable({
+            processing: false,
+            pageLength: 10,
+            autoWidth: false,
+            order: [],
+            bDestroy: true,
+            scrollX: true,
+            paging: false,
+            searching: false,
+            ordering: false,
+            info: false,
+            sScrollXInner: "100%",
+            data: item.premium,
+            columns: [
+                { data: "no_nota", className: "text-center" },
+                { data: "no_bukti", className: "text-center" },
+                { data: "tanggal", className: "text-center" },
+                { data: "jumlah", className: "text-center" },
+                { data: "pelunasan", className: "text-center" },
+                { data: "saldo", className: "text-center" },
+            ],
+        });
+    });
+
+    $('#overlayPremiumInfo').fadeOut();
+    return clientTable;
+}
+
+async function getPremiuminfo() {
+    if (loadPremiumInfo === 0) {
+        try {
+            $('#overlayPremiumInfo').fadeIn();
+            const { client, ins } = await fetchPremiumInfo();
+
+            const clientTable = await displayPremiumInfo(client, ins);
+            loadPremiumInfo = 1;
+
+            clientTable.columns.adjust().draw();
+        } catch (error) {
+            // Handle errors if needed
+        }
     } else {
         console.log('Premium info has already been loaded.');
     }
 }
 
-function validation() {
+async function submitClaimValidation() {
     if (inputStatusId !== 0) {
-        const form = new FormData();
-        form.append("klaimId", $('#claimId').val());
-        form.append("statusId", inputStatusId);
-        form.append("description", desc);
+        const form = createFormData();
 
-        dataClient.forEach(function (item) {
-            form.append("cobId", item.cob_id);
-        });
+        try {
+            const response = await sendValidationRequest(form);
+            handleValidationSuccess(response);
+        } catch (error) {
+            handleValidationError(error);
+        }
+    } else {
+        return false;
+    }
+}
 
-        $('#fileInputupd').each(function () {
-            const files = $(this).prop('files');
+function createFormData() {
+    const form = new FormData();
+    form.append("klaimId", $('#claimId').val());
+    form.append("statusId", inputStatusId);
+    form.append("description", desc);
 
-            if (files.length > 0) {
-                for (let j = 0; j < files.length; j++) {
-                    form.append('fileUpd[]', files[j]);
-                }
+    dataClient.forEach(function (item) {
+        form.append("cobId", item.cob_id);
+    });
+
+    $('#fileInputupd').each(function () {
+        const files = $(this).prop('files');
+
+        if (files.length > 0) {
+            for (let j = 0; j < files.length; j++) {
+                form.append('fileUpd[]', files[j]);
+            }
+        }
+    });
+
+    if (inputStatusId === 6) {
+        dataIns.forEach(item => {
+            const checkbox = $(`#insCheckbox${item.insId}`);
+            const isChecked = checkbox.is(':checked');
+
+            if (isChecked) {
+                form.append("ins[]", item.insId);
             }
         });
+        form.append("paid_date", paidDate);
+    }
 
-        if (inputStatusId === 6) {
-            dataIns.forEach(item => {
-                const checkbox = $(`#insCheckbox${item.insId}`);
-                const isChecked = checkbox.is(':checked');
+    return form;
+}
 
-                if (isChecked) {
-                    form.append("ins[]", item.insId);
-                }
-            });
-            form.append("paid_date", paidDate);
-        }
-
-        $.ajax({
+async function sendValidationRequest(form) {
+    try {
+        const response = await $.ajax({
             async: true,
             crossDomain: true,
             url: "/api/claim/validation",
@@ -557,31 +699,40 @@ function validation() {
             mimeType: "multipart/form-data",
             data: form,
             beforeSend: function () {
-                Swal.fire({
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    },
-                });
+                showLoadingPopup();
             },
-        }).done(function (response) {
-            Swal.fire({
-                icon: 'success',
-                timer: 3000,
-                showConfirmButton: false,
-                allowOutsideClick: false,
-            }).then(() => {
-                return window.location.reload();
-            });
-        }).fail(function (error) {
-            Swal.fire({
-                icon: 'error',
-                title: error.responseJSON ? error.responseJSON.message : 'Terjadi kesalahan',
-                showConfirmButton: true,
-            });
         });
-    } else {
-        return false;
+        return response;
+    } catch (error) {
+        throw error;
     }
+}
+
+function showLoadingPopup() {
+    Swal.fire({
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+}
+
+function handleValidationSuccess(response) {
+    Swal.fire({
+        icon: 'success',
+        timer: 3000,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    }).then(() => {
+        window.location.reload();
+    });
+}
+
+function handleValidationError(error) {
+    Swal.fire({
+        icon: 'error',
+        title: error.responseJSON ? error.responseJSON.message : 'Terjadi kesalahan',
+        showConfirmButton: true,
+    });
 }

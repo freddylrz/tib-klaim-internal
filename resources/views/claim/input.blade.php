@@ -85,8 +85,9 @@
                         <div class="card-footer" style="text-align: right;">
                             <input type="text" name="sppa_id" id="sppa_id" hidden>
                             <input type="text" name="polis_id" id="polis_id" hidden>
-                            <button class="btn btn-primary" onclick="getClientinfo();"><i class="fas fa-check mr-1"></i>
-                                Load</button>
+                            <button class="btn btn-primary" type="button" id="btnLoadCLient">
+                                <i class="fas fa-check mr-1"></i> Load
+                            </button>
                         </div>
 
                     </div>
