@@ -14,7 +14,7 @@ const showButtons = {
     '#btnProposeAdjustment': [1, 2, 3],
     '#btnEdit': [1, 2, 3],
     '#btnSettled': [4],
-    '#btnProcessFinal': [5],
+    '#btnProcessFinal': [5, 6],
     '#btnUpdatePembayaran': [5],
     '#btnTolak': [1, 2, 3, 4],
     '#btnRollbackStatus': [1, 2, 3, 4, 5, 6, 7],
@@ -143,48 +143,85 @@ $(function() {
         submitClaimValidation()
     })
 
-    $('#formProposeAdjustment').on('submit', function(e){
+    $('#formProposeAdjustment').on('submit', async function(e){
         e.preventDefault()
 
-        const files = $('#fileInputupd').prop('files');
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        if (!files || files.length === 0) {
+        if (confirmationResult.isConfirmed) {
+            const files = $('#fileInputupd').prop('files');
+
+            if (!files || files.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Please select file(s)',
+                    showConfirmButton: true,
+                });
+                return false; // Stop further execution
+            }
+            inputStatusId = 4
+            desc = $("#descPorposeAdjustment").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
             Swal.fire({
                 icon: 'error',
-                title: 'Please select file(s)',
+                title: 'Perubahan tidak disimpan',
                 showConfirmButton: true,
+                allowOutsideClick: false,
             });
-            return false; // Stop further execution
         }
-        inputStatusId = 4
-        desc = $("#descPorposeAdjustment").val()
-
-        submitClaimValidation()
     })
 
-    $('#formSettled').on('submit', function(e){
+    $('#formSettled').on('submit', async function(e){
         e.preventDefault()
 
-        const files = $('#fileInputupd').prop('files');
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        if (!files || files.length === 0) {
+        if (confirmationResult.isConfirmed) {
+            const files = $('#fileInputupd').prop('files');
+
+            if (!files || files.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Please select file(s)',
+                    showConfirmButton: true,
+                });
+                return false; // Stop further execution
+            }
+            inputStatusId = 5
+            desc = $("#descSet").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
             Swal.fire({
                 icon: 'error',
-                title: 'Please select file(s)',
+                title: 'Perubahan tidak disimpan',
                 showConfirmButton: true,
+                allowOutsideClick: false,
             });
-            return false; // Stop further execution
         }
-        inputStatusId = 5
-        desc = $("#descSet").val()
-
-        submitClaimValidation()
     })
 
     $('#formPembayaranAsuransi').on('submit', async function(e){
-        e.preventDefault()
+        e.preventDefault();
 
         const files = $('#fileInputupd').prop('files');
+        const insuranceCheckboxes = $('#listInsurance input[type="checkbox"]'); // Select all insurance checkboxes
 
         if (!files || files.length === 0) {
             Swal.fire({
@@ -194,39 +231,106 @@ $(function() {
             });
             return false; // Stop further execution
         }
-        inputStatusId = 6
-        paidDate = $("#dateIns").val()
 
-        submitClaimValidation()
-    })
+        // Check if no insurance checkbox is checked
+        if (!insuranceCheckboxes.is(':checked')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Please select at least one insurance',
+                showConfirmButton: true,
+            });
+            return false; // Stop further execution
+        }
+
+        inputStatusId = 6;
+        paidDate = $("#dateIns").val();
+
+        submitClaimValidation();
+    });
 
     $('#formProsesFinal').on('submit', async function(e){
-        e.preventDefault()
+        e.preventDefault();
 
-        inputStatusId = 7
-        desc = $("#descProsesFinal").val()
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        submitClaimValidation()
+        if (confirmationResult.isConfirmed) {
+            e.preventDefault()
+
+            inputStatusId = 7
+            desc = $("#descProsesFinal").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Perubahan tidak disimpan',
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+        }
     })
 
     $('#formFinal').on('submit', async function(e){
         e.preventDefault()
 
-        inputStatusId = 8
-        desc = $("#descProsesFinal").val()
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        submitClaimValidation()
+        if (confirmationResult.isConfirmed) {
+            inputStatusId = 8
+            desc = $("#descProsesFinal").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Perubahan tidak disimpan',
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+        }
     })
+
     $('#formTolak').on('submit', async function(e){
         e.preventDefault()
 
-        inputStatusId = 8
-        desc = $("#descTolak").val()
+        const confirmationResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin?',
+            allowOutsideClick: false,
+            showDenyButton: true,
+            confirmButtonText: 'Ya, Lanjutkan',
+            denyButtonText: `Tidak`,
+        });
 
-        submitClaimValidation()
+        if (confirmationResult.isConfirmed) {
+            inputStatusId = 8
+            desc = $("#descTolak").val()
+
+            submitClaimValidation()
+        } else if (confirmationResult.isDenied) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Perubahan tidak disimpan',
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            });
+        }
     })
 });
-
 
 function getDetail() {
     if($('#claimId').val() == '') {
