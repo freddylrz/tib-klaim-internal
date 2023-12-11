@@ -111,7 +111,7 @@
                             <ul class="nav nav-pills nav-sidebar flex-column text-uppercase" data-widget="treeview"
                                 role="menu" data-accordion="false">
                                 <li class="nav-item">
-                                    <a href="/" class="nav-link">
+                                    <a href="/" class="nav-link {{{ Request::is('/') ? 'active' : '' }}}">
                                         <i class="nav-icon fas fa-home"></i>
                                         <p>
                                             Dashboard
