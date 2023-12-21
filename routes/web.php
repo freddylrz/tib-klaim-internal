@@ -12,7 +12,7 @@
 */
 
 Auth::routes([
-    'login' => true, // Registration Routes... 
+    'login' => true, // Registration Routes...
     'register' => false, // Registration Routes...
     'reset' => false, // Password Reset Routes...
     'verify' => false, // Email Verification Routes...
@@ -24,7 +24,7 @@ Route::get('/', 'HomeController@index')->name('home');
 
 #CLAIM
 Route::group(['prefix' => 'claim', 'as' => 'claim::', 'middleware' => 'auth:web'], function () {
-    Route::get('/list', function () {
+    Route::get('/list/{statusId?}', function () {
         return view('claim.list');
     });
     Route::get('/input', function () {
@@ -67,7 +67,7 @@ Route::group(['prefix' => 'lar', 'as' => 'lar::', 'middleware' => 'auth:web'], f
      Route::get('/update/{idlar}', function () {
         return view('utility.LossAdjuster.update');
     });
-    
+
 });
 Route::group(['prefix' => 'ws', 'as' => 'ws::', 'middleware' => 'auth:web'], function () {
     Route::get('/input', function () {
