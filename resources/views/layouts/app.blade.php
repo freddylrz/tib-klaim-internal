@@ -118,8 +118,8 @@
                                         </p>
                                     </a>
                                 </li>
-                                <li class="nav-item {{{ Request::is('claim/list','claim/input') ? 'menu-open' : '' }}}">
-                                    <a href="#" class="nav-link {{{ Request::is('claim/list','claim/input') ? 'active' : '' }}}">
+                                <li class="nav-item {{{ Request::is('claim/list*','claim/input') ? 'menu-open' : '' }}}">
+                                    <a href="#" class="nav-link {{{ Request::is('claim/list*','claim/input') ? 'active' : '' }}}">
                                         <i class="nav-icon fas fa-book"></i>
                                         <p>
                                             Klaim Data
@@ -128,7 +128,7 @@
                                     </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="/claim/list" class="nav-link {{{ Request::is('claim/list') ? 'active' : '' }}}">
+                                            <a href="/claim/list" class="nav-link {{{ Request::is('claim/list*') ? 'active' : '' }}}">
                                                 <i class="far fa-dot-circle nav-icon"></i>
                                                 <p>List Data</p>
                                             </a>
