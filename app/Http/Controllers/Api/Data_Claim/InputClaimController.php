@@ -96,6 +96,39 @@ class InputClaimController extends Controller
         }
     }
 
+ public function inputAssetManual(Request $r)
+    {
+        try {
+            $client = DB::select(
+                'SELECT
+                webapps_db.tb_client.id as clientId,
+                webapps_db.tb_client.name as clientName
+                FROM
+                webapps_db.tb_client');
+
+            $ins = DB::select(
+                'SELECT
+                    user_db.tb_security.id as insrId,
+                    user_db.tb_security.crt_name AS insrName
+                FROM
+                    user_db.tb_security
+                    WHERE user_db.tb_security.id <> 0');
+
+            return response()->json([
+                'status' => 200,
+                'client' => $client,
+                'insurance' => $ins,
+            ], 200);
+        } catch (Throwable $exception) {
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+
     public function getDataTable(Request $r)
     {
         try {
