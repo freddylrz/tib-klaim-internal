@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="/request/listKlaim?cob=0&status=2">
+                    <a href="/claim/list">
                         <div class="small-box bg-purple shadow">
                             <div class="overlay dark">
                                 <i class="fas fa-3x fa-sync-alt fa-spin"></i>
@@ -48,7 +48,7 @@
                 </div>
                 <!-- /.info-box-content -->
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="/request/listKlaim?cob=0&status=2">
+                    <a href="/claim/list/2">
                         <div class="small-box bg-lightblue shadow">
                             <div class="overlay dark">
                                 <i class="fas fa-3x fa-sync-alt fa-spin"></i>
@@ -67,7 +67,7 @@
                 </div>
                 <!-- /.info-box-content -->
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="/request/listKlaim?cob=0&status=2">
+                    <a href="/claim/list/3">
                         <div class="small-box bg-primary shadow">
                             <div class="overlay dark">
                                 <i class="fas fa-3x fa-sync-alt fa-spin"></i>
@@ -86,7 +86,7 @@
                 </div>
                 <!-- /.info-box-content -->
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="/request/listKlaim?cob=0&status=2">
+                    <a href="/claim/list/4">
                         <div class="small-box bg-teal shadow">
                             <div class="overlay dark">
                                 <i class="fas fa-3x fa-sync-alt fa-spin"></i>
@@ -105,7 +105,7 @@
                 </div>
                 <!-- /.info-box-content -->
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="/request/listKlaim?cob=0&status=2">
+                    <a href="/claim/list/5">
                         <div class="small-box bg-olive shadow">
                             <div class="overlay dark">
                                 <i class="fas fa-3x fa-sync-alt fa-spin"></i>
@@ -124,7 +124,7 @@
                 </div>
                 <!-- /.info-box-content -->
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="/request/listKlaim?cob=0&status=2">
+                    <a href="/claim/list/7">
                         <div class="small-box bg-success shadow">
                             <div class="overlay dark">
                                 <i class="fas fa-3x fa-sync-alt fa-spin"></i>
@@ -143,7 +143,7 @@
                 </div>
                 <!-- /.info-box-content -->
                 <div class="col-md-3 col-sm-6 col-12">
-                    <a href="/request/listKlaim?cob=0&status=2">
+                    <a href="/claim/list/8">
                         <div class="small-box bg-danger shadow">
                             <div class="overlay dark">
                                 <i class="fas fa-3x fa-sync-alt fa-spin"></i>
