@@ -18,12 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['cors','auth:api']], function ($router)
-{   
+{
     Route::get('/dashboard', ['uses' => 'Api\DashboardController@index']);
 
     Route::prefix('/claim')->group(function () {
         Route::prefix('/input')->group(function () {
             Route::get('/asset', ['uses' => 'Api\Data_Claim\InputClaimController@inputAsset']);
+            Route::get('/asset-manual', ['uses' => 'Api\Data_Claim\InputClaimController@inputAssetManual']);
             Route::post('/insert', ['uses' => 'Api\Data_Claim\InputClaimController@insert']);
             Route::get('/dataTable', ['uses' => 'Api\Data_Claim\InputClaimController@getDataTable']);
             Route::get('/data-client', ['uses' => 'Api\Data_Claim\InputClaimController@getDataClient']);

@@ -46,7 +46,7 @@
                                     <div class="input-group-append bg-gray text-white">
                                         <div class="input-group-text">
                                             <span id="togglePassword" class="fas fa-eye text-light"
-                                                style="width: 14px"></span>
+                                                style="width: 14px;cursor: pointer"></span>
                                         </div>
                                     </div>
                                 </div>

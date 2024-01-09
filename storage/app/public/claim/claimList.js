@@ -79,6 +79,11 @@ $(function() {
 })
 
 function getDataAsset() {
+    const pathSegments = window.location.pathname.split('/');
+    const statusId = pathSegments.includes('list') ? pathSegments[pathSegments.indexOf('list') + 1] : null;
+
+    console.log(statusId); // Check the extracted statusId value
+
     Swal.fire({
         icon: "info",
         text: "loading",
@@ -100,6 +105,12 @@ function getDataAsset() {
                 text: item.filterDesc
             }));
         });
+
+        if (statusId !== undefined) {
+            $('#statusId').val(statusId);
+            $('#statusId').trigger('change');
+        }
+
         response.listCOB.forEach(function (item) {
             $('#cobId').append($('<option>', {
                 value: item.id,
