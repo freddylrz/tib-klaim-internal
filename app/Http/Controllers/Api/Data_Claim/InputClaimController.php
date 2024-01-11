@@ -108,7 +108,7 @@ class InputClaimController extends Controller
 
             $ins = DB::select(
                 'SELECT
-                    user_db.tb_security.id as insrId,
+                    user_db.tb_security.insr_id as insrId,
                     user_db.tb_security.crt_name AS insrName
                 FROM
                     user_db.tb_security
@@ -309,6 +309,87 @@ class InputClaimController extends Controller
             return response()->json([
                 'status' => 200,
                 'data' => $listIns,
+                'netClaimAmt' => number_format($sum, 0)
+            ], 200);
+        } catch (Throwable $exception) {
+            Log::error($exception);
+
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal memuat data! Silahkan coba lagi.',
+            ], 500);
+        }
+    }
+
+    public function getClaimAmountManual(Request $r)
+    {
+        try {
+            $eAmnt = str_replace(",", "", $r->get('estAmt'));
+            $cAmnt = str_replace(",", "", $r->get('claimAmt'));
+            $dAmnt = str_replace(",", "", $r->get('deducAmt'));
+            $rAmnt = str_replace(",", "", $r->get('recoveryAmt'));
+            $sum = $cAmnt - $dAmnt - $rAmnt;
+
+            if (!empty($r->get('ins'))) {
+                $sisaNet = $sum;
+                $sisaEst = $eAmnt;
+                $sisaClaim = $cAmnt;
+                $sisaDeduc = $dAmnt;
+                $sisaRec = $rAmnt;
+                for ($i = 0; $i < count($r->get('ins')); $i++) {
+//                    dd($r->get('ins')[$i]['share']);
+                    $share = $r->get('ins')[$i]['share'] / 100;
+
+                    if ($i != count($r->get('ins')) - 1 || $i == 0) {
+                        //net
+                        $netShare = $sum * $share;
+                        $sisaNet = $sisaNet - $netShare;
+
+                        //est
+                        $estShare = $eAmnt * $share;
+                        $sisaEst = $sisaEst - $estShare;
+
+                        //claim
+                        $claimShare = $cAmnt * $share;
+                        $sisaClaim = $sisaClaim - $claimShare;
+
+                        //deduc
+                        $deducShare = $dAmnt * $share;
+                        $sisaDeduc = $sisaDeduc - $deducShare;
+
+                        //recov
+                        $recShare = $rAmnt * $share;
+                        $sisaRec = $sisaRec - $recShare;
+
+                        $estAmt = number_format($estShare, 2);
+                        $claimAmt = number_format($claimShare, 2);
+                        $deducAmt = number_format($deducShare, 2);
+                        $recovAmt = number_format($recShare, 2);
+                        $netAmt = number_format($netShare, 2);
+
+                    } else {
+                        $estAmt = number_format($sisaEst, 2);
+                        $claimAmt = number_format($sisaClaim, 2);
+                        $deducAmt = number_format($sisaDeduc, 2);
+                        $recovAmt = number_format($sisaRec, 2);
+                        $netAmt = number_format($sisaNet, 2);
+                    }
+                    $arr [] = array(
+                        "insId" => $r->get('ins')[$i]['insId'],
+                        "insShare" => number_format($r->get('ins')[$i]['share'],2).' %',
+                        "share" => number_format($r->get('ins')[$i]['share'],2),
+                        "estAmt" => $estAmt,
+                        "claimAmt" => $claimAmt,
+                        "deducAmt" => $deducAmt,
+                        "recovAmt" => $recovAmt,
+                        "netAmt" => $netAmt
+                    );
+                }
+            }
+
+            return response()->json([
+                'status' => 200,
+                'data' => $arr,
                 'netClaimAmt' => number_format($sum, 0)
             ], 200);
         } catch (Throwable $exception) {
