@@ -395,6 +395,7 @@ function search() {
     $('#premi').val('');
     $('#polisNo').prop('readonly', false);
     $('#insuredName').prop('disabled', false);
+    $('#cobId').prop('disabled', false);
     $('#tsi').prop('readonly', false);
     $('#premi').prop('readonly', false);
     $('#startDd').prop('readonly', false);
