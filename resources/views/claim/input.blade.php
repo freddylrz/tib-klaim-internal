@@ -92,6 +92,76 @@
 
                     </div>
                 </div>
+                {{-- client input --}}
+                <div class="col-12" id="clientInput" style="display: none;">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">Input Data Client</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                                <div class="card-body p-0">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="polisNo">Policy</label>
+                                                <input type="text" class="form-control" id="polisNo" name="polisNo"
+                                                    placeholder="Policy">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="insuredName">Insured Name</label>
+                                                <select class="form-control select2bs4" id="insuredName" name="insuredName"
+                                                    style="width: 100%;" required>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tsi">Total Sum Insured</label>
+                                                <input type="text" class="form-control money" id="tsi"
+                                                    name="tsi" placeholder="Total Sum Insured">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="premi">Premi</label>
+                                                <input type="text" class="form-control money" id="premi"
+                                                    name="premi" placeholder="Premi">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="period">Period</label>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control datetimepicker-input"
+                                                            id="startDd" data-toggle="datetimepicker"
+                                                            data-target="#startDd" name="startDd"
+                                                            placeholder="Start Period">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control datetimepicker-input"
+                                                            id="endDd" data-toggle="datetimepicker"
+                                                            data-target="#endDd" name="endDd" placeholder="End Period">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="interestInsured">Interest/Object Claim</label>
+                                                <textarea class="form-control" rows="8" style="width: 100%;" id="interestInsured" name="interestInsured"
+                                                    placeholder="Interest/Object Claim"></textarea>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="clientInputFooter" class="card-footer col-md-12" style="text-align: right;">
+                            <button class="btn btn-primary btnDataCLaim"><i class="fas fa-plus mr-1"></i>
+                                Add Data Claim
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
                 {{-- client info --}}
                 <div class="col-12" id="clientInfo" style="display: none;">
                     <div class="card card-primary card-tabs">
@@ -104,13 +174,14 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="premium-info-tab" data-toggle="pill"
-                                        href="#premium-info-tab-view" role="tab" aria-controls="premium-info-tab-view"
-                                        aria-selected="false">Premium
+                                        href="#premium-info-tab-view" role="tab"
+                                        aria-controls="premium-info-tab-view" aria-selected="false">Premium
                                         Info</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="debit-note-tab" data-toggle="pill" href="#debit-note-tab-view"
-                                        role="tab" aria-controls="debit-note-tab-view" aria-selected="false">D/N
+                                    <a class="nav-link" id="debit-note-tab" data-toggle="pill"
+                                        href="#debit-note-tab-view" role="tab" aria-controls="debit-note-tab-view"
+                                        aria-selected="false">D/N
                                         Info</a>
                                 </li>
                             </ul>
@@ -130,8 +201,6 @@
                                                 <div class="form-group">
                                                     <label for="insured_name">Policy</label>
                                                     <p id="txtpolisNo"></p>
-                                                    <input type="text" class="form-control" id="polisNo"
-                                                        name="polisNo" placeholder="Policy" hidden>
                                                     <input type="text" class="form-control" id="draftNo"
                                                         name="draftNo" placeholder="Draft Number" required hidden>
                                                     <input type="text" class="form-control" name="prodNo"
@@ -154,31 +223,21 @@
                                                 <div class="form-group">
                                                     <label for="insured_name">Total Sum Insured</label>
                                                     <p id="txttsi"></p>
-                                                    <input type="text" class="form-control" id="tsi"
-                                                        name="tsi" placeholder="tsi" hidden>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="insured_name">Period</label>
                                                     <p id="txtperiod"></p>
-                                                    <input type="text" class="form-control" id="startDd"
-                                                        name="startDd" placeholder="Start Period" hidden>
-                                                    <input type="text" class="form-control" id="endDd"
-                                                        name="endDd" placeholder="End Period" hidden>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="insured_name">Interest/Object Claim</label>
                                                     <p id="txtinterestInsured"></p>
-                                                    <textarea class="form-control" rows="10" style="width: 100%;" id="interestInsured" name="interestInsured"
-                                                        hidden></textarea>
                                                 </div>
 
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="submit" id="saveBtn" style="display: none;">
-                                    <input type="text" id="c_cob" name="c_cob" style="display: none;">
                                 </div>
                                 <div class="tab-pane fade" id="premium-info-tab-view" role="tabpanel"
                                     aria-labelledby="premium-info-tab">
@@ -220,7 +279,7 @@
                             </div>
                         </div>
                         <div id="clientInfoFooter" class="card-footer col-md-12" style="text-align: right;">
-                            <button class="btn btn-primary" id="btnDataCLaim"><i class="fas fa-plus mr-1"></i>
+                            <button class="btn btn-primary btnDataCLaim"><i class="fas fa-plus mr-1"></i>
                                 Add Data Claim
                             </button>
                         </div>
@@ -367,6 +426,49 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12" id="dataAmountManualInput" style="display: none;">
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                                <h3 class="card-title">Claim Amount</h3>
+                                <div class="card-tools">
+                                    <button id="btnAddClaimAmountManual" type="button" data-toggle="modal"
+                                        data-target="#modal-manualInput" class="btn btn-primary">
+                                        <i class="fas fa-plus mr-1"></i> Add Data
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table id="tbclaimAmountManualInput"
+                                            class="table table-bordered table-hover text-nowrap" style="width: 100%">
+                                            <thead>
+                                                <tr class="bg-primary">
+                                                    <th>Insurance Name</th>
+                                                    <th>Share (%)</th>
+                                                    <th>Claim Amount</th>
+                                                    <th>Deduction Amount</th>
+                                                    <th>Recovery Amount</th>
+                                                    <th>Net Claim</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="overlayDataAmountManualInput" class="overlay"><i
+                                    class="fas fa-3x fa-sync-alt fa-spin"></i>
+                                <div class="text-bold pt-2">Loading...</div>
+                            </div>
+                            <div class="card-footer" style="text-align: right;">
+                                <button id="btnSaveAllManualInput" type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save mr-1"></i> Save All Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-12" id="dataAmount" style="display: none;">
                         <div class="card card-primary card-outline">
                             <div class="card-header">
@@ -395,7 +497,7 @@
                                 <div class="text-bold pt-2">Loading...</div>
                             </div>
                             <div class="card-footer" style="text-align: right;">
-                                <button id="btnSaveAll" class="btn btn-primary">
+                                <button id="btnSaveAll" type="submit" class="btn btn-primary">
                                     <i class="fas fa-save mr-1"></i> Save All Data
                                 </button>
                             </div>
@@ -405,6 +507,44 @@
             </form>
         </div>
     </section>
+
+    <div class="modal fade" id="modal-manualInput">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Data Insurance</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="fas fa-times font-weight-bolder"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" id="log-id" name="log-id">
+                        <label for="ddOnPro">Insurance</label>
+                        <select class="form-control select2bs4" id="insuranceSelect" name="insuranceSelect"
+                            style="width: 100%;" required>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="insured_name">Share</label>
+                        <div class="input-group mb-3">
+                            <input type="number" class="form-control max-share share" id="share" name="share"
+                                placeholder="Share" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addData();">
+                        <i class="fas fa-plus mr-1"></i> Add
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 

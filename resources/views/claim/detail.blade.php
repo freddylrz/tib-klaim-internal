@@ -470,7 +470,7 @@
                             <div class="form-group">
                                 <div id="uploadform">
                                     <div class="form-group">
-                                        <label for="client">Upload File</label><br>
+                                        <label for="fileInputupd">Upload File</label><br>
                                         <input type="file" id="fileInputupd" class="form-control"
                                             name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
                                         <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
@@ -503,14 +503,14 @@
                         {{ csrf_field() }}
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="deduction">Description</label>
+                                <label for="descPorposeAdjustment">Description</label>
                                 <textarea class="form-control" rows="3" style="width: 100%;" id="descPorposeAdjustment"
                                     name="descPorposeAdjustment" required></textarea>
                             </div>
                             <div class="form-group">
                                 <div id="uploadform">
                                     <div class="form-group">
-                                        <label for="client">Upload File</label><br>
+                                        <label for="filePurposeAdjustment">Upload File</label><br>
                                         <input type="file" id="filePurposeAdjustment" class="form-control"
                                             name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
                                         <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
@@ -543,13 +543,13 @@
                         {{ csrf_field() }}
                         <div class="modal-body">
                             <div class="form-group clearfix">
-                                <label for="deduction">Insurance</label>
+                                <label>Insurance</label>
                                 <div id="listInsurance">
 
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="descIns">Paid Date</label>
+                                <label for="dateIns">Paid Date</label>
                                 <input type="text" class="form-control datetimepicker-input" id="dateIns"
                                     data-toggle="datetimepicker" data-target="#dateIns" name="dateIns"
                                     placeholder="Paid Dates" required>
@@ -557,7 +557,7 @@
                             <div class="form-group">
                                 <div id="uploadform">
                                     <div class="form-group">
-                                        <label for="client">Upload File</label><br>
+                                        <label for="fileInputupd">Upload File</label><br>
                                         <input type="file" id="fileInputupd" class="form-control"
                                             name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
                                         <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
@@ -591,8 +591,8 @@
                         {{ csrf_field() }}
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="descPaidAll">Description</label>
-                                <textarea class="form-control" rows="3" style="width: 100%;" id="descProsesFinal" name="descPaidAll"
+                                <label for="descProsesFinal">Description</label>
+                                <textarea class="form-control" rows="3" style="width: 100%;" id="descProsesFinal" name="descProsesFinal"
                                     required></textarea>
                             </div>
                         </div>
@@ -624,7 +624,7 @@
                             <div class="form-group">
                                 <div id="uploadform">
                                     <div class="form-group">
-                                        <label for="client">Upload File</label><br>
+                                        <label for="fileInputupd">Upload File</label><br>
                                         <input type="file" id="fileInputupd" class="form-control"
                                             name="fileInputupd[]" style="padding: 4px;display:none;" multiple>
                                         <a class="btn btn-primary btn-sm btnfilesupd" style="color: #fff"><i
