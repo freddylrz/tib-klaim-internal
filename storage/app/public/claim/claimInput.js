@@ -1142,6 +1142,16 @@ function saveAllData() {
 }
 
 function saveAllDataManualInput() {
+    if(maxShare != 0){
+        Swal.fire({
+            icon: "error",
+            text: `Share masih tersisa ${maxShare}%`,
+            allowOutsideClick: false,
+        });
+
+        return false
+    }
+
     if(loadingIndicator == false){
         Swal.fire({
             icon: "info",
